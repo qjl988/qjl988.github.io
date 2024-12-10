@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Dual Attention Network for Scene Segmentation | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Dual Attention Network for Scene Segmentation  Abstract 在本文中，我们通过捕捉基于自我注意机制的丰富的上下文依赖来解决场景分割任务。与之前通过多尺度特征融合来捕捉上下文的工作不同，我们提出了一个双注意网络（DANet）来适应性地整合局部特征和它们的全局依赖关系。具体来说，我们在扩张的FCN之上附加了两种注意力模块，它们分别在空间和通道维度上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dual Attention Network for Scene Segmentation">
+<meta property="og:url" content="http://example.com/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Danet/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="Dual Attention Network for Scene Segmentation  Abstract 在本文中，我们通过捕捉基于自我注意机制的丰富的上下文依赖来解决场景分割任务。与之前通过多尺度特征融合来捕捉上下文的工作不同，我们提出了一个双注意网络（DANet）来适应性地整合局部特征和它们的全局依赖关系。具体来说，我们在扩张的FCN之上附加了两种注意力模块，它们分别在空间和通道维度上">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T15:51:15.196Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Danet/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Dual Attention Network for Scene Segmentation',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">Dual Attention Network for Scene Segmentation</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Dual Attention Network for Scene Segmentation</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T15:51:15.196Z" title="更新于 2024-12-10 23:51:15">2024-12-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="dual-attention-network-for-scene-segmentation"><a class="markdownIt-Anchor" href="#dual-attention-network-for-scene-segmentation"></a> Dual Attention Network for Scene Segmentation</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<p>在本文中，我们通过捕捉基于自我注意机制的丰富的上下文依赖来解决场景分割任务。与之前通过多尺度特征融合来捕捉上下文的工作不同，我们提出了一个双注意网络（DANet）来适应性地整合局部特征和它们的全局依赖关系。具体来说，我们在扩张的FCN之上附加了两种注意力模块，它们分别在空间和通道维度上模拟语义的相互依赖性。位置注意模块通过所有位置上的特征的加权和，选择性地聚合每个位置上的特征。类似的特征会相互关联，而不考虑它们的距离。同时，通道注意模块通过整合所有通道图中的相关特征，选择性地强调相互依赖的通道图。我们将两个注意力模块的输出相加，进一步改善特征表示，这有助于获得更精确的分割结果。我们在三个具有挑战性的场景分割数据集，即Cityscapes、PASCAL Context和COCO Stuff数据集上实现了新的最先进的分割性能。特别是，在不使用粗略数据的情况下，在Cityscapes测试集上取得了81.5%的平均IoU得分。</p>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h2>
+<p>场景分割是一个基本的、具有挑战性的问题，其目标是将场景图像分割并解析为与语义类别相关的不同图像区域，包括东西（如天空、道路、草地）和离散物体（如人、汽车、自行车）。对这项任务的研究可以应用于潜在的应用，如自动驾驶、机器人感应和图像编辑。为了有效地完成场景分割的任务，我们需要区分一些混乱的类别，并考虑到具有不同外观的物体。例如，&quot;田野 &quot;和 &quot;草地 &quot;的区域往往是无法区分的，而 &quot;汽车 &quot;的对象可能经常受到尺度、遮挡和光照的影响。因此，有必要提高像素级识别的特征表示的鉴别能力。</p>
+<p>最近，人们提出了基于全卷积网络（FCN）[13]的最先进的方法来解决上述问题。一种方法是利用多尺度背景融合。例如，一些工作[3，4，29]通过结合不同的扩张卷积和池化操作产生的特征图来聚合多尺度的上下文。还有一些作品[15, 27]通过扩大具有分解结构的内核大小或在网络顶部引入有效的编码层来捕获更丰富的全局语境信息。此外，还提出了编码器-解码器结构[6，10，16]来融合中层和高层语义特征。虽然上下文融合有助于捕捉不同尺度的物体，但它不能利用全局视图中物体或东西之间的关系，这对场景分割也是至关重要的。</p>
+<p>另一类方法是采用递归神经网络来利用长距离的依赖关系，从而提高场景分割的准确性。基于二维LSTM网络的方法[1]被提出来捕捉标签上复杂的空间依赖关系。工作[18]建立了一个带有有向无环图的递归神经网络来捕捉局部特征上丰富的上下文依赖关系。然而，这些方法用递归神经网络隐含地捕捉全局关系，其有效性在很大程度上依赖于长期记忆的学习结果。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/img/image-20241210232535582-1733845060787-3.png" alt="image-20241210232535582" /></p>
+<blockquote>
+<p>图1：场景分割的目标是识别每个像素，包括东西和不同的物体。物体/物品的各种尺度、遮挡和光照变化使得解析每个像素成为挑战。</p>
+</blockquote>
+<p>为了解决上述问题，我们提出了一个新的框架，称为双注意网络（DANet），用于自然场景图像分割，如图所示。2. 它引入了一种自我注意机制，分别在空间和通道维度上捕捉特征的依赖性。具体来说，我们在扩张的FCN上面附加了两个平行的注意力模块。一个是位置注意模块，另一个是通道注意模块。对于位置注意模块，我们引入了自我注意机制来捕捉特征图中任意两个位置之间的空间依赖关系。对于某个位置的特征，它是通过将所有位置的特征加权求和来更新的，其中权重是由相应的两个位置之间的特征相似度决定的。也就是说，任何两个具有相似特征的位置都可以促进相互改进，而不管它们在空间维度上的距离如何。对于通道注意模块，我们使用类似的自我注意机制来捕捉任何两个通道图之间的通道依赖性，并以所有通道图的加权和来更新每个通道图。最后，这两个注意力模块的输出被融合以进一步增强特征表示。</p>
+<p>应该指出，在处理复杂多样的场景时，我们的方法比以前的方法[4, 29]更加有效和灵活。以图中的街道场景为例。1为例。首先，第一行的一些 &quot;人 &quot;和 &quot;红绿灯 &quot;由于光线和视野的原因，是不明显的或不完整的物体。如果探索简单的上下文嵌入，来自被支配的突出物体（如汽车、建筑）的上下文会损害这些不明显的物体标签。相比之下，我们的注意力模型选择性地聚集了不显眼物体的相似特征，以突出它们的特征表征，避免显眼物体的影响。第二，&quot;车 &quot;和 &quot;人 &quot;的尺度是多样的，识别这种多样的物体需要不同尺度的背景信息。也就是说，不同尺度的特征应该被同等对待，以代表相同的语义。我们的模型与注意力机制只是为了从全局角度自适应地整合任何尺度的相似特征，这在一定程度上可以解决上述问题。第三，我们明确地将空间和通道关系考虑在内，这样场景理解就可以从长距离的依赖关系中受益。</p>
+<p>我们的主要贡献可以概括为以下几点：</p>
+<ul>
+<li>
+<p>我们提出了一种新颖的具有自我注意机制的双注意网络（DANet），以增强特征表征对场景分割的判别能力。</p>
+</li>
+<li>
+<p>提出了一个位置注意模块来学习特征的空间相互依赖性，并设计了一个通道注意模块来模拟通道相互依赖性。它通过对局部特征的丰富的上下文依赖关系进行建模，大大改善了分割结果。</p>
+</li>
+<li>
+<p>我们在三个流行的基准上取得了新的最先进的结果，包括Cityscapes数据集[5]、PASCAL Context数据集[14]和COCO Stuff数据集[2]。</p>
+</li>
+</ul>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2. Related Work</h2>
+<p>语义分割。基于完全卷积网络（FCN）的方法在语义分割方面取得了很大进展。有几个模型变体被提出来以加强上下文的聚合。首先，Deeplabv2[3]和Deeplabv3[4]采用直角空间金字塔池来嵌入上下文信息，它由不同扩张率的平行扩张卷积组成。PSPNet[29]设计了一个金字塔池模块来收集有效的语境先验，包含不同尺度的信息。编码器-解码器结构[? ，6，8，9]融合了中级和高级语义特征，以获得不同尺度的上下文。其次，学习局部特征的上下文依赖关系也有助于特征表征的形成。DAG-RNN[18]用递归神经网络对有向无环图进行建模，以捕捉丰富的上下文依赖关系。PSANet[30]通过卷积层和空间维度的相对位置信息来捕捉像素级的关系。此外，EncNet[27]引入了一个通道注意机制来捕捉全局背景。</p>
+<p>自我注意模块。注意力模块可以对长距离的依赖关系进行建模，并在许多任务中得到了广泛的应用[11, 12, 17, 19-21]。特别是，工作[21]是第一个提出自我注意机制来绘制输入的全局依赖关系，并将其应用于机器翻译。同时，注意力模块在图像视觉中的应用也越来越多。作品[28]引入了自我注意机制来学习更好的图像生成器。与自我注意模块相关的工作[23]，主要探索了视频和图像在时空维度上的非局部操作的有效性。</p>
+<p>与以往的工作不同，我们在场景分割任务中扩展了自我注意机制，并精心设计了两类注意模块来捕捉丰富的上下文关系，以获得具有类内紧凑性的更好的特征表示。全面的实证结果验证了我们提出的方法的有效性。</p>
+<h2 id="3-dual-attention-network"><a class="markdownIt-Anchor" href="#3-dual-attention-network"></a> 3. Dual Attention Network</h2>
+<p>在这一节中，我们首先介绍了我们网络的总体框架，然后介绍了两个注意力模块，它们分别在空间和通道维度上捕捉长距离的背景信息。最后，我们描述了如何将它们聚集在一起进行进一步的细化。</p>
+<h3 id="31-overview"><a class="markdownIt-Anchor" href="#31-overview"></a> 3.1. Overview</h3>
+<p>给出一张场景分割的图片，东西或物体在尺度、光照和视野上是不同的。由于卷积操作会导致局部接受场，与具有相同标签的像素对应的特征可能有一些差异。这些差异会带来类内的不一致，影响识别的准确性。为了解决这个问题，我们通过在注意力机制下建立特征间的关联来探索全局性的上下文信息。我们的方法可以自适应地聚合长范围的上下文信息，从而改善场景分割的特征表示。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/img/image-20241210232555352-1733845060788-4.png" alt="image-20241210232555352" /></p>
+<blockquote>
+<p>图2：双重注意网络的概述。(最好以彩色观看)</p>
+</blockquote>
+<p>如图所示。如图2所示，我们设计了两种类型的注意力模块，在扩张的残差网络产生的局部特征上绘制全局背景，从而获得更好的像素级预测的特征表示。我们采用预训练的残差网络，以扩张的策略[3]为骨干。值得注意的是，我们去掉了下采样操作，在最后两个ResNet块中采用了扩张卷积，从而将最终的特征图大小扩大到输入图像的1/8。它保留了更多的细节，而没有增加额外的参数。然后，来自扩张的残差网络的特征将被送入两个平行的注意力模块。以图中上部的空间注意模块为例。2为例，我们首先应用一个卷积层来获得降维的特征。然后，我们将这些特征送入位置注意模块，并通过以下三个步骤生成新的空间长距离背景信息的特征。第一步是生成一个空间注意力矩阵，该矩阵对特征的任何两个像素之间的空间关系进行建模。接下来，我们在注意力矩阵和原始特征之间进行矩阵乘法。第三，我们对上述相乘的结果矩阵和原始特征进行元素相加运算，以获得反映长距离背景的最终表征。同时，通道维度上的长程上下文信息被通道关注模块所捕获。除了第一步，捕捉通道关系的过程与位置注意模块相似，在这一步中，通道注意矩阵是以通道维度计算的。最后，我们将两个注意模块的输出汇总，以获得更好的特征表示，用于像素级预测。</p>
+<h3 id="32-position-attention-module"><a class="markdownIt-Anchor" href="#32-position-attention-module"></a> 3.2. Position Attention Module</h3>
+<p>鉴别性的特征表示对于场景理解至关重要，这可以通过捕捉长距离的上下文信息获得。然而，许多工作[15, 29]表明，由传统的FCNs产生的局部特征可能会导致对物体和东西的错误分类。为了在局部特征上建立丰富的上下文关系模型，我们引入了一个位置注意模块。位置注意模块将更广泛的上下文信息编码到局部特征中，从而提高了它们的表示能力。接下来，我们详细说明了自适应聚合空间背景的过程。</p>
+<p>如图3(A)所示，给定一个局部特征<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∈</mo><mi>R</mi><mi>C</mi><mo>×</mo><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">A\in RC \times H \times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span>，我们首先将其输入卷积层，分别生成两个新的特征图B和C，其中{B，C}∈RC×H×W。然后我们将它们重塑为RC×N，其中N=H×W是像素的数量。之后，我们在C和B的转置之间进行矩阵乘法，并应用softmax层来计算空间注意图S∈RN×N：</p>
+<p>其中sji衡量第i个位置对第j个位置的影响。两个位置的特征表示越相似，就越有助于它们之间的关联性。</p>
+<p>同时，我们将特征A送入卷积层，生成一个新的特征图D∈RC×H×W并将其重塑为RC×N。然后，我们在D和S的转置之间进行矩阵乘法，将结果重塑为RC×H×W。最后，我们将其乘以一个比例参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">α</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span>，并与特征A进行元素相加运算，得到最终输出E∈RC×H×W，如下所示：</p>
+<p>其中α初始化为0，并逐渐学习分配更多的权重[28]。从公式2中可以推断出，每个位置的结果特征E是所有位置的特征和原始特征的加权和。因此，它有一个全局的语境观，并根据空间注意图选择性地聚合语境。相似的语义特征实现了相互增益，从而加强了类内的紧凑性和语义的一致性。</p>
+<h3 id="33-channel-attention-module"><a class="markdownIt-Anchor" href="#33-channel-attention-module"></a> 3.3. Channel Attention Module</h3>
+<p>高层特征的每个通道图都可以被看作是一个特定类别的反应，而不同的语义反应是相互关联的。通过利用通道图之间的相互依存关系，我们可以强调相互依存的特征图，改善特定语义的特征表示。因此，我们建立了一个通道注意模块来明确地模拟通道之间的相互依赖关系。</p>
+<p>图3(B)说明了通道注意模块的结构。与位置注意模块不同的是，我们直接从原始特征<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∈</mo><msup><mi>R</mi><mrow><mi>C</mi><mo>×</mo><mi>C</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A\in R^{C×C}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span></span></span></span></span></span></span></span></span>计算出通道注意图X∈RC×H×W。具体来说，我们将A重塑为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mrow><mi>C</mi><mo>×</mo><mi>N</mi></mrow></msup></mrow><annotation encoding="application/x-tex">R^{C×N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span></span></span></span></span></span></span></span>，然后在A和A的转置之间进行矩阵乘法。最后，我们应用softmax层来获得通道注意图X∈RC×C：</p>
+<p>其中xji衡量第i个通道对第j个通道的影响。此外，我们在X和A的转置之间进行矩阵乘法，将其结果重塑为RC×H×W。然后，我们将结果乘以一个比例参数β，并与A进行逐元相加运算，得到最终输出E∈RC×H×W：</p>
+<p>公式4显示，每个通道的最终特征是所有通道的特征和原始特征的加权和，它是特征图之间长程语义依赖的模型。它有助于提高特征的可辨识性。</p>
+<p>值得注意的是，在计算两个通道的关系图之前，我们没有采用卷积层来嵌入特征，因为它可以保持不同通道图之间的关系。此外，与最近的工作[27]不同的是，我们利用所有相应位置的空间信息来建立通道相关性模型，通过全局汇集或编码层来探索通道关系。</p>
+<h3 id="34-attention-module-embedding-with-networks"><a class="markdownIt-Anchor" href="#34-attention-module-embedding-with-networks"></a> 3.4. Attention Module Embedding with Networks</h3>
+<p>为了充分利用长距离的上下文信息，我们将这两个注意力模块的特征集合起来。具体来说，我们通过卷积层对两个注意力模块的输出进行转换，并进行元素求和来完成特征融合。最后，再通过卷积层来生成最终的预测图。我们没有采用级联操作，因为它需要更多的GPU内存。我们注意到，我们的注意力模块很简单，可以直接插入现有的FCN管道中。它们没有增加太多的参数，但却能有效地加强特征表示。</p>
+<h2 id="4-experiments"><a class="markdownIt-Anchor" href="#4-experiments"></a> 4. Experiments</h2>
+<p>为了评估所提出的方法，我们在Cityscapes数据集[5]、PASCAL VOC2012[7]、PASCAL Context数据集[14]和COCO Stuff数据集[2]上进行了综合实验。实验结果表明，DANet在三个数据集上实现了最先进的性能。在接下来的几个小节中，我们首先介绍了数据集和实现细节，然后我们在Cityscapes数据集上进行了一系列的消融实验。最后，我们报告了我们在PASCAL VOC 2012、PASCAL Context和COCO Stuff上的结果。</p>
+<h3 id="41-datasets-and-implementation-details"><a class="markdownIt-Anchor" href="#41-datasets-and-implementation-details"></a> 4.1. Datasets and Implementation Details</h3>
+<p>城市景观 该数据集有5000张从50个不同城市拍摄的图像。每张图片有2048×1024像素，有19个语义类别的高质量的像素级标签。训练集有2979张图片，验证集有500张图片，测试集有1525张图片。我们在实验中不使用粗略的数据。</p>
+<p>PASCAL VOC 2012 该数据集有10,582张图片用于训练，1,449张图片用于验证，1,456张图片用于测试，其中涉及20个前景物体类别和一个背景类别。PASCAL Context 该数据集为整个场景提供了详细的语义标签，其中包含4,998张训练用图像和5,105张测试用图像。按照[10, 27]，我们对最频繁的59个类别和一个背景类别（共60个类别）进行评估。</p>
+<p>COCO Stuff 该数据集包含9,000张用于训练的图像和1,000张用于测试的图像。按照[6, 10]，我们报告了我们在171个类别上的结果，包括80个物体和91个标注在每个像素上的东西。</p>
+<h4 id="411-implementation-details"><a class="markdownIt-Anchor" href="#411-implementation-details"></a> 4.1.1 Implementation Details</h4>
+<p>我们的方法基于 Pytorch 实现。按照文献[4,27]，我们采用了多学习率策略，即初始学习率在每次迭代后乘以（1- iter total iter ）0.9。城市景观数据集的基本学习率设定为 0.01。动量和权重衰减系数分别设置为 0.9 和 0.0001。我们使用同步 BN [27] 训练模型。在采用多尺度增强时，我们将 COCO Stuff 的训练时间设置为 180 epochs，将其他数据集的训练时间设置为 240 epochs。根据文献[3]，当使用两个注意力模块时，我们在网络末端采用多损失。在数据增强方面，我们在对城市景观数据集进行消融研究的训练过程中采用了随机裁剪（裁剪尺寸为 768）和随机左右翻转。</p>
+<h3 id="42-results-on-cityscapes-dataset"><a class="markdownIt-Anchor" href="#42-results-on-cityscapes-dataset"></a> 4.2. Results on Cityscapes Dataset</h3>
+<h4 id="421-ablation-study-for-attention-modules"><a class="markdownIt-Anchor" href="#421-ablation-study-for-attention-modules"></a> 4.2.1 Ablation Study for Attention Modules</h4>
+<p>我们在扩张网络的基础上采用了双重注意模块，以捕捉长距离的依赖关系，从而更好地理解场景。为了验证注意力模块的性能，我们用表1中的不同设置进行了实验。</p>
+<p>如表1所示，注意力模块明显提高了性能。与基线FCN（ResNet-50）相比，采用位置注意力模块在平均IoU方面产生了75.74%的结果，这带来了5.71%的改善。同时，单独采用通道上下文模块比基线要好4.25%。当我们把这两个注意力模块整合在一起时，性能进一步提高到76.34%。此外，当我们采用一个更深的预训练网络（ResNet-101）时，带有两个注意力模块的网络比基线模型的分割性能显著提高了5.03%。结果表明，注意力模块为场景分割带来了巨大的好处。</p>
+<p>位置注意模块的效果可以在图4中得到体现。 一些细节和物体的边界在位置注意模块的作用下更加清晰，例如第一行的 &quot;杆 &quot;和第二行的 “人行道”。对局部特征的选择性融合增强了对细节的识别。同时，图5显示，通过我们的通道注意模块，一些错误分类的类别现在被正确分类，如第一行和第三行的 “公共汽车”。通道图之间的选择性整合有助于捕捉上下文信息。语义的一致性得到了明显的改善。</p>
+<h4 id="422-ablation-study-for-improvement-strategies"><a class="markdownIt-Anchor" href="#422-ablation-study-for-improvement-strategies"></a> 4.2.2 Ablation Study for Improvement Strategies</h4>
+<p>按照[4]，我们采用同样的策略来进一步提高性能。(1) DA：用随机缩放法进行数据扩充。(2) 多网格：我们在最后一个ResNet块中采用了不同大小的网格层次结构（4,8,16）。(3) MS：我们对来自8个图像尺度{0.5 0.75 1 1.25 1.5 1.75 2 2.2}的分割概率图进行平均，以进行推理。</p>
+<p>实验结果显示在表2中。通过随机缩放的数据增强，性能提高了近1.26%，这表明网络从丰富训练数据的尺度多样性中获益。我们采用MultiGrid来获得预训练网络的更好的特征表示，这进一步实现了1.11%的改进。最后，分割图的融合进一步提高了性能，达到81.50%，比著名的Deeplabv3[4]方法（在Cityscape val set上为79.30%）高出2.20%。</p>
+<h4 id="423-visualization-of-attention-module"><a class="markdownIt-Anchor" href="#423-visualization-of-attention-module"></a> 4.2.3 Visualization of Attention Module</h4>
+<p>对于位置注意，整体的自我注意图的大小为（H×W）×（H×W），这意味着对于图像中的每一个具体的点，都有一个相应的子注意图，其大小为（H×W）。在图6中，对于每个输入图像，我们选择两个点（标记为#1和#2），并在第2列和第3列分别显示它们相应的子注意图。我们观察到，位置注意力模块可以捕捉到清晰的语义相似性和远距离关系。例如，在第一行中，红色的1号点被标记在一栋建筑上，它的注意力图（在第二列）突出了建筑所在的大部分区域。此外，在子注意图中，尽管有些点离1号点很远，但其边界却非常清晰。至于2号点，它的注意力图集中在大部分标为 &quot;汽车 &quot;的位置。在第二行中，全局区域的 &quot;交通标志 &quot;和 &quot;人 &quot;也是如此，尽管对应的像素数量较少。第三行是针对 &quot;植被 &quot;类和 &quot;人 &quot;类。特别是，2号点对附近的 &quot;骑手 &quot;类没有反应，但它对远处的 &quot;人 &quot;有反应。</p>
+<p>对于通道注意，很难直接给出关于注意图的可理解的视觉化。相反，我们展示了一些被关注的频道，看它们是否突出了清晰的语义区域。在图6中，我们在第4列和第5列显示了第11个和第4个被关注的通道。我们发现，在通道注意模块增强后，特定语义的反应是明显的。例如，在所有三个例子中，第11个通道图对 &quot;汽车 &quot;类有反应，而第4个通道图对 &quot;植被 &quot;类有反应，这有利于两个场景类别的分割。总而言之，这些可视化的数据进一步证明了捕捉长距离的依赖关系对于改善场景分割中的特征表示的必要性。</p>
+<h4 id="424-comparing-with-state-of-the-art"><a class="markdownIt-Anchor" href="#424-comparing-with-state-of-the-art"></a> 4.2.4 Comparing with State-of-the-art</h4>
+<p>我们在Cityscapes测试集上进一步比较了我们的方法和现有的方法。具体来说，我们只用精细注释的数据训练我们的DANet101，并将测试结果提交给官方评估服务器。结果显示在表3中。DANet以明显的优势胜过了现有的方法。特别是，我们的模型在相同的骨干网ResNet-101的情况下，以很大的优势超过了PSANet[30]。此外，它也超过了DenseASPP[25]，后者使用了比我们更强大的预训练模型。</p>
+<h3 id="43-results-on-pascal-voc-2012-dataset"><a class="markdownIt-Anchor" href="#43-results-on-pascal-voc-2012-dataset"></a> 4.3. Results on PASCAL VOC 2012 Dataset</h3>
+<p>我们在PASCAL VOC 2012数据集上进行了实验，以进一步评估我们方法的有效性。PASCAL VOC 2012数据集的定量结果见表。4. 我们的注意力模块明显提高了性能，其中DANet-50比基线高出3.3%。当我们采用一个更深的网络ResNet-101时，该模型进一步达到了80.4%的平均IoU。继[4, 27, 29]之后，我们采用了PASCAL VOC 2012训练值集，进一步微调我们的最佳模型。PASCAL VOC2012在测试集上的结果如表5所示。</p>
+<h3 id="44-results-on-pascal-context-dataset"><a class="markdownIt-Anchor" href="#44-results-on-pascal-context-dataset"></a> 4.4. Results on PASCAL Context Dataset</h3>
+<p>在本小节中，我们对PASCAL Context数据集进行了实验，以进一步评估我们方法的有效性。我们在PASCAL VOC 2012数据集上采用相同的训练和测试设置。PASCAL Context的定量结果显示在表。6. 基线（Dilated FCN-50）产生的平均IoU为44.3%。DANet-50将性能提高到50.1%。此外，通过深度预训练网络ResNet101，我们的模型结果达到了Mean IoU 52.6%，以很大的优势超过了以前的方法。在以前的工作中，Deeplab-v2和RefineNet通过不同的卷积或不同阶段的编码器采用多尺度特征融合。此外，他们用额外的COCO数据训练他们的模型，或者采用更深的模型（ResNet152）来提高他们的分割结果。与之前的方法不同的是，我们引入了注意力模块来明确捕获全局依赖关系，所提出的方法可以实现更好的性能。</p>
+<h3 id="45-results-on-coco-stuff-dataset"><a class="markdownIt-Anchor" href="#45-results-on-coco-stuff-dataset"></a> 4.5. Results on COCO Stuff Dataset</h3>
+<p>我们还对COCO Stuff数据集进行了实验，以验证我们提出的网络的通用性。与以前最先进的方法的比较见表。7. 结果显示，我们的模型在Mean IoU方面取得了39.7%的成绩，以很大的幅度超过了这些方法。在比较的方法中，DAG-RNN[18]利用二维图像的链式RNN来模拟丰富的空间依赖关系，Ding等人[6]在解码器阶段采用了门控机制来改善不明显物体和背景东西的分割。</p>
+<h3 id="5-conclusion"><a class="markdownIt-Anchor" href="#5-conclusion"></a> 5. Conclusion</h3>
+<p>在本文中，我们提出了一个用于场景分割的双注意网络（DANet），它利用自我注意机制自适应地整合局部语义特征。具体来说，我们引入了一个位置注意模块和一个通道注意模块，分别捕捉空间和通道维度上的全局依赖关系。消融实验表明，双注意模块能有效地捕捉长距离的上下文信息，并给出更精确的分割结果。我们的注意力网络在四个场景分割数据集上持续取得了出色的表现，即Cityscapes、Pascal VOC 2012、Pascal Context和COCO Stuff。此外，降低计算复杂性和增强模型的鲁棒性也很重要，这将在未来的工作中进行研究。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">qjl988</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Danet/">http://example.com/2024/12/10/论文/论文翻译/Danet/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">qjl988</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2024/12/08/hello-world/" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Hello World</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.  Quick Start  Create a new post $ hexo new &quot;My New Post&quot; More info: Writing  Run server $ hexo server More info: Server  Generate static files $ hexo generate More info: Generating  Deploy to remote sites $ hexo deploy More info: Deployment </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dual-attention-network-for-scene-segmentation"><span class="toc-text"> Dual Attention Network for Scene Segmentation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1. Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2. Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-dual-attention-network"><span class="toc-text"> 3. Dual Attention Network</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-overview"><span class="toc-text"> 3.1. Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-position-attention-module"><span class="toc-text"> 3.2. Position Attention Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-channel-attention-module"><span class="toc-text"> 3.3. Channel Attention Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-attention-module-embedding-with-networks"><span class="toc-text"> 3.4. Attention Module Embedding with Networks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experiments"><span class="toc-text"> 4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-datasets-and-implementation-details"><span class="toc-text"> 4.1. Datasets and Implementation Details</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#411-implementation-details"><span class="toc-text"> 4.1.1 Implementation Details</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-results-on-cityscapes-dataset"><span class="toc-text"> 4.2. Results on Cityscapes Dataset</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#421-ablation-study-for-attention-modules"><span class="toc-text"> 4.2.1 Ablation Study for Attention Modules</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#422-ablation-study-for-improvement-strategies"><span class="toc-text"> 4.2.2 Ablation Study for Improvement Strategies</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#423-visualization-of-attention-module"><span class="toc-text"> 4.2.3 Visualization of Attention Module</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#424-comparing-with-state-of-the-art"><span class="toc-text"> 4.2.4 Comparing with State-of-the-art</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-results-on-pascal-voc-2012-dataset"><span class="toc-text"> 4.3. Results on PASCAL VOC 2012 Dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-results-on-pascal-context-dataset"><span class="toc-text"> 4.4. Results on PASCAL Context Dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-results-on-coco-stuff-dataset"><span class="toc-text"> 4.5. Results on COCO Stuff Dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-conclusion"><span class="toc-text"> 5. Conclusion</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Danet/" title="Dual Attention Network for Scene Segmentation">Dual Attention Network for Scene Segmentation</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/08/hello-world/" title="Hello World">Hello World</a><time datetime="2024-12-07T19:18:25.281Z" title="发表于 2024-12-08 03:18:25">2024-12-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
