@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>pspnet | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="pspnet  Abstract 对于不受限制的开放词汇和多样化场景，场景解析是一项挑战。在本文中，我们通过我们的金字塔池化模块和所提出的金字塔场景解析网络（PSPNet），利用基于不同区域的上下文聚合，从而利用全局上下文信息的能力。我们的全局先验表示法能有效地在场景解析任务中产生高质量的结果，而 PSPNet 则为像素级预测提供了一个卓越的框架。所提出的方法在各种数据集上都取得了最先进的性能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pspnet">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/pspnet/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="pspnet  Abstract 对于不受限制的开放词汇和多样化场景，场景解析是一项挑战。在本文中，我们通过我们的金字塔池化模块和所提出的金字塔场景解析网络（PSPNet），利用基于不同区域的上下文聚合，从而利用全局上下文信息的能力。我们的全局先验表示法能有效地在场景解析任务中产生高质量的结果，而 PSPNet 则为像素级预测提供了一个卓越的框架。所提出的方法在各种数据集上都取得了最先进的性能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:04:05.295Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/pspnet/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'pspnet',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">pspnet</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">pspnet</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:04:05.295Z" title="更新于 2024-12-11 01:04:05">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="pspnet"><a class="markdownIt-Anchor" href="#pspnet"></a> pspnet</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<p>对于不受限制的开放词汇和多样化场景，场景解析是一项挑战。在本文中，我们通过我们的金字塔池化模块和所提出的金字塔场景解析网络（PSPNet），利用基于不同区域的上下文聚合，从而利用全局上下文信息的能力。我们的全局先验表示法能有效地在场景解析任务中产生高质量的结果，而 PSPNet 则为像素级预测提供了一个卓越的框架。所提出的方法在各种数据集上都取得了最先进的性能。它在 2016 年 ImageNet 场景解析挑战赛、PASCAL VOC 2012 基准测试和 Cityscapes 基准测试中均名列第一。在 PASCAL VOC 2012 和 Cityscapes 基准测试中，单个 PSPNet 的 mIoU 准确率分别达到 85.4% 和 80.2% 的新纪录。</p>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h2>
+<p>基于语义分割的场景解析是计算机视觉领域的一个基本课题。其目标是为图像中的每个像素分配一个类别标签。场景解析可提供对场景的完整理解。它能预测每个元素的标签、位置和形状。这一主题在自动驾驶、机器人传感等潜在应用中具有广泛的意义。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240304202656121.png" alt="image-20240304202656121" /></p>
+<blockquote>
+<p>图 1. ADE20K 数据集中复杂场景的图示。</p>
+</blockquote>
+<p>场景解析的难度与场景和标签的多样性密切相关。最早的场景解析任务[23]是对 LMO 数据集[22]中 2,688 幅图像的 33 个场景进行分类。最近的 PASCAL VOC 语义分割和 PASCAL 上下文数据集[8, 29]包含了更多具有相似上下文的标签，如椅子和沙发、马和牛等。新的 ADE20K 数据集[43]是最具挑战性的数据集，它拥有大量无限制的开放词汇和更多的场景类别。图 1 中显示了一些具有代表性的图像。要为这些数据集开发有效的算法，需要克服一些困难。</p>
+<p>最先进的场景解析框架大多基于全卷积网络（FCN）[26]。基于深度卷积神经网络（CNN）的方法可以增强对物体的动态理解，但考虑到场景的多样性和不受限制的词汇量，这些方法仍然面临挑战。图 2 第一行显示了一个例子，一艘船被误认为是一辆汽车。这些错误是由于物体外观相似造成的。但是，如果根据场景被描述为河边的船屋这一上下文来查看图像，就能得出正确的预测结果。</p>
+<p>为了实现准确的场景感知，知识图谱依赖于场景上下文的先验信息。我们发现，目前基于 FCN 模型的主要问题是缺乏利用全局场景类别线索的合适策略。对于典型的复杂场景理解，以前为了获得全局图像级特征，人们广泛采用空间金字塔汇集法[18]。空间金字塔池网络[12]进一步增强了这种能力。</p>
+<p>与这些方法不同，为了结合合适的全局特征，我们提出了金字塔场景解析网络（PSPNet）。除了传统的用于像素预测的扩张 FCN [3, 40]，我们还将像素级特征扩展到专门设计的全局金字塔集合特征。局部和全局线索共同作用，使最终预测结果更加可靠。我们还提出了一种具有深度监督损失的优化策略。我们在本文中给出了所有实现细节，这些细节是我们取得良好性能的关键，并公开了代码和训练好的模型1。</p>
+<p>我们的方法在所有可用数据集上都达到了最先进的性能。它是 2016 年 ImageNet 场景解析挑战赛的冠军[43]，在 PASCAL VOC 2012 语义分割基准测试中获得第一名[8]，在城市场景 Cityscapes 数据中获得第一名[6]。他们表明，PSPNet 为像素级预测任务提供了一个很有前景的方向，甚至可能在后续工作中惠及基于 CNN 的立体匹配、光流、深度估计等。我们的主要贡献有三方面。</p>
+<ul>
+<li>
+<p>我们提出了一种金字塔场景解析网络，用于在基于 FCN 的像素预测框架中嵌入困难的景物背景特征。</p>
+</li>
+<li>
+<p>我们为基于深度监督损失的深度 ResNet [13] 开发了有效的优化策略。</p>
+</li>
+<li>
+<p>我们为最先进的场景解析和语义分割构建了一个实用系统，其中包括所有关键的实现细节。</p>
+</li>
+</ul>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2. Related Work</h2>
+<p>下面，我们将回顾场景解析和语义分割任务的最新进展。在强大的深度神经网络[17, 33, 34, 13]的驱动下，场景解析和语义分割等像素级预测任务取得了巨大进展，其灵感来自于用卷积层取代分类中的全连接层[26]。为了扩大神经网络的感受野，[3, 40] 的方法使用了扩张卷积。Noh 等人[30]提出了一种粗到细结构的解卷积网络来学习分割掩码。我们的基准网络是 FCN 和扩张网络 [26, 3]。</p>
+<p>其他工作主要有两个方向。一个方向 [26, 3, 5, 39, 11] 是多尺度特征集合。因为在深度网络中，高层特征包含更多语义，而位置信息较少。结合多尺度特征可以提高性能。</p>
+<p>另一个方向是基于结构预测。先驱工作[3]使用条件随机场（CRF）作为后处理来完善分割结果。随后的方法 [25, 41, 1] 则通过端到端建模来完善网络。这两个方向都改善了场景解析的定位能力，使预测的语义边界与物体相吻合。然而，在利用复杂场景中的必要信息方面仍有很大的空间。</p>
+<p>为了充分利用全局图像级先验来理解不同场景，[18, 27]的方法利用传统特征而不是深度神经网络来提取全局上下文信息。在物体检测框架下也有类似的改进[35]。Liu 等人[24]的研究证明，利用 FCN 进行全局平均池化可以改善语义分割结果。然而，我们的实验表明，对于具有挑战性的 ADE20K 数据，这些全局描述符的代表性不足。因此，与 [24] 中的全局池化不同，我们通过金字塔场景解析网络进行基于不同区域的上下文聚合，从而利用全局上下文信息的能力。</p>
+<h3 id="3-pyramid-scene-parsing-network"><a class="markdownIt-Anchor" href="#3-pyramid-scene-parsing-network"></a> 3. Pyramid Scene Parsing Network</h3>
+<p>我们首先观察和分析了将 FCN 方法应用于场景解析时的代表性失败案例。这些案例促使我们提出金字塔池模块作为有效的全局上下文先验。图 3 所示的金字塔场景解析网络 (PSPNet) 可提高复杂场景解析中开放词汇对象和内容识别的性能。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240304202904792.png" alt="image-20240304202904792" /></p>
+<blockquote>
+<p>图 3.我们提出的 PSPNet 概述。给定输入图像 (a)，我们首先使用 CNN 获取最后一个卷积层 (b) 的特征图，然后应用金字塔解析模块来获取不同的子区域表示，然后通过上采样和串联层形成最终的特征表示，在（c）中携带局部和全局上下文信息。最后，将表示输入卷积层以获得最终的每像素预测（d）。</p>
+</blockquote>
+<h3 id="31-important-observations"><a class="markdownIt-Anchor" href="#31-important-observations"></a> 3.1. Important Observations</h3>
+<p><img src="/img/loading.gif" data-original="images/image-20240304202956770.png" alt="image-20240304202956770" /></p>
+<blockquote>
+<p>图 2.我们在 ADE20K [43] 数据集上观察到的场景解析问题。第一行显示了关系不匹配的问题——汽车比船很少在水面上航行。第二行显示了混淆类别，其中“建筑”类很容易被混淆为“摩天大楼”。第三行说明了不显眼的类。在这个例子中，枕头的颜色和质地与床单非常相似。这些不显眼的物体很容易被FCN错误分类。</p>
+</blockquote>
+<p>新的 ADE20K 数据集[43]包含 150 个东西/物体类别标签（如墙、天空和树）和 1,038 个图像级场景描述符（如机场航站楼、卧室和街道）。因此，大量的标签和庞大的场景分布就出现了。通过查看 [43] 中提供的 FCN 基线的预测结果，我们总结了复杂场景解析的几个常见问题。</p>
+<p>不匹配的关系 上下文关系具有普遍性，对于复杂场景的理解尤为重要。存在并发的视觉模式。例如，飞机很可能在跑道上或在天空中飞行，而不是在道路上。在图 2 第一行的例子中，FCN 根据黄色方框中的船的外观预测其为 “汽车”。但常识告诉我们，汽车很少会经过河流。缺乏收集上下文信息的能力会增加错误分类的几率。</p>
+<p>混淆类别 在 ADE20K 数据集中，有许多类别标签对在分类时容易混淆。例如，田地和土地；山和山丘；墙壁、房屋、建筑物和摩天大楼。它们具有相似的外观。如文献[43]所述，对整个数据集进行标注的专家标注者仍有 17.60% 的像素误差。在图 2 的第二行中，FCN 将方框中的物体预测为摩天大楼的一部分和建筑物的一部分。这些结果应排除在外，这样整个物体要么是摩天大楼，要么是建筑物，而不是两者都是。利用类别之间的关系可以解决这个问题。</p>
+<p>不显眼的类别 场景中包含任意大小的物体/物品。一些小尺寸的东西，如路灯和招牌，虽然可能非常重要，但却很难找到。相反，大的物体或物品可能会超出 FCN 的感受野，从而导致预测不连续。如图 2 第三行所示，枕头与床单的外观相似。忽略全局场景类别可能会导致无法解析枕头。为了提高对非常小或非常大的物体的性能，我们应该对包含不显眼类别的不同子区域给予更多关注。</p>
+<p>综上所述，许多错误部分或完全与不同感受野的上下文关系和全局信息有关。因此，具有合适的全局场景级先验的深度网络可以大大提高场景解析的性能。</p>
+<h3 id="32-pyramid-pooling-module"><a class="markdownIt-Anchor" href="#32-pyramid-pooling-module"></a> 3.2. Pyramid Pooling Module</h3>
+<p><img src="/img/loading.gif" data-original="images/image-20240304202904792.png" alt="image-20240304202904792" /></p>
+<blockquote>
+<p>图 3.我们提出的 PSPNet 概述。给定输入图像 (a)，我们首先使用 CNN 获取最后一个卷积层 (b) 的特征图，然后应用金字塔解析模块来获取不同的子区域表示，然后通过上采样和串联层形成最终的特征表示，在（c）中携带局部和全局上下文信息。最后，将表示输入卷积层以获得最终的每像素预测（d）。</p>
+</blockquote>
+<p>通过上述分析，我们将在下文中介绍金字塔池化模块，经验证明它是一种有效的全局上下文先验。</p>
+<p>在深度神经网络中，感受野的大小可以大致说明我们对上下文信息的利用程度。虽然从理论上讲，ResNet [13] 的感受野已经大于输入图像，但 Zhou 等人[42] 的研究表明，CNN 的经验感受野远远小于理论感受野，尤其是在高层。这使得许多网络无法充分纳入瞬间全局景物先验。针对这一问题，我们提出了一种有效的全局先验表示法。</p>
+<p>全局平均池化是一个很好的全局上下文先验基线模型，常用于图像分类任务 [34, 13]。在 [24] 中，它被成功应用于语义分割。但对于 ADE20K[43] 中的复杂场景图像，这种策略不足以涵盖必要的信息。这些场景图像中的像素被标注了许多内容和对象。直接将它们融合成一个单一的矢量可能会丢失空间关系并造成模糊。在这方面，全局上下文信息和子区域上下文信息有助于区分各种类别。将来自不同子区域的信息与这些感受野融合在一起，可以形成更强大的表征。经典的场景/图像分类工作 [18, 12] 也得出了类似的结论。</p>
+<p>在[12]中，通过金字塔汇集法生成的不同层次的特征图最终被扁平化并连接到一个全连接层中进行分类。这种全局先验的设计是为了消除用于图像分类的 CNN 的固定大小限制。为了进一步减少不同子区域之间的上下文信息损失，我们提出了一种分层全局先验，它包含不同尺度的信息，并且在不同子区域之间各不相同。我们称之为金字塔池化模块，用于在深度神经网络的最终层特征图上构建全局场景先验，如图 3（c）所示。</p>
+<p>金字塔池化模块融合了四种不同金字塔尺度下的特征。红色标注的最粗级别是全局池化，以生成单仓输出。接下来的金字塔级将特征图分成不同的子区域，并形成不同位置的池化表示。金字塔池化模块中不同层级的输出包含不同大小的特征图。为了保持全局特征的权重，我们在每个金字塔层级后使用 1×1 卷积层，将上下文表示的维度降低到原始维度的 1/N（如果金字塔层级大小为 N）。然后，我们直接对低维特征图进行上采样，通过双线性插值得到与原始特征图相同大小的特征。最后，将不同层次的特征汇总为最终的金字塔汇集全局特征。</p>
+<p>注意，金字塔的层数和每个层的大小都可以修改。它们与输入金字塔汇集层的特征图的大小有关。该结构通过采用不同大小的池核，分几步抽象出不同的子区域。因此，多级核应保持合理的表示间隙。我们的金字塔池化模块是一个四级模块，分仓大小分别为 1×1、2×2、3×3 和 6×6。对于最大值和平均值之间的池化操作类型，我们在第 5.2 节中进行了大量实验，以显示两者之间的差异。</p>
+<h3 id="33-network-architecture"><a class="markdownIt-Anchor" href="#33-network-architecture"></a> 3.3. Network Architecture</h3>
+<p>通过金字塔池模块，我们提出了金字塔场景解析网络（PSPNet），如图 3 所示。对于图 3(a) 中的输入图像，我们使用预训练的 ResNet [13] 模型和扩张网络策略 [3, 40] 来提取特征图。最终的特征图大小为输入图像的 1/8，如图 3(b) 所示。在图谱之上，我们使用（c）所示的金字塔池化模块来收集上下文信息。利用我们的 4 级金字塔，池化内核涵盖了图像的全部、一半和一小部分。它们被融合为全局先验。然后，我们在 © 的最后部分将先验图与原始特征图连接起来。之后是卷积层，生成 (d) 中的最终预测图。</p>
+<p>为了解释我们的结构，PSPNet 为像素级场景解析提供了有效的全局上下文先验。金字塔池化模块可以收集各层次的信息，比全局池化更具代表性[24]。在计算成本方面，与原始的扩张 FCN 网络相比，我们的 PSPNet 并没有增加多少成本。在端到端学习中，可以同时优化全局金字塔池模块和局部 FCN 特征。</p>
+<h2 id="4-deep-supervision-for-resnet-based-fcn"><a class="markdownIt-Anchor" href="#4-deep-supervision-for-resnet-based-fcn"></a> 4. Deep Supervision for ResNet-Based FCN</h2>
+<p>深度预训练网络具有良好的性能 [17, 33, 13]。然而，网络深度的增加可能会带来额外的优化困难，如用于图像分类的 [32, 19] 所示。ResNet 通过在每个块中跳过连接来解决这个问题。深层 ResNet 的后几层主要基于前几层学习残差。</p>
+<p>与此相反，我们建议通过附加损失的监督生成初始结果，之后再通过最终损失学习残差。因此，深度网络的优化被分解为两个部分，每个部分的求解都更简单。</p>
+<p>图 4 举例说明了我们的深度监督 ResNet101 [13] 模型。除了使用 softmax 损失训练最终分类器的主分支外，在第四阶段后还应用了另一个分类器，即 res4b22 残差块。不同于中继反向传播法[32]将后向辅助损失阻断到几个浅层，我们让两个损失函数通过前面的所有层。辅助损失有助于优化学习过程，而主分支损失则承担最大责任。我们增加权重来平衡辅助损失。</p>
+<p>在测试阶段，我们放弃辅助分支，只使用优化后的主分支进行最终预测。这种基于 ResNet 的 FCN 深度监督训练策略在不同的实验环境下具有广泛的实用性，并能与预训练的 ResNet 模型配合使用。这体现了这种学习策略的通用性。更多详情请参见第 5.2 节。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/mVIT1/" title="MobileViT"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">MobileViT</div></div><div class="info-2"><div class="info-item-1"> MobileViT模型简介 blog.csdn.net 论文名称：MobileViT: Light-Weight, General-Purpose, and Mobile-Friendly Vision Transformer- 论文下载地址：https://arxiv.org/abs/2110.02178- 官方源码（Pytorch实现）：https://github.com/apple/ml-cvnets- 自己从ml-cvnets仓库中剥离的代码：https://github.com/WZMIAOMIAO/deep-learning-for-image-processing/tree/master/pytorch_classification/MobileViT   文章目录 [TOC]   0 前言 自从2020年ViT(Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/seaformer/" title="SEAFORMER SQUEEZE-ENHANCED AXIAL TRANSFORMER FOR MOBILE SEMANTIC SEGMENTATION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SEAFORMER SQUEEZE-ENHANCED AXIAL TRANSFORMER FOR MOBILE SEMANTIC SEGMENTATION</div></div><div class="info-2"><div class="info-item-1"> SEAFORMER: SQUEEZE-ENHANCED AXIAL TRANSFORMER FOR MOBILE SEMANTIC SEGMENTATION 文章链接  ABSTRACT 自从引入transformer后，许多计算机视觉任务（如语义分割）的格局，最近被CNN压倒性地主宰，发生了显著的变化。然而，计算成本和内存要求使得这些方法不适合在移动设备上使用，特别是对于高分辨率的每像素语义分割任务。在本文中，我们介绍了一种用于移动语义分割的新方法挤压增强轴向变换器（SeaFormer）。具体来说，我们设计了一个通用的注意力块，其特点是制定挤压轴和细节增强。它可以进一步用于创建一个具有卓越成本效益的骨干架构系列。与轻型分割头相结合，我们在ADE20K和Cityscapes数据集上基于ARM的移动设备上实现了分割精度和延迟之间的最佳权衡。最关键的是，我们以更好的性能和更低的延迟击败了对移动设备友好的对手和基于transformer的同行，而没有任何花哨的东西。除了语义分割之外，我们还将提出的SeaFormer架构应用于图像分类问题，展示了其作为多功能移动友好骨干的潜力。  1...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pspnet"><span class="toc-text"> pspnet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1. Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2. Related Work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-pyramid-scene-parsing-network"><span class="toc-text"> 3. Pyramid Scene Parsing Network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#31-important-observations"><span class="toc-text"> 3.1. Important Observations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-pyramid-pooling-module"><span class="toc-text"> 3.2. Pyramid Pooling Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-network-architecture"><span class="toc-text"> 3.3. Network Architecture</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-deep-supervision-for-resnet-based-fcn"><span class="toc-text"> 4. Deep Supervision for ResNet-Based FCN</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

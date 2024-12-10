@@ -1,0 +1,360 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>BiSeNetV2 | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="BiSeNetV2  Abstract 低层次的细节和高层次的语义对于语义分割任务都是至关重要的。然而，为了加快模型推理的速度，目前的方法几乎总是牺牲低层次的细节，导致准确性大大降低。我们建议分别处理这些空间细节和分类语义，以实现实时语义分割的高准确性和高效率。为此，我们提出了一个高效的架构，在速度和准确性之间做了很好的权衡，称为双边分割网络（BiSeNet V2）。**这个架构包括以下几个方面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BiSeNetV2">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/bisenetv2/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="BiSeNetV2  Abstract 低层次的细节和高层次的语义对于语义分割任务都是至关重要的。然而，为了加快模型推理的速度，目前的方法几乎总是牺牲低层次的细节，导致准确性大大降低。我们建议分别处理这些空间细节和分类语义，以实现实时语义分割的高准确性和高效率。为此，我们提出了一个高效的架构，在速度和准确性之间做了很好的权衡，称为双边分割网络（BiSeNet V2）。**这个架构包括以下几个方面">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:04:04.251Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/bisenetv2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'BiSeNetV2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">BiSeNetV2</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">BiSeNetV2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:04:04.251Z" title="更新于 2024-12-11 01:04:04">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>38分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="bisenetv2"><a class="markdownIt-Anchor" href="#bisenetv2"></a> BiSeNetV2</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<p>低层次的细节和高层次的语义对于语义分割任务都是至关重要的。然而，为了加快模型推理的速度，目前的方法几乎总是牺牲低层次的细节，导致准确性大大降低。我们建议分别处理这些空间细节和分类语义，以实现实时语义分割的高准确性和高效率。为此，我们提出了一个高效的架构，在速度和准确性之间做了很好的权衡，称为双边分割网络（BiSeNet V2）。**这个架构包括以下几个方面： (i) 一个细节分支，具有宽通道和浅层，以捕捉低层次的细节并产生高分辨率的特征表示；(ii) 一个语义分支，具有窄通道和深层，以获得高层次的语义背景。细节分支有宽通道尺寸和浅层，而语义分支有窄通道尺寸和深层。由于通道容量的减少和快速下采样策略的使用，语义分支是轻量级的，可以由任何有效的模型实现。**我们设计了一个导引聚合层，以加强相互联系，融合两种类型的特征表示。此外，我们还设计了一个助推器训练策略来提高分割性能，而不需要任何额外的推理成本。广泛的定量和定性评估表明，与几个最先进的实时语义分割方法相比，所提出的架构显示出良好的性能。具体来说，对于2048×1024的输入，我们在一块NVIDIA GeForce GTX 1080 Ti显卡上，在Cityscapes测试集上实现了72.6%的Mean IoU，速度为156 FPS，这比现有的方法要快得多，但我们实现了更好的分割精度。</p>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1 Introduction</h2>
+<p><img src="/img/loading.gif" data-original="images/image-20230427122145463.png" alt="image-20230427122145463" /></p>
+<blockquote>
+<p>图1 在Cityscapes测试集上的速度-准确度权衡比较 红点表示我们的方法，而灰点表示其他方法。红线代表实时速度（在线彩色图）。</p>
+</blockquote>
+<p>语义分割是为每个像素分配语义标签的任务。它是计算机视觉中的一个基本问题，有着广泛的应用，包括场景理解（Zhou等人，2019）、自主驾驶（Cordts等人，2016；Geiger等人，2012）、人机交互和视频监控，仅此而已。近年来，随着卷积神经网络（Krizhevsky等人，2012）的进步，一系列基于全卷积网络（FCN）（Long等人，2015）的语义分割方法（Zhao等人，2017；Chen等人，2017；Yuetal.2018b；Chen等人，2018；Zhang等人，2018a）不断推进最先进性能。</p>
+<p>这些方法的高精确度取决于其骨干网络。主要有两种架构作为骨干网络：(i) 扩张骨干网络，它去掉了下采样操作，对相应的滤波核进行上采样，以保持高分辨率的特征表示(Chen et al. 2015; Chen et al. 2018; Chen et al. 2018; Zhao et al. 2017, 2018b; Fuetal.2019 ;Yuetal.2020b)，如图2a所示；(ii)编码器-解码器主干，通过自上而下和跳过连接来恢复解码器部分的高分辨率特征表示（Lin等人，2017；Peng等人，2017；Yuetal.2018b），如图2b所示。然而，这两种架构都是为一般的语义分割任务设计的，很少考虑推理速度和计算成本。在扩张骨干网中，扩张卷积很耗时，去除下采样操作后，会产生很高的计算复杂性和内存占用。编码器-解码器架构中的众多连接对于获得低内存访问成本是不利的（Ma等人，2018）。然而，实时语义分割应用需要高速的高效推理。</p>
+<p>为了满足这一需求，基于这两个骨干网络，现有的方法（Badrinarayanan等人，2017；Paszke等人，2016；Zhao等人，2018a；Romera等人，2018；Mazzini 2018）主要采用两种方法来加速模型：（i）输入限制。在相同的网络结构下，较小的输入分辨率会带来较低的计算成本。为了实现实时推理速度，许多算法（Zhao等人2018a；Romera等人2018；Mazzini 2018；Romera等人2018）试图限制输入大小以降低整体计算复杂性；（ii）通道修剪。这是一种直接的加速方法，特别是在早期阶段修剪通道以提升推理速度（Badrinarayanan等人2017；Paszke等人2016；Chollet 2017）。尽管推理速度有所提高，但这两种方法都牺牲了低层次的细节和空间容量，导致准确性急剧下降。因此，同时实现高效率和高精确度是具有挑战性的，对于利用特定的架构进行实时语义分割任务具有重要意义。</p>
+<p>低层次的细节和高层次的语义对于语义分割任务都是至关重要的。在一般语义分割任务的架构中，深度和宽度网络同时编码这两类信息。然而，我们观察到，这两种类型的信息本质上需要不同的架构，即不同的宽度和深度。低层次的细节，通常有高分辨率的特征图，存在于架构的低级阶段，并编码许多不同的模式，因此需要宽通道维度。高层次的语义，通常有低分辨率的特征图，存在于架构的高阶段，需要深层来抽象信息。这促使我们将空间细节和分类语义分开处理，以实现实时语义分割任务的准确性和推理速度之间的权衡。</p>
+<p>为了实现这一目标，<strong>我们提出了一个双路径架构，我们称之为双边分割网络（BiSeNet V2），用于实时语义分割。其中一条通路被设计用来捕捉具有宽通道尺寸和浅层的空间细节，即较大的分支宽度和较小的分支深度，并被称为细节分支。与此相反，另一条途径被引入以提取具有窄通道尺寸和深层的分类语义，即较小的分支宽度和较大的分支深度，并被命名为语义分支。语义分支只需要一个大的感受野来捕捉语义背景，而详细的信息可以由细节分支提供。因此，语义分支可以通过较少的通道维度和快速下采样策略变得非常轻便。这两种类型的特征被合并以构建一个更强大和更全面的特征表示。如图2c所示，这一概念设计导致了一个高效和有效的实时语义分割的架构。</strong></p>
+<p>两个分支都采用不同的深度来编码信息，导致两个特征之间的语义差距。在这项研究中，我们设计了一个引导性的聚合层来有效地合并这两类特征。BiSeNetV1（Yu等人，2018a）采用横向连接来进一步迭代增强语义分支的特征。然而，横向连接对于获得低内存访问成本是不利的。因此，遵循深度监督的理念（Xie和Tu 2015），我们提出了一个带有一系列辅助预测头的助推器训练策略。它在训练阶段逐级增强特征表示能力，并在推理阶段丢弃，不增加任何推理复杂性。广泛的定量和定性评估表明，与最先进的实时语义分割方法相比，所提出的架构显示了良好的性能，如图1所示。</p>
+<p>这项工作的主要贡献总结如下：</p>
+<ul>
+<li>
+<p>我们提出了一个高效的双路径架构，称为双边分割网络，用于实时语义分割，它分别处理空间细节和分类语义。</p>
+</li>
+<li>
+<p>对于语义学分支，我们设计了一个基于深度卷积的新的轻量级结构，以增强感受野并捕获丰富的上下文信息。</p>
+</li>
+<li>
+<p>在不增加推理成本的情况下，引入了增量训练策略来进一步提高分割性能。</p>
+</li>
+<li>
+<p>我们的架构在Cityscapes（Cordts等人，2016）、CamVid（Brostow等人，2008a）、COCO-Stuff（Caesar等人，2018）和ADE20K（Zhou等人，2019）基准测试中取得了令人瞩目的结果。具体来说，我们在Cityscapes测试集上获得了72.6%的平均IoU的结果，在一块NVIDIA GeForce GTX 1080Ti卡上的速度为156 FPS。</p>
+</li>
+</ul>
+<p>这项工作的初步版本发表在（Yu et al. 2018a）。我们对会议版本做了如下扩展。(i) 我们简化了原来的结构，提出了一个高效和有效的实时语义分割架构。我们删除了原始版本中耗时的跨层连接，以获得一个更清晰和更简单的架构。(ii) 我们用更紧凑的网络结构和精心设计的组件重新设计了整体架构。具体来说，我们加深了细节分支以编码更多的细节。我们为语义分支设计了基于深度卷积的轻量级组件。同时，我们提出了一个高效的聚合层，以加强两个路径之间的相互联系。(iii) 我们进行了全面的消融实验，阐述了所提方法的有效性和效率。(iv) 我们在以前的工作中显著提高了该方法的准确性和速度；即对于2048×1024的输入，在Cityscapes测试集上实现了72.6%的平均IoU，在一块NVIDIA GeForce GTX 1080Ti卡上的速度为156FPS。</p>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2 Related Work</h2>
+<p>最近几年，图像语义分割取得了重大进展。在本节中，我们的讨论主要集中在与我们工作最相关的三组方法上，即通用语义分割方法、实时语义分割方法和轻量级架构。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230427140405459.png" alt="image-20230427140405459" /></p>
+<blockquote>
+<p>图2 不同骨干网结构的说明。a是扩张骨干网，它去掉了下采样操作，并对相应的卷积滤波器进行上采样。b是编码器-解码器主干网络，它增加了额外的自上而下和横向连接来恢复高分辨率的特征图。网络中的这些连接在内存访问成本方面不太有利。为了同时实现高精度和高效率，我们设计了c双边分割主干网络。这个架构有两个通路，一个是用于空间细节的细节分支，一个是用于分类语义的语义分支。细节分支有宽通道和浅层，而语义分支有窄通道和深层，可以通过系数（λ，例如1/4）使其变得非常轻盈</p>
+</blockquote>
+<h3 id="21-generic-semantic-segmentation"><a class="markdownIt-Anchor" href="#21-generic-semantic-segmentation"></a> 2.1 Generic Semantic Segmentation</h3>
+<p>基于阈值选择（Otsu 1979）、区域生长（Vincent和Soille 1991）、超级像素（Ren和Malik 2003；Achanta等人2012；Van den Bergh等人2012）和图（Boykov和Jolly 2001；Rother等人2004）算法的传统分割方法采用手工制作的特征来解决这个问题。最近，新一代基于FCN的算法（Long等人，2015；Shelhamer等人，2017）在不同的基准上不断提高最先进的性能。各种方法都是基于两种类型的骨干网络：（i）扩张骨干网络，和（ii）编码器-解码器骨干网络。</p>
+<p>一方面，扩张骨干网去掉了下采样操作，对卷积滤波器进行上采样，以保留高分辨率的特征表示。由于扩张卷积的简单性，各种方法（Chen et al. 2018; Chen et al. 2018; Zhao et al. 2017; Wang et al. 2018a; Zhang et al. 2018a;Yuetal.2020b）在其上开发了不同的新颖有效的组件。Deeplabv3（Chen等人，2017）设计了一个tratous空间金字塔池来捕捉多尺度的背景，而PSPNet（Zhao等人，2017）在扩张骨架上采用了金字塔池模块。同时，一些方法引入了注意机制，如自我注意（Yuan and Wang, 2018; Fu et al., 2019; Yu et al., 2020b）、空间注意（Zhao et al. 2018b）和通道注意（Zhang et al. 2018a），来捕捉基于扩张主干的长距离语境。</p>
+<p>另一方面，编码器-解码器骨干网络增加了额外的自上而下和横向的连接，以恢复解码器部分的高分辨率特征图。FCN和Hypercolumns（Hariharan等人，2015）采用跳过连接来整合低层次的特征。同时，U-net（Ronneberger等人，2015）、带有保存的池化指数的SegNet（Badrinarayanan等人，2017）、带有多路径细化的RefineNet（Lin等人，2017）、带有逐步重建的LRR（Ghiasi和Fowlkes，2016）、带有 &quot;大核 &quot;卷积的GCN（Peng等人，2017）和带有通道注意模块的DFN（Yu等人，2018b）都纳入了这个骨干网络来恢复细节信息。HRNet（Wang等人，2020）和Lite-HRNet（Yu等人，2021）采用多分支来保持高解析度。</p>
+<p>这两种类型的骨干网络都是用广义和深义的网络同时编码低级细节和高级语义。尽管这两种类型的骨干网络都达到了最先进的性能，但大多数方法都表现出推理速度缓慢。在这项研究中，我们提出了一种新的、高效的架构，分别处理空间细节和分类语义，以实现分割精度和推理速度之间的有利权衡。</p>
+<h3 id="22-real-time-semantic-segmentation"><a class="markdownIt-Anchor" href="#22-real-time-semantic-segmentation"></a> 2.2 Real-time Semantic Segmentation</h3>
+<p>当要求越来越高的实际应用需要快速互动和响应时，实时语义分割算法吸引了越来越多的关注。SegNet（Badrinarayanan等人，2017）使用紧凑的网络结构和跳过连接来实现高速度。E-Net（Paszke等人，2016）设计了一个轻量级的网络，并提供了一个非常高的推理速度。DLC（Li等人，2017）采用了一个级联网络结构，以减少 &quot;简单区域 &quot;的计算。ERFNet（Romera等人，2018）采用了残差连接和因子化卷积来保持效率和准确性。同时，ESPNet（Mehta等人，2018，2019）设计了一个高效的空间金字塔扩张卷积，用于实时语义分割。DFANet（Li等人，2019b）重用了特征，增强了特征表示，降低了复杂性。</p>
+<p>虽然这些方法可以达到实时推理的速度，但它们往往为了效率而大大牺牲了准确性，主要是由于损失了低层次的细节。在这项工作中，我们同时考虑到了低层次的细节和高层次的语义，以实现高精确度和高效率。</p>
+<p>双分支/多分支架构。这项工作也与实时语义分割任务中的其他双/多分支架构有关。ICNet（Zhao等人，2018a）是第一个用于实时语义分割的多分支架构。它采用了具有不同深度的树枝来处理不同分辨率的输入。低分辨率和中等分辨率的分支部分共享权重。GUN（Mazzini 2018）和ContextNet（Poudel等人，2018）共享ICNet的类似结构。它们对两个分辨率的输入只有两个分支。Fast-SCNN（Poudel等人，2019）遵循BiSeNetV1（Yu等人，2018a）的架构理念。它与BiSeNetV1的不同之处在于，它学习对输入进行向下采样，然后用两个分支处理信息。</p>
+<p>与这些工作不同，我们的研究观察到（i）丰富的图像信息对分割的准确性至关重要，（ii）空间细节和分类语义需要不同的编码结构。因此，我们提出的架构保持了丰富的图像信息，并为空间细节和分类语义分别采用了不同的结构。</p>
+<h3 id="23-lightweight-architecture"><a class="markdownIt-Anchor" href="#23-lightweight-architecture"></a> 2.3 Lightweight Architecture</h3>
+<p>继分组/深度卷积和可分离卷积的开创性工作之后，轻量级架构设计取得了快速发展，包括Xception（Chollet 2017）、MobileNet（Howard等人，2017；Sandler等人，2018）和ShuffleNet（Zhang等人，2018b；Maetal.2018）等等。这些方法在分类任务的速度和准确性之间实现了良好的权衡。在这项研究中，考虑到计算复杂度、内存访问成本和实时语义分割的实际推理速度，我们设计了一个轻量级网络。</p>
+<h2 id="3-bilateral-segmentation-network"><a class="markdownIt-Anchor" href="#3-bilateral-segmentation-network"></a> 3 Bilateral Segmentation Network</h2>
+<p>我们的 BiSeNet 概念是通用的，可以用不同的卷积模型（He 等人，2016 年；Huang 等人，2017 年；Chollet，2017 年；Iandola 等人，2016 年；Howard 等人，2017 年；Sandler 等人，2018 年；Zhang 等人，2018b;Maetal. 2018）以及任何具体的设计。主要有三个关键概念：(i) 细节分支具有宽通道维度和浅层，空间细节的感受野小；(ii) 语义分支具有窄通道维度和深层，分类语义的感受野大。(iii) 设计一个高效的聚合层来融合这两类表征。</p>
+<p>在本节中，我们将展示整体架构的概念和相应的实例，以及其他一些具体设计，如图 3 所示。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230427140538818.png" alt="image-20230427140538818" /></p>
+<blockquote>
+<p>图3 双边分割网络概述。该网络具有三个主要组件：紫色虚线框中的双通道主干、橙色虚线框中的聚合层以及黄色虚线框中的增强组件。双路径主干包含细节分支（蓝色立方体）和语义分支（绿色立方体）。详细分支中的三个阶段分别具有 C1、C2、C3 通道。语义分支中相应阶段的通道可以通过因子 λ(λ &lt; 1) 进行轻量化。语义分支的最后一个阶段是上下文嵌入块的输出。同时，立方体中的数字显示特征图与输入分辨率的比率。在聚合层组件中，我们采用双边聚合层。 Down表示下采样操作，Up表示上采样操作，φ是sigmoid函数，⊗表示元素乘积。此外，在booster组件中，我们设计了一些辅助分割头来提高分割性能，而无需任何额外的推理成本（网上彩图）</p>
+</blockquote>
+<h3 id="31-detail-branch"><a class="markdownIt-Anchor" href="#31-detail-branch"></a> 3.1 Detail Branch</h3>
+<h4 id="concept"><a class="markdownIt-Anchor" href="#concept"></a> Concept.</h4>
+<p>细节分支负责低级空间细节。细节信息具有丰富的模式，需要较高的通道容量，即较宽的通道尺寸。由于低级细节信息通常存在于架构的低级阶段，我们可以设计一种分支层数较少的浅层结构，使该分支的步长较小。总之，细节分支的关键概念是使用宽通道尺寸和浅层，即较大的分支宽度和较小的分支深度来处理空间细节。由于该分支具有高分辨率特征图和宽通道尺寸，考虑到内存访问成本，最好采用 VGGNet（Simonyan 和 Zisserman，2015 年）的架构，而不使用任何残余连接。</p>
+<h4 id="instantiation"><a class="markdownIt-Anchor" href="#instantiation"></a> Instantiation.</h4>
+<p><img src="/img/loading.gif" data-original="images/image-20240125021127449.png" alt="image-20240125021127449" /></p>
+<blockquote>
+<p>表 1 细节分支和语义分支的实例化 每个阶段 S 包含一个或多个操作 opr（例如 Conv2d、Stem、GE、CE）。每个操作都有一个内核大小 k、步长 s 和输出通道 c，重复 r 次。扩展因子 e 用于扩展操作的通道数。这里的通道比为 λ = 1/4 。绿色表示在细节分支的相应阶段，语义分支的通道数较少。符号 Conv2d 表示卷积层，之后是一个批处理归一化层和 relu 激活函数。Stem 表示干块。GE 表示聚集扩展层。CE 表示上下文嵌入块</p>
+</blockquote>
+<p>如表 1 所示，细节分支具有树形阶段，每一层都是卷积层，然后是批量归一化（Ioffe 和 Szegedy，2015 年）和激活函数（Glorot 等，2011 年）。每个阶段的第一层的跨距 s = 2，而同一阶段的其他层的滤波器数量和输出特征图大小相同。因此，该分支提取的输出特征图是原始输入的 1/8。由于通道容量大，该细节分支可以编码丰富的空间细节。</p>
+<h3 id="32-semantics-branch"><a class="markdownIt-Anchor" href="#32-semantics-branch"></a> 3.2 Semantics Branch</h3>
+<h4 id="concept-2"><a class="markdownIt-Anchor" href="#concept-2"></a> Concept.</h4>
+<p>与细节分支并行，语义分支旨在捕捉高级语义。该分支的通道尺寸较窄，因为空间细节可由细节分支提供。高级语义需要上下文相关性和较大的感受野。因此，</p>
+<p>(i) 我们采用快速下采样策略来提高特征表示的水平，并快速扩大感受野；</p>
+<p>(ii) 我们采用全局平均池化（Liu 等人，2016 年）来嵌入全局上下文响应。由于采用了快速下采样策略和较窄的通道维度，语义分支是轻量级的，可以由任何高效模型实现（如 Chollet 2017；Iandola 等人，2016；Howardetal.2017；Sandler 等人，2018；Zhang 等人，2018b；Maetal.2018）。</p>
+<h4 id="instantiation-2"><a class="markdownIt-Anchor" href="#instantiation-2"></a> Instantiation.</h4>
+<p>同时考虑到大感受野和高效计算，我们设计了语义分支，其灵感来自轻量级模型的设计，例如 Xception（Chollet 2017）、MobileNet（Howard 等人，2017；Sandler 等人，2018；Howardetal.2019）、ShuffleNet（Zhang 等人，2018b；Maetal.2018）。语义分支与细节分支的通道比例为 λ（λ &lt; 1），以保持较窄的通道维度。语义分支的一些主要特点如下。</p>
+<h4 id="stem-block"><a class="markdownIt-Anchor" href="#stem-block"></a> Stem Block.</h4>
+<p><img src="/img/loading.gif" data-original="images/image-20240125021443373.png" alt="image-20240125021443373" /></p>
+<blockquote>
+<p>图 4 干块和上下文嵌入块示意图 a 是干块，采用快速降采样策略。该块有两个分支，以不同的方式对特征表示进行下采样。b 是上下文嵌入块。如第 3.2 节所示，其语义是 如 3.2 节所示，语义分支需要较大的感受野。因此，我们设计了一个具有全局平均池化功能的上下文嵌入块来嵌入全局上下文信息。符号 Conv 是卷积操作。BN 是批归一化。ReLu 是 ReLu 激活函数。Mpooling 是最大池化。GPooling 是全局平均池化。同时，1 × 1、3 × 3 表示内核大小，H × W × C 表示张量形状（高度、宽度、通道维度）。</p>
+</blockquote>
+<p>受（Szegedy 等人，2017；Shen 等人，2017；Wang 等人，2018b）的启发，我们采用干块作为语义分支的第一阶段，如图 4 所示。它采用两种不同的下采样方式来缩小特征表示。两个分支的输出特征被串联起来作为输出。这种结构具有高效的计算成本和有效的特征表达能力。</p>
+<h4 id="context-embedding-block"><a class="markdownIt-Anchor" href="#context-embedding-block"></a> Context Embedding Block.</h4>
+<p>如第 3.2 节所述，语义分支需要较大的感受野来捕捉高级语义。语义分支需要较大的感受野来捕捉高级语义。受（Yu et al. 2018b；Liu et al. 2016；Zhao et al. 2017；Chen et al. 2017）的启发，我们设计了上下文嵌入块。如图 4 所示，该块使用全局平均池化和残差连接（He 等人，2016 年）来高效嵌入全局上下文信息。</p>
+<h4 id="gather-and-expansion-layer"><a class="markdownIt-Anchor" href="#gather-and-expansion-layer"></a> Gather-and-Expansion Layer.</h4>
+<p><img src="/img/loading.gif" data-original="images/image-20240125021626289.png" alt="image-20240125021626289" /></p>
+<blockquote>
+<p>图 5 倒置瓶颈层和聚集扩展层示意图。a 是 MobileNetv2 中提出的移动倒置瓶颈层 Conv。bc 为提议的聚合-扩展层。</p>
+<p>瓶颈结构采用 (i) 3 × 3 卷积，收集局部特征响应并扩展到高维空间；(ii) 3 × 3 深度卷积，在扩展层的每个独立输出通道上独立执行；(iii) 1 × 1 卷积，作为投影层，将深度卷积的输出投影到低通道容量空间。当步长 = 2 时，我们在主路径上采用两个核大小 = 3 的深度卷积，并采用 3 × 3 的可分离卷积作为捷径。符号 Conv 是卷积操作。BN 是批量归一化。ReLu 是 ReLu 激活函数。同时，1 × 1、3 × 3 表示内核大小，H × W × C 表示张量形状（高度、宽度、通道维度）。</p>
+</blockquote>
+<p>利用深度卷积的优势，我们提出了 “聚集-扩展层”（gather-and-expansion Layer），如图 5 所示。聚集-扩展层由以下部分组成： (i) 3 × 3 卷积，<strong>用于有效聚合特征响应并扩展到更高维空间</strong>；(ii) 3×3 深度卷积，<strong>在扩展层的每个独立输出通道上独立执行</strong>；(iii) 1 × 1 卷积，作为投影层，<strong>将深度卷积的输出投影到低通道容量空间</strong>。最近的轻量级作品（Tan 等人，2019；Howardetal.2019）大量采用 5 × 5 可分离卷积来扩大感受野。在这一层中，当步长 = 2 时，我们采用两个 3 × 3 深度卷积来代替 5 × 5 深度卷积，以更少的 FLOPs 来扩大感受野。</p>
+<p>与 MobileNetv2 中的倒置瓶颈不同，GE 层多了一个 3 × 3 卷积。这是因为 3 × 3 卷积在 CUDNN 库（Chetlur 等人，2014 年）中进行了专门优化。在 ShuffleNetV2（Ma 等人，2018 年）中也观察到，3 × 3 卷积并不比 1 × 1 卷积慢多少。3 × 3 卷积具有更大的感受野，有利于语义分支。因此，它是在分割准确性和效率之间权衡的一个不错选择。</p>
+<h3 id="33-bilateral-guided-aggregation"><a class="markdownIt-Anchor" href="#33-bilateral-guided-aggregation"></a> 3.3 Bilateral Guided Aggregation</h3>
+<h4 id="concept-3"><a class="markdownIt-Anchor" href="#concept-3"></a> Concept.</h4>
+<p>这两个分支都有不同的深度和宽度，导致了两个特征表示之间的语义差距。两个分支的下采样策略也不同，因此产生了分辨率差距。因此，需要一个聚合层来补偿语义和分辨率上的差距，以合并两种类型的特征表示。</p>
+<h4 id="instantiation-3"><a class="markdownIt-Anchor" href="#instantiation-3"></a> Instantiation.</h4>
+<p><img src="/img/loading.gif" data-original="images/image-20240125021856207.png" alt="image-20240125021856207" /></p>
+<blockquote>
+<p>图 6 双边导引聚合层的详细设计。符号 Conv 是卷积操作。DWConv 是深度卷积。APooling 表示平均池化。BN 表示批量归一化。Upsample 表示双线性插值。Sigmoid 是指 sigmoid 激活函数。Sum 表示求和。同时，1×1、3×3 表示核大小，H ×W ×C 表示张量形状（高度、宽度、通道维度），⊗ 表示元素乘积</p>
+</blockquote>
+<p><strong>简单的组合，即元素相加和串联，忽略了两类信息的多样性，导致性能更差，难以优化。</strong></p>
+<p>基于这些观察，我们提出了双边引导聚合层，以融合来自两个分支的互补信息，如图6所示。该层采用语义分支的上下文信息来指导细节分支的特征响应。利用不同尺度的引导，我们可以捕捉到不同尺度的特征表现，内在地对多尺度信息进行编码。同时，与简单的组合方式相比，这种引导方式能够实现两个分支之间的有效沟通。</p>
+<h3 id="34-booster-training-strategy"><a class="markdownIt-Anchor" href="#34-booster-training-strategy"></a> 3.4 Booster Training Strategy</h3>
+<p>阶段性地增强语义是有利于语义分支的。然而，BiSeNetV1使用的横向连接对获得低内存访问成本是不利的。在深度监督（Xie和Tu 2015）之后，我们提出了一个助推器训练策略。顾名思义，它类似于火箭助推器。它在训练阶段增强了特征表示，并在推理阶段被丢弃。它为每个阶段增加约束条件，以增强语义信息。</p>
+<p>因此，在推理阶段，它不会增加任何计算的复杂性。如图3所示，我们可以将辅助分割头插入到语义分支的不同位置。在第4.1节中，我们对辅助分割头进行了分析。4.1中，我们分析了在不同位置插入的效果。图7说明了分割头的细节。我们可以通过控制通道尺寸Ct来调整辅助分割头和主分割头的计算复杂性。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125022108332.png" alt="image-20240125022108332" /></p>
+<blockquote>
+<p>图 7 Booster 中分割头的详细设计。符号 Conv 表示卷积操作。BN 表示批量归一化。Upsample 表示双线性插值。同时，1 × 1、3 × 3 表示内核大小，H ×W ×C 表示张量形状（高度、宽度、通道维度），C 表示通道维度，S 表示上采样比例，N 是最终输出维度。</p>
+</blockquote>
+<h2 id="4-experimental-results"><a class="markdownIt-Anchor" href="#4-experimental-results"></a> 4 Experimental Results</h2>
+<p>在本节中，我们首先介绍数据集和实施细节。接下来，我们将研究我们提出的方法的每个组成部分对Cityscapes验证集的影响。最后，我们报告在不同基准上与其他算法相比的最终准确率和速度结果。</p>
+<p><strong>Datasets.</strong> Cityscapes（Cordts 等人，2016 年）侧重于从汽车的视角对城市街景进行语义理解。该数据集分为训练集、验证集和测试集，分别包含 2975 张、500 张和 1525 张图像。在我们的实验中，我们只使用精细标注的图像来验证我们所提方法的有效性。注释包括 30 个类别，其中 19 个类别用于语义分割任务。该数据集具有 2048 × 1024 的高分辨率，因此对实时语义分割具有挑战性。</p>
+<p>Cambridge-driving 标签视频数据库（CamVid）（Brostow 等人，2008a）是一个从汽车行驶视角出发的道路场景数据集。它包含从视频序列中提取的 701 幅分辨率为 960 × 720 的图像。按照 Brostow 等人（2008b）、Sturgess 等人（2009）和 Badrinarayanan 等人（2017）的开创性工作，这些图像被分成 367 幅用于训练，101 幅用于验证，233 幅用于测试。为了与其他方法进行公平比较，我们使用了所提供的 32 个候选类别中的 11 个类别子集。不属于这些类别的像素将被忽略。</p>
+<p>COCO-Stuff（Caesar 等人，2018 年）在广受欢迎的 COCO（Lin 等人，2014 年）数据集的 10K 张复杂图像上添加了密集的内容注释。对于实时语义分割来说，这也是一个具有挑战性的数据集，因为它有更复杂的类别，包括 91 个事物类和 91 个东西类用于评估。为了进行公平比较，我们按照（Caesar 等，2018 年）中的拆分方法，使用 9K 幅图像进行训练，使用 1K 幅图像进行测试。</p>
+<p>ADE20K（Zhou 等人，2019 年）是一个场景理解数据集，包含 20K 张训练图像和 2K 张验证图像，最多可有 150 个类别标签。由于类别繁多且场景具有挑战性，该数据集对实时语义分割方法而言具有相当大的挑战性。</p>
+<p><strong>Training.</strong> 我们的模型是采用（He 等人，2015 年）中提出的初始化方式从头开始训练的。我们使用动量为 0.9 的随机梯度下降（SGD）算法来训练模型。对于所有数据集，我们都采用了 16 个批次的规模。对于 Cityscapes 和 CamVid 数据集，权重衰减为 0.0005，而对于 COCO-Stuff 和 ADE20K 数据集，权重衰减为 0.0001。我们注意到，权重衰减正则化仅用于卷积层的参数。初始速率设置为 5e-2，采用 &quot;多 &quot;学习速率策略，即初始速率乘以（1 - iter itersmax ）幂，每次迭代的幂为 0.9。此外，我们对 Cityscapes、CamVid、COCOStuff 和 ADE20K 数据集的模型分别进行了 150K、10K、20K 和 150K 次迭代训练。</p>
+<p>在增强训练中，我们将输入图像随机水平翻转、随机缩放和随机裁剪成固定大小。随机比例包含{0.75, 1, 1.25, 1.5, 1.75, 2.0}。裁剪后的分辨率分别为：Cityscapes 为 2048 × 1024，CamVid 为 960 × 720，COCO-Stuff 为 640 × 640，ADE20K 为 480 × 480。此外，Cityscapes 的增强输入将调整为 1024 × 512 分辨率，以训练我们的模型。</p>
+<p><strong>Inference.</strong> 我们没有采用任何评估技巧，例如滑动窗口评估和多尺度测试，这些方法虽然可以提高准确性，但却非常耗时。对于Cityscapes，输入分辨率为 2048×1024，我们首先将其调整为 1024×512 的分辨率进行推理，然后将预测调整为输入的原始尺寸。我们只用一块 GPU 卡测量推理时间，并重复 5000 次迭代以消除误差波动。我们注意到，调整大小的时间包含在推理时间的测量中。换句话说，在测量推理时间时，实际输入大小为 2048 × 1024。同时，我们对 Cityscapes 和 CamVid 数据集采用了平均交集联合度量（mIoU）这一标准度量，而 COCO-Stuff 和 ADE20K 数据集则采用了平均交集联合度量（mIoU）和像素精度（pixAcc）作为度量。</p>
+<p><strong>Setup.</strong> 我们基于 PyTorch 1.0 进行了实验。模型被转换为 ONNX 格式，并用 TensorRT v5.1.51 进行了优化。与其他方法相比，推理时间是在一台 NVIDIA GeForce GTX 1080Ti 上运行 CUDA 9.0 和 CUDNN 7.0 得到的。</p>
+<p>我们还报告了采用 TensorRT 优化技术的英伟达 Jetson TX2 上的推理时间。</p>
+<h3 id="41-ablative-evaluation-on-cityscapes"><a class="markdownIt-Anchor" href="#41-ablative-evaluation-on-cityscapes"></a> 4.1 Ablative Evaluation on Cityscapes</h3>
+<p>本节将介绍消融实验，以验证我们方法中每个组件的有效性。在接下来的实验中，我们将在 Cityscapes（Cordts 等人，2016 年）训练集上训练我们的模型，并在 Cityscapes 验证集上进行评估。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023204665.png" alt="image-20240125023204665" /></p>
+<blockquote>
+<p>表 2  Cityscapes的消融实验。我们逐步验证了每个组件的有效性。我们展示了分割准确率（mIoU%）和以 GFLOPs 为单位的计算复杂度（输入空间大小为 2048 × 1024）。符号： Detail 是细节分支。Semantics 是语义分支。BGA 表示双边引导聚合层。Booster 指助推训练策略。OHEM 是难样本挖掘</p>
+</blockquote>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023359617.png" alt="image-20240125023359617" /></p>
+<blockquote>
+<p>图 8 显示细节分支不同阶段可视化解释的示例。根据 Grad-CAM（Selvaraju 等人，2017 年），我们将细节分支的 Grad-CAM 可视化。可视化结果表明，细节分支可以关注空间细节，例如边界，逐渐地</p>
+</blockquote>
+<p><strong>Individual pathways.</strong> 我们首先具体探讨了单个路径的效果。表 2 的前两行说明了仅使用一条路径的分割精度和计算复杂度。细节分支缺乏足够的高级语义，而语义分支则缺乏低级空间细节，导致结果不尽人意。图 8 显示了对细节分支空间细节的逐步关注。表 2 中的第二组显示，在所有情况下，两个分支的不同组合都比只有一个途径的模型要好。这两个分支可以提供互补的表征，从而实现更好的分割性能。单独的语义分支和细节分支分别只能达到 64.68% 和 62.35% 的 mIoU。然而，通过简单求和，语义分支比细节分支提高了 6% 以上，而细节分支比语义分支提高了 4%。这一观察结果表明，这两种表征对于实时语义分割任务来说是互补的，也是必不可少的。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023515259.png" alt="image-20240125023515259" /></p>
+<blockquote>
+<p>图 9 双侧引导聚合层对城市景观阀集的视觉改进</p>
+</blockquote>
+<p><strong>Aggregation methods.</strong> 我们还研究了两个分支的聚合方法，如表 2 所示。为了实现高效聚合，我们设计了双边引导聚合层，它采用高层语义作为聚合多尺度低层细节的引导。我们还展示了不使用双边引导聚合层的两种变体，即两个分支输出的求和与并集。为了进行公平比较，求和与合并的输入分别经过一个可分离层。图 9 展示了细节分支、语义分支和两个分支汇总后的可视化输出。这说明细节分支可以提供足够的空间细节，而语义分支则可以捕捉语义上下文。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023640388.png" alt="image-20240125023640388" /></p>
+<blockquote>
+<p>表 3  Cityscapes上语义分支设计的消融。我们对语义分支的信道容量、区块设计和扩展率进行了实验研究。符号： GLayer 表示聚集层，即 GE 层中的第一个 3 × 3 卷积。DDWConv 表示双深度卷积层</p>
+</blockquote>
+<p>表 3 展示了语义分支设计的一系列分析实验。</p>
+<p><strong>Channel capacity of the semantics branch.</strong> 如第 3.2 节所述，语义分支负责高层语义，不考虑空间细节。语义分支负责高层语义，不考虑空间细节。因此，语义分支可以用窄信道维度变得非常轻量级，而窄信道维度是用信道容量比 λ 来修改的。</p>
+<p>不同的 λ 会对纯细节基线产生不同程度的改进。即使在 λ = 1/16 的情况下，语义分支的第一层也只有 4 个通道维度，相对于基线提高了 6% (62.35% → 68.27%)。在此，我们采用 λ = 1/4 作为默认值。</p>
+<p><strong>Block design of the semantics branch.</strong> 按照先驱者的工作（Sandler 等人，2018；Howardetal.2019），我们设计了一个聚集膨胀层，如第 3.2 节所述和图 5 所示。3.2 节中的讨论和图 5 中的说明。主要改进有两方面：(i) 我们采用一个 3 × 3 卷积作为聚合层，而不是 MobileNetV2（Sandler 等人，2018 年）倒置瓶颈中的一个点向卷积；(ii) 当步长 = 2 时，我们采用两个 3 × 3 深度卷积来替代一个 5 × 5 深度卷积。</p>
+<p><strong>Expansion ratio of GE layer.</strong> GE 层中的第一个 3 × 3 卷积层也是一个扩展层，可以将输入投射到高维空间。它在内存访问成本方面具有优势（Sandler 等人，2018 年；Howard 等人，2019 年）。扩展比可以控制该层的输出维度。表 3c 研究了改变 . 令人惊讶的是，即使在 = 1 的情况下，语义分支也能将基线的平均 IoU 提高 4% (62.35% → 67.48%)，验证了轻量级语义分支的高效性和有效性。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023933653.png" alt="image-20240125023933653" /></p>
+<blockquote>
+<p>表 4 助推器位置。我们可以在不同位置添加辅助切分头作为语义分支的助推器。这里，stages表示在s stage之后添加辅助分割头。 stage5_4和stage5_5分别表示上下文嵌入块之前和之后的位置。 OHEM代表在线引导策略</p>
+</blockquote>
+<p><strong>Booster training strategy.</strong> 如第 3.4 节所述，我们提出了一种助推器训练策略，以进一步提高分割精度。3.4. 我们在训练阶段将图 7 所示的分割头插入语义分支的不同位置，这些分割头在推理阶段会被丢弃。因此，它们不会增加推理阶段的计算复杂度，这与火箭的助推器类似。表 4 显示了在不同位置插入分割头的效果。可以看出，助推器训练策略可以明显提高分割精度。我们选择表 4 中第三行的配置，在不影响推理速度的情况下，平均 IoU 进一步提高了 3% 以上（69.67% → 73.19%）。在此配置的基础上，我们采用了在线引导策略（Wu 等人，2016 年）来进一步提高性能。</p>
+<h3 id="42-generalization-capability"><a class="markdownIt-Anchor" href="#42-generalization-capability"></a> 4.2 Generalization Capability</h3>
+<p><img src="/img/loading.gif" data-original="images/image-20240125023951104.png" alt="image-20240125023951104" /></p>
+<blockquote>
+<p>表 5 大型模型的推广。我们从两个方面扩大我们的模型：（i）更宽的模型； (ii) 更深层次的模型</p>
+</blockquote>
+<p><img src="/img/loading.gif" data-original="images/image-20240125024034887.png" alt="image-20240125024034887" /></p>
+<blockquote>
+<p>表 6 与其他型号的兼容性。我们采用不同的轻量级模型作为语义分支来探索我们架构的兼容性</p>
+</blockquote>
+<p>在本节中，我们将主要探讨我们提出的架构的泛化能力。首先，我们研究了表 5 中更宽模型和更深模型的性能。接下来，我们用其他一些通用轻量级模型替换语义分支，以探索与表 6 所示结果的兼容性。</p>
+<p><strong>Generalization to large models.</strong> 虽然我们的架构主要是为轻量级任务（如实时语义分割）设计的，但 BiSeNet V2 也可以推广到大型模型。表 5 显示了不同宽度乘数 α 和不同深度乘数 d 下更宽模型的分割精度和计算复杂度。根据实验结果，我们选择 α = 2.0 和 d = 3.0 来构建我们的大型架构，称为 BiSeNetV2-Large；该架构实现了 75.8% 的 mIoU 和 GFLOPs。</p>
+<p><strong>Compatibility with other models.</strong> BiSeNetV2 是一个具有两个分支的通用架构。在这项工作中，我们为语义分支设计了一些特定的模块。语义分支可以是任何轻量级卷积模型（He 等人，2016；Howardetal.2017）。因此，为了探索我们架构的兼容性，我们用不同的通用轻量级模型进行了一系列实验。表 6 显示了与不同模型的组合结果。</p>
+<h3 id="43-performance-evaluation"><a class="markdownIt-Anchor" href="#43-performance-evaluation"></a> 4.3 Performance Evaluation</h3>
+<p>在本节中，我们将在四个基准数据集上比较我们的最佳模型（BiSeNetV2 和 BiSeNetV2-Large）和其他最先进的方法： Cityscapes、CamVid、COCO-Stuff 和 ADE20K。最后，我们报告了在英伟达 Jeston TX2 上的运行效率。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125024149046.png" alt="image-20240125024149046" /></p>
+<blockquote>
+<p>表 7 与Cityscapes最先进技术的比较。我们使用 2048 × 1024 分辨率输入来训练和评估我们的模型，该输入在模型中调整为 1024 × 512。推理时间是在一张 NVIDIA GeForce 1080Ti 卡上测量的。符号：γ为原始2048×1024分辨率对应的降采样比。 backbone 表示在 ImageNet 数据集上预训练的主干模型。 † 表示模型是从头开始训练的。 “-”表示该方法没有报告相应的结果。 DFANet A和DFANet B采用1024×1024输入尺寸并使用优化的深度卷积来提高速度</p>
+</blockquote>
+<p><strong>Cityscapes.</strong> 我们介绍了 BiSeNetV2 在Cityscapes测试集上的分割精度和推理速度。我们使用 2048 × 1024 输入的训练集和验证集来训练我们的模型，这些模型首先被调整为 1024 × 512 分辨率。然后，在测试集上对模型进行评估。推理时间的测量是在一块 NVIDIA GeForce 1080Ti 显卡上进行的。表 7 报告了我们的方法与最先进方法的比较结果。第一组是非实时方法，包括 CRF-RNN（Zheng 等人，2015 年）、Deeplab-CRF（Chen 等人，2015 年）、FCN-8S（Long 等人，2015 年）、Dilation10（Yu 等人，2015 年 2015）、Dilation10（Yu 和 Koltun，2016）、LRR（Ghiasi 和 Fowlkes，2016）、Deeplabv2-CRF（Chen 等，2018）、FRRN（Pohlen 等，2017）、RefineNet（Lin 等，2017）、DUC（Wang 等，2018a）、PSPNet（Zhao 等，2017）。实时语义分割算法列在第二组，包括ENet（Paszke等人，2016）、SQ（Treml等人，2016）、ESPNet（Mehta等人，2018）、ESPNetV2（Mehta等人，2019）、ERFNet（Romera等人，2018）、Fast-SCNN（Poudel等人，2019）、ICNet（Zhao等人，2018a）、DABNet（Lietal.2019 a）、DFANet（Li 等人，2019b）、GUN（Mazzini，2018）、SwiftNet（Orsic 等人，2019）、SwiftNet-pyr（Orsic 和 Segvic，2021）以及 BiSeNetV1（Yu 等人，2018a）。第三组是复杂程度不同的我们的方法。</p>
+<p>如表 7 所示，我们的方法以 156 FPS 实现了 72.6% 的平均 IoU。与其他大多数实时方法相比，BiSeNetV2 实现了更好的分割结果和更高的推理速度。与 DFANet 相比，BiSeNetV2 在推理速度相当的情况下获得了更高的分割结果。与 SwiftNet 和 SwiftNet-pyr 相比，BiSeNetV2 的结果较低，但推理速度却高得多。这些方法采用的预训练模型可以显著提高性能。我们的模型都是从头开始训练的。随着模型规模的扩大，BiSeNetV2-Large 实现了 75.3% 的平均 IoU 和 47.3 FPS。这些结果甚至优于表 7 第一组中的一些非实时算法。我们注意到，许多非实时方法可能会采用一些评估技巧，例如多尺度测试和多作物评估，这虽然能显著提高准确性，但却非常耗时。因此，出于对推理速度的考虑，我们没有采用这种策略。为了更加直观，我们在图 1 中说明了性能和速度之间的权衡。为了突出我们方法的有效性，我们还在图 11 中展示了 BiSeNetV2 在Cityscapes上的一些可视化示例。</p>
+<p><strong>CamVid.</strong> 表 8 显示了 CamVid 数据集的统计准确度指标和速度结果。在推理阶段，我们使用训练数据集和验证数据集以 960 × 720 分辨率输入来训练我们的模型。我们的模型与一些非实时算法进行了比较，即 SegNet（Badrinarayanan 等人，2017 年）、Deeplab（Chen 等人，2015 年）、RTA（Huang 等人，2018 年）、Dilate8（Yu 和 Koltun，2016 年）、PSPNet（Zhao 等人，2017 年）、VideoGCRF（Chandra 等人，2018 年）和 DenseDecec。2018）和 DenseDecoder（Bilinski 和 Prisacariu 2018），以及实时算法，即 ENet（Paszke 等人，2016）、ICNet（赵等人，2018a）、DABNet（李等人，2019a）、DFANet（李等人，2019b）、SwiftNet（Orsic 等人，2019）、SwiftNet-pyr（Orsic 和 Segvic，2021）、BiSeNetV1（于等人，2018a）。</p>
+<p>与大多数方法相比，BiSeNetV2 以更高的推理速度实现了更高的分割精度。与 DFANet 相比，BiSeNetV2 的推理速度更慢，但获得的分割结果却高得多。此外，我们还研究了预训练数据集对 CamVid 的影响。表 8 的最后两行显示，在 CamVid 测试集上，Cityscapes 的预训练可将平均 IoU 大幅提高 6% 以上。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125024417827.png" alt="image-20240125024417827" /></p>
+<blockquote>
+<p>表 9 与 COCO-Stuff 上最新技术的比较。我们的模型使用 640 × 640 分辨率的输入进行训练和评估。符号：backbone表示在ImageNet数据集上预训练的backbone模型</p>
+</blockquote>
+<p><strong>COCO-Stuff.</strong> 我们还在表 9 中报告了在 COCO-Stuff 验证数据集上的准确度和速度结果。在推理阶段，我们将输入填充为 640 × 640 分辨率。为了公平比较（Long 等人，2015；Chen 等人，2018；Zhao 等人，2017，2018a），我们没有采用任何耗时的测试技巧，如多尺度和翻转测试。即使对于该数据集中更复杂的类别，与先驱工作相比，我们的 BiSeNetV2 仍然显示出更高的效率，并实现了相当的准确性。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125024442020.png" alt="image-20240125024442020" /></p>
+<blockquote>
+<p>表 10 与 ADE20K 验证集上最新技术的比较。我们的模型使用 480 × 480 分辨率的输入进行训练。所有方法都报告单尺度结果，无需任何测试技巧。符号：backbone表示在ImageNet数据集上预训练的主干模型。 RT表示实时推理速度</p>
+</blockquote>
+<p><strong>ADE20K.</strong> 表 10 报告了我们的方法和其他最先进方法的结果，包括 CPNet（Yu 等人，2020b）、RGNet（Yu 等人，2020a）、PSANet（Zhao 等人，2018b）、PSPNet（Zhao 等人，2017）、Dilated FCN（Chen 等人，2018）和 Swift-pyr（Orsic 和 Segvic，2021）。BiSeNetV2 实现了 29.2% 的 mIoU。在扩展到更大的模型后，BiSeNetV2-Large 获得了 32.5% 的 mIoU。这些结果验证了我们方法的泛化能力和模型容量。与大型模型相比，我们的方法以更快的推理速度和更低的复杂度取得了更低的结果。与 SwiftNet-pyr 相比，BiSeNetV2-Large 的结果相当。我们注意到 SwiftNet-pyr 采用了预训练模型，这对 ADE20K 数据集尤其重要，因为该数据集包含许多类别。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240125024513307.png" alt="image-20240125024513307" /></p>
+<blockquote>
+<p>图 10 不同输入分辨率下 NVIDIA Jetson TX2 的推理速度。两个模型都使用 TensorRT 以 FP32 (a) 和 FP16 精度 (b) 进行优化</p>
+</blockquote>
+<p>Jetson TX2 上的运行效率。我们在搭载 PyTorch 和 TensorRT 框架的英伟达 Jetson TX2 上使用我们的方法来测量推理时间。TX2 的技术规格如下所示： 人工智能性能：1.33 TFLOPs；内存：8 GB 128 位 LPDDR4，59.7GB/s。图 10 显示了 BiSeNetV2 和 BiSeNetV2-Large 在 32 位（FP32）和 16 位（FP16）浮点精度下的推理速度。由于资源有限，我们没有在 1024 × 2048 分辨率下进行实验。</p>
+<h2 id="5-concluding-remarks"><a class="markdownIt-Anchor" href="#5-concluding-remarks"></a> 5 Concluding Remarks</h2>
+<p>我们发现，语义分割任务既需要低级细节，也需要高级语义。我们提出了一种将空间细节和分类语义分开处理的新架构，即双边分割网络（BiSeNetV2）。BiSeNetV2 框架是一种通用架构，可由大多数卷积模型实现。我们的 BiSeNetV2 实现在分割准确性和推理速度之间取得了良好的平衡。我们希望 BiSeNetV2 这一通用架构能促进语义分割领域的进一步研究。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/" title="采样方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">采样方式</div></div><div class="info-2"><div class="info-item-1"> 采样方式       </div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/SegNet/" title="SegNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SegNet</div></div><div class="info-2"><div class="info-item-1"> SegNet  Abstract 我们提出了一种用于语义像素分割的新型实用深度全卷积神经网络架构，称为 SegNet。 这种可训练的核心分割引擎由一个编码器网络、一个相应的解码器网络和一个像素分类层组成。编码器网络的架构在拓扑结构上与 VGG16 网络中的 13 个卷积层相同[1]。解码器网络的作用是将低分辨率编码器特征图映射到全输入分辨率特征图，以进行像素分类。SegNet 的新颖之处在于解码器对低分辨率输入特征图进行上采样的方式。具体来说，解码器使用在相应编码器的最大池化步骤中计算出的池化指数来执行非线性上采样。这样就无需学习上采样。上采样图是稀疏的，然后与可训练滤波器卷积，生成密集的特征图。我们将提议的架构与广泛采用的 FCN [2] 以及著名的 DeepLab-LargeFOV [3] 和 DeconvNet [4] 架构进行了比较。这种比较揭示了实现良好分割性能所涉及的内存与精度权衡问题。 SegNet 主要受场景理解应用的启发。因此，它的设计在内存和推理过程中的计算时间方面都很高效。与其他同类架构相比，SegNet...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#bisenetv2"><span class="toc-text"> BiSeNetV2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2 Related Work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-generic-semantic-segmentation"><span class="toc-text"> 2.1 Generic Semantic Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-real-time-semantic-segmentation"><span class="toc-text"> 2.2 Real-time Semantic Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-lightweight-architecture"><span class="toc-text"> 2.3 Lightweight Architecture</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-bilateral-segmentation-network"><span class="toc-text"> 3 Bilateral Segmentation Network</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-detail-branch"><span class="toc-text"> 3.1 Detail Branch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#concept"><span class="toc-text"> Concept.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instantiation"><span class="toc-text"> Instantiation.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-semantics-branch"><span class="toc-text"> 3.2 Semantics Branch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#concept-2"><span class="toc-text"> Concept.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instantiation-2"><span class="toc-text"> Instantiation.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stem-block"><span class="toc-text"> Stem Block.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#context-embedding-block"><span class="toc-text"> Context Embedding Block.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gather-and-expansion-layer"><span class="toc-text"> Gather-and-Expansion Layer.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-bilateral-guided-aggregation"><span class="toc-text"> 3.3 Bilateral Guided Aggregation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#concept-3"><span class="toc-text"> Concept.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instantiation-3"><span class="toc-text"> Instantiation.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-booster-training-strategy"><span class="toc-text"> 3.4 Booster Training Strategy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experimental-results"><span class="toc-text"> 4 Experimental Results</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-ablative-evaluation-on-cityscapes"><span class="toc-text"> 4.1 Ablative Evaluation on Cityscapes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-generalization-capability"><span class="toc-text"> 4.2 Generalization Capability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-performance-evaluation"><span class="toc-text"> 4.3 Performance Evaluation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-concluding-remarks"><span class="toc-text"> 5 Concluding Remarks</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

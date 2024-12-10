@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>qjl988 - qjl988 blog</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="钱家黎的博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="qjl988">
+<meta property="og:url" content="https://qjl988.github.io/page/4/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="钱家黎的博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:author" content="qjl988">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/page/4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'qjl988',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">qjl988</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Polyper/" title="Polyper">Polyper</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> Polyper  Abstract 我们提出了一种新的息肉分割边界敏感框架，称为 Polyper。我们的方法源于一种临床方法，即经验丰富的医生经常利用息肉内部区域的固有特征来解决边界模糊的问题。受此启发，我们提出明确利用息肉区域来增强模型的边界辨别能力，同时最大限度地减少计算量。我们的方法首先通过形态学算子从初始分割图中提取边界和息肉区域。然后，我们设计了对边界敏感的注意力，利用内部息肉区域的特征集中增强边界区域附近的特征，从而生成良好的分割结果。我们提出的方法可与 ResNet-50、MiT-B1 和 Swin Transformer 等经典编码器网络无缝集成。为了评估 Polyper 的有效性，我们在五个公开的挑战性数据集上进行了实验，并在所有数据集上都获得了一流的性能。  Introduction 结肠息肉是结肠粘膜内的突起物，在形状、质地和颜色上有很大差异（Pooler 等人，2023 年）。重要的是，结肠息肉被认为是与结肠癌发展密切相关的癌前病变（Djinbachian 等人，2020...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/PIDNet/" title="PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers">PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers  Abstract  1. Introduction Proportional-Integral-Derivative (PID) Controller is a classic concept that has been widely applied in modern dynamic systems and processes such as robotic manipulation [3], chemical processes [24], and power systems [25]. Even though many advanced control strategies with better control performance have been developed in recent years, PID controller is still the go-to choice for most...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/RTformer/" title="RTFormer">RTFormer</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> RTFormer  Abstract 最近，基于transformer的网络在语义分割方面显示出令人印象深刻的结果。然而，对于实时语义分割来说，由于transformer的计算机制很耗时，基于CNN的纯方法仍然在该领域占主导地位。我们提出了RTFormer，一种用于实时语义分割的高效双分辨率transformer，它在性能和效率之间实现了比基于CNN的模型更好的权衡。为了在类似GPU的设备上实现高推理效率，我们的RTFormer利用了具有线性复杂度的GPU-Friendly Attention，并抛弃了多头机制。此外，我们发现，跨分辨率的注意力通过传播从低分辨率分支学到的高水平知识，更有效地收集高分辨率分支的全局背景信息。在主流基准上的广泛实验证明了我们提出的RTFormer的有效性，它在Cityscapes、CamVid和COCOStuff上达到了最先进的水平，并在ADE20K上显示出有希望的结果。   1...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/SAN/" title="SAN">SAN</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> SAN  Abstract 本文提出了一种利用预先训练好的视觉语言模型（名为 “侧适配器网络”（SAN））进行开放词汇语义分割的新框架。我们的方法将语义分割任务建模为区域识别问题。一个侧边网络连接到一个冻结的 CLIP 模型，该模型有两个分支：一个用于预测mask建议，另一个用于预测注意力偏差，该注意力偏差应用于 CLIP 模型，以识别mask类别。这种解耦设计有利于 CLIP 识别mask建议类别。由于附加侧网络可以重复使用 CLIP 特征，因此可以非常轻便。此外，整个网络可以进行端到端训练，使侧网络适应冻结的 CLIP 模型，从而使预测的mask建议具有 CLIP 感知。我们的方法快速、准确，而且只增加了几个额外的可训练参数。我们在多个语义分割基准上评估了我们的方法。我们的方法明显优于其他同类方法，可训练参数减少了 18 倍，推理速度提高了 19 倍。图 1 显示了 ImageNet 上的一些可视化结果。我们希望我们的方法能成为一个坚实的基线，并为未来的开放词汇语义分割研究提供帮助。              图 1.ImageNet...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/STDC/" title="STDC">STDC</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> STDC Rethinking BiSeNet For Real-time Semantic Segmentation  Abstract 事实证明，BiSeNet [28, 27] 是一种用于实时分割的流行双流网络。然而，其增加额外路径以编码空间信息的原理非常耗时，而且由于缺乏特定任务的设计，借用预训练任务（如图像分类）的骨干可能会导致图像分割效率低下。为了解决这些问题，我们通过消除结构冗余，提出了一种新颖高效的结构，命名为短期密集串联网络（STDC 网络）。具体来说，我们逐步降低了特征图的维度，并利用特征图的聚合进行图像表示，这构成了 STDC 网络的基本模块。在解码器中，我们提出了细节聚合模块，以单流方式将空间信息的学习整合到低层。最后，将低层特征和深层特征融合起来，预测最终的分割结果。在 Cityscapes 和 CamVid 数据集上进行的大量实验证明了我们方法的有效性，在分割准确性和推理速度之间实现了良好的权衡。在 Cityscapes 数据集上，我们在测试集上实现了 71.9% 的 mIoU，在 NVIDIA GTX 1080Ti 上的推理速度为 250.4...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/SegFormer/" title="SegFormer">SegFormer</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> SegFormer  文章链接   摘要 我们提出了SegFormer，这是一个简单、高效而强大的语义分割框架，它将Transformer与轻量级多层感知器（MLP）解码器统一起来。SegFormer有两个吸引人的特点。1）SegFormer包括一个新颖的分层结构的Transformer编码器，输出多尺度特征。它不需要位置编码，从而避免了位置编码的插值，当测试分辨率与训练不同时，插值会导致性能下降。2)...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/SegNeXt/" title="SegNeXt">SegNeXt</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> SegNeXt  文章链接   Abstract 我们提出了SegNeXt，一个用于语义分割的简单卷积网络架构。由于自我注意在编码空间信息方面的效率，最近基于transformer的模型在语义分割领域占主导地位。在本文中，我们表明卷积注意是一种比transformer中的自我注意机制更有效率和效果的编码上下文信息的方式。通过重新审视成功的分割模型所拥有的特征，我们发现了导致分割模型性能提高的几个关键成分。这促使我们设计了一个新颖的卷积注意力网络，它使用廉价的卷积操作。在没有任何附加条件的情况下，我们的SegNeXt大大改善了以前最先进的方法在流行基准上的性能，包括ADE20K、Cityscapes、COCO-Stuff、Pascal VOC、Pascal Context和iSAID。值得注意的是，SegNeXt的性能优于EfficientNet-L2 w/NAS-FPN，在Pascal VOC...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Squeeze-and-Excitation-Networks/" title="Squeeze-and-Excitation Networks">Squeeze-and-Excitation Networks</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> Squeeze-and-Excitation Networks  Abstract 卷积神经网络是建立在卷积操作之上的，它通过在局部感受野内将空间和通道信息融合在一起来提取信息特征。为了提高网络的表示能力，最近的一些方法显示了加强空间编码的好处。在这项工作中，我们专注于通道关系，并提出了一个新的结构单元，我们称之为 “挤压和激励”（SE）块，它通过明确地模拟通道之间的相互依赖性来适应性地重新校准通道方面的特征反应。我们证明，通过将这些模块堆叠在一起，我们可以构建SENet架构，该架构在具有挑战性的数据集上具有非常好的通用性。最重要的是，我们发现SE块对现有的最先进的深度架构产生了明显的性能改进，而额外的计算成本却很小。SENets构成了我们2017年ILSVRC分类提交的基础，它赢得了第一名，并将前五名的误差大大降低到2.251%，比2016年的获奖作品实现了25%的相对改进。  1. Introduction 卷积神经网络（CNN）已被证明是处理各种视觉任务的有效模型[21, 27, 33,...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/TopFormer/" title="TopFormer Token Pyramid Transformer for Mobile Semantic Segmentation">TopFormer Token Pyramid Transformer for Mobile Semantic Segmentation</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> TopFormer: Token Pyramid Transformer for Mobile Semantic Segmentation  文章链接   Abstract 尽管vision transformers（ViTs）在计算机视觉领域取得了巨大的成功，但沉重的计算成本阻碍了它们在密集预测任务中的应用，如移动设备上的语义分割。在本文中，我们提出了一个名为Token Pyramid Vision Transformer（TopFormer）的移动友好架构。所提出的TopFormer将不同尺度的Token作为输入，以产生尺度感知的语义特征，然后将其注入到相应的Token中以增强表示。实验结果表明，我们的方法在几个语义分割数据集上明显优于基于CNN和ViT的网络，并且在准确性和延迟之间实现了良好的权衡。在ADE20K数据集上，TopFormer在基于ARM的移动设备上以较低的延迟实现了比MobileNetV3高5%的mIoU精度。此外，TopFormer的微小版本在基于ARM的移动设备上实现了具有竞争力的实时推理结果。  1. Introduction vision...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Squeeze-excite-guided-few-shot-segmentation-of-volumetric-images/" title="‘Squeeze &amp; excite’ guided few-shot segmentation of volumetric images">‘Squeeze &amp; excite’ guided few-shot segmentation of volumetric images</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="content"> ‘Squeeze &amp; excite’ guided few-shot segmentation of volumetric images  文章链接   摘要 深度神经网络能够实现高度精确的图像分割，但需要大量的人工注释数据进行监督训练。小样本学习的目的是通过从小样本有注释的支持实例中学习一个新的类别来解决这个缺点。我们介绍了一个新颖的小样本框架，用于分割只有几个注释的切片的体积医学图像。与计算机视觉领域的其他相关工作相比，主要的挑战是缺乏预训练的网络和医学扫描的体积性质。我们通过提出一个新的架构来解决这些挑战，该架构用于小样本的分割，其中包括 &quot;挤压和激发 &quot;块。我们的双臂结构包括一个调节器臂，它处理注释的支持输入并产生一个特定的任务表示。这个表征被传递给分割器臂，它使用这些信息来分割新的查询图像。为了促进调节器和分割器臂之间的有效互动，我们建议使用 &quot;通道挤压和空间激励...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/3/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#content-inner">5</a><a class="page-number" href="/page/6/#content-inner">6</a><a class="extend next" rel="next" href="/page/5/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AE%BA%E6%96%87/"><span class="card-category-list-name">论文</span><span class="card-category-list-count">55</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/" style="font-size: 1.1em; color: #999">论文翻译</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/12/">
+          <span class="card-archive-list-date">十二月 2024</span>
+          <span class="card-archive-list-count">56</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">56</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">336.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-12-10T17:04:16.072Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["你在抱怨什么呢","为明天到来的事，说人生像是没有意义","没有选择会是唯一的路","这不是你自己的问题，人终归要好好去生活"])
+  } else {
+    document.getElementById("subtitle").textContent = "你在抱怨什么呢"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

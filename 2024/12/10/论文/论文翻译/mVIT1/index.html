@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MobileViT | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MobileViT模型简介 blog.csdn.net 论文名称：MobileViT: Light-Weight, General-Purpose, and Mobile-Friendly Vision Transformer- 论文下载地址：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2110.02178- 官方源码（Pytorch实现）：https:&#x2F;&#x2F;github.com&#x2F;apple&#x2F;ml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MobileViT">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/mVIT1/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="MobileViT模型简介 blog.csdn.net 论文名称：MobileViT: Light-Weight, General-Purpose, and Mobile-Friendly Vision Transformer- 论文下载地址：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2110.02178- 官方源码（Pytorch实现）：https:&#x2F;&#x2F;github.com&#x2F;apple&#x2F;ml">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:04:05.785Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/mVIT1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MobileViT',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">MobileViT</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">MobileViT</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:04:05.785Z" title="更新于 2024-12-11 01:04:05">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="mobilevit模型简介"><a class="markdownIt-Anchor" href="#mobilevit模型简介"></a> MobileViT模型简介</h1>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/126715733">blog.csdn.net</a></p>
+<p>论文名称：<strong>MobileViT: Light-Weight, General-Purpose, and Mobile-Friendly Vision Transformer</strong>-<br />
+论文下载地址：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.02178">https://arxiv.org/abs/2110.02178</a>-<br />
+官方源码（Pytorch实现）：<a target="_blank" rel="noopener" href="https://github.com/apple/ml-cvnets">https://github.com/apple/ml-cvnets</a>-<br />
+自己从ml-cvnets仓库中剥离的代码：<a target="_blank" rel="noopener" href="https://github.com/WZMIAOMIAO/deep-learning-for-image-processing/tree/master/pytorch_classification/MobileViT">https://github.com/WZMIAOMIAO/deep-learning-for-image-processing/tree/master/pytorch_classification/MobileViT</a></p>
+<hr />
+<h3 id="文章目录"><a class="markdownIt-Anchor" href="#文章目录"></a> 文章目录</h3>
+<p>[TOC]</p>
+<hr />
+<h2 id="0-前言"><a class="markdownIt-Anchor" href="#0-前言"></a> 0 前言</h2>
+<p>自从2020年ViT(Vision <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Transformer&amp;spm=1001.2101.3001.7020">Transformer</a>)模型的横空出世，人们发现了Transformer架构在视觉领域的巨大潜力。近些年，越来越多的科研人员投入Transformer的怀抱，视觉领域的各项任务也不断被Transformer架构模型刷新。Transformer虽然强大，但在现在看来落地仍存在很多难点。比如模型参数太大（比如ViT Large Patch16模型光权重就有1个多G），而且算力要求太高，这基本就给移动端部署Transformer模型判了死刑。尽管近两年Transformer架构在视觉领域出现了很多优秀的工作，比如2021年的Swin-Transformer，它相比ViT效果更好且更轻量，但相比基于CNN的轻量级模型（比如MobileNet系列）无论是在模型参数上还是推理速度上都还有很大的差距。当然毕竟CNN从2012年的AlexNet发表至今已经过去10年了，无论是在模型结构的设计上，还是软硬件的调优上都已经优化的非常到位了。而Transformer模型才刚刚开始，我相信再过个几年，会有越来越多的学者从事研究Transformer轻量化设计，并且各软硬件厂商会针对Transformer做更多的优化，那时Transformer落地移动端将不再是问题。话题扯远了，言归正传今天我们来简单聊聊MobileViT，Apple公司（对，就是那个被啃了一口的苹果）在2021年发表的一篇CNN与Transfomrer的混合架构模型。近两年CNN和Transformer混合架构研究也是一大热点，CNN的轻量和高效+Transformer的自注意力机制和全局视野。为什么不用纯Transformer架构，前面提到了它很“重”，除此之外还有一些其他的问题，比如说:</p>
+<ul>
+<li><strong>Transformer缺少空间归纳偏置(spatial inductive biases)。这个之前在讲Transformer self-attention时有提到过。计算某个token的attention时如果将其他token的顺序打乱对最终结果没有任何影响。但在图像数据中，空间信息是很重要且有意义的。为了解决这个问题，常见的方法是加上位置偏置(position bias)/位置编码，比如Vision Transformer中使用的绝对位置偏置，Swin Transformer中的相对位置偏置，加上位置偏置虽然在一定程度上解决了空间位置的信息丢失的问题，但又引入了一个新的问题。迁移到别的任务上时，位置偏执信息往往需要调整。</strong></li>
+<li><strong>Transformer模型迁移到其他任务(输入图像分辨率发生改变)时比较繁琐。这里所说的繁琐是相对CNN而言的，而主要原因是引入位置偏置导致的。比如在Imagenet上预训练好的Vision Transformer(输入图片大小为<code>224x224</code>)模型后，现在要迁移到更大尺度的任务中，但由于Vision Transformer的绝对位置偏置的序列长度是固定的，等于$ \frac{H \times W}{16 \times 16}$，其中H、W代表输入图片的高和宽，所以只要改变输入图像的尺度就无法直接复用了。现在最常见的处理方法是通过插值的方式将位置偏置插值到对应图像的序列长度。但如果不对网络进行微调直接使用实际效果可能会掉点，比如在<code>224x224</code>尺度上训练的网络，直接对位置偏置进行插值不去微调，在<code>384x384</code>的尺度上进行验证可能会出现掉点(CNN一般会涨点)。如果每次改变输入图像尺度都要重新对位置偏置进行插值和微调，那也太麻烦了。这里有人会说可以使用Swin Transformer中的相对位置偏置，确实如此，Swin Transformer相对位置偏置的序列长度只和Windows大小有关，与输入图像尺度无关。但在实际使用中，Windows的尺度和输入图像尺度又有一定关系。一般输入图像尺度越大，Windows的尺度也会设置的大些。只要Windows尺度发生变化，相对位置偏置也要进行插值了，那么问题又来了。当然这里并不是说位置偏置引入了一堆问题就去否定它的作用，只是现在所采用的位置偏置方式还有很多值得优化的地方。比如在Swin Transformer v2中就对v1的相对位置偏置进行了优化。</strong></li>
+<li><strong>Transformer模型训练困难。根据现有的一些经验，Transformer相比CNN要更难训练。比如Transformer需要更多的训练数据，需要迭代更多的epoch，需要更大的正则项(L2正则)，需要更多的数据增强(且对数据增强很敏感，比如在MobileViT论文的引言中提到，如果将CutMix以及DeIT-style的数据增强移除，模型在Imagenet上的Acc直接掉6个点)。</strong></li>
+</ul>
+<p>针对以上问题，现有的、最简单的方式就是采用CNN与Transformer的混合<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%9E%B6%E6%9E%84&amp;spm=1001.2101.3001.7020">架构</a>，CNN能够提供空间归纳偏置所以可以摆脱位置偏置，而且加入CNN后能够加速网络的收敛，使网络训练过程更加的稳定。下图展示了MobileViT与当时主流的一些Transformer模型对比，通过下图可以看出，即使使用普通的数据增强方式MobileViT也能达到更高的Acc并且参数数量更少。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Fb287550996404d44afef8be2b014fe98.png" alt="fig7" /></p>
+<p>除此之外，作者还将MobileViT与一些传统的轻量级CNN进行了对比，如下图所示，在近似的参数数量下MobileViT的Acc要更高。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Ffbabc083d32b49eb9eb6ef12efbf6e09.png" alt="在这里插入图片描述" /></p>
+<p>以上只提到了参数数量和Acc，并没有明确的推理速度对比，在论文中唯一能找到的一个有推理速度对比是表3，通过对比能够看到基于Tranaformer的模型(无论是否为混合架构)推理速度比纯CNN的模型还是要慢很多的(移动端)。作者在论文中给出解释主要还是说当前移动端对Transformer架构优化的还太少。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2F73215607e5cd496eb09d8d648902e13e.png" alt="t3" /></p>
+<hr />
+<h2 id="1-模型结构解析"><a class="markdownIt-Anchor" href="#1-模型结构解析"></a> 1 模型结构解析</h2>
+<h3 id="11-vision-transformer结构"><a class="markdownIt-Anchor" href="#11-vision-transformer结构"></a> 1.1 Vision Transformer结构</h3>
+<p>在讲MobileViT网络之前先简单回顾下Vision Transformer的网络结构，如果还不了解，建议先看下之前写的有关Vision Transformer的文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/118242600">https://blog.csdn.net/qq_37541097/article/details/118242600</a>。下图是MobileViT论文中绘制的<code>Standard visual Transformer</code>。首先将输入的图片划分成一个个<code>Patch</code>，然后通过线性变化将每个<code>Patch</code>映射到一个一维向量中（视为一个个<code>Token</code>），接着加上位置偏置信息（可学习参数），再通过一系列Transformer Block，最后通过一个全连接层得到最终预测输出。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Ff02b2cfd2d7549ecb769cbe712331797.png" alt="在这里插入图片描述" /></p>
+<hr />
+<h3 id="12-mobilevit结构"><a class="markdownIt-Anchor" href="#12-mobilevit结构"></a> 1.2 MobileViT结构</h3>
+<p>简单回顾完Vision Transformer后，再来看看本文要讲的MobileViT。下图对应的是论文中的图1(b)，通过下图可以看到MobileViT主要由普通卷积，<code>MV2</code>（MobiletNetV2中的<code>Inverted Residual block</code>），<code>MobileViT block</code>，全局池化以及全连接层共同组成。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2F73aa3a646e0447fa9f00b0a673a95ddb.png" alt="在这里插入图片描述" /></p>
+<p>关于<code>MV2</code>结构之前在讲MobileNetV2时有讲过，这里不再赘述，下图是当stride等于1时的<code>MV2</code>结构。上图中标有向下箭头的<code>MV2</code>结构代表stride等于2的情况，即需要进行下采样。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Fa0a78fe10e3843768b8121c3b50503e8.png" alt="在这里插入图片描述" /></p>
+<p>接下来就是最核心的<code>MobileViT block</code>，在论文的图1(b)中作者已经绘制出了<code>MobileViT block</code>的大致结构。首先将特征图通过一个卷积核大小为<code>nxn</code>（代码中是<code>3x3</code>）的卷积层进行局部的特征建模，然后通过一个卷积核大小为<code>1x1</code>的卷积层调整通道数。接着通过<code>Unfold -&gt; Transformer -&gt; Fold</code>结构进行全局的特征建模，然后再通过一个卷积核大小为<code>1x1</code>的卷积层将通道数调整回原始大小。接着通过shortcut捷径分支与原始输入特征图进行<code>Concat</code>拼接（沿通道channel方向拼接），最后再通过一个卷积核大小为<code>nxn</code>（代码中是<code>3x3</code>）的卷积层做特征融合得到输出。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2F050aea7d9d9248d7946a6a749211251f.png" alt="在这里插入图片描述" /></p>
+<p>我个人认为有关<code>Unfold -&gt; Transformer -&gt; Fold</code>这块介绍的并不是很清楚（可能是我太菜），所以看了下源码自己重新绘制了一个方便大家理解的版本。这里为了方便我们将<code>Unfold -&gt; Transformer -&gt; Fold</code>简写成<code>Global representations</code>，它的具体计算过程如下图所示。首先对特征图划分<code>Patch</code>（这里为了方便忽略通道channels），图中的<code>Patch</code>大小为<code>2x2</code>，即每个<code>Patch</code>由4个<code>Pixel</code>组成。在进行<code>Self-Attention</code>计算的时候，每个<code>Token</code>（图中的每个<code>Pixel</code>或者说每个小颜色块）只和自己颜色相同的<code>Token</code>进行<code>Attention</code>，这样就达到了减少计算量的目的，没错就这么简单。对于原始的<code>Self-Attention</code>计算每个<code>Token</code>是需要和所有的<code>Token</code>进行<code>Attention</code>，假设特征图的高宽和通道数分别为<code>H, W, C</code>，这里记计算成本为<code>Cost=O(WHC)</code>。如果按照刚刚说的，每个<code>Token</code>只和自己颜色相同的<code>Token</code>做<code>Attention</code>，假设<code>Patch</code>大小为<code>2x2</code>，那么计算成本为<code>Cost=O(WHC/4)</code>，即理论上的计算成本仅为原始的 1 4 \frac{1}{4} 41。至于为什么能这么做，这里简单谈谈我的看法。对于图像数据本身就存在大量的数据冗余，比如对于较浅层的特征图（<code>H, W</code>下采样倍率较低时），相邻像素间信息可能没有太大差异，如果每个<code>Token</code>做<code>Attention</code>的时候都要去看下相邻的这些像素，个人感觉有些浪费<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E7%AE%97%E5%8A%9B&amp;spm=1001.2101.3001.7020">算力</a>。这里并不是说看相邻的像素没有意义，只是说在分辨率较高的特征图上收益可能很低，增加的计算成本远大于Accuracy上的收益。而且前面已经通过<code>nxn</code>的卷积层进行局部建模了，进行全局建模时就没必要再看这么细了。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Fd0a55f0a83fc4450abe0c2816bf62bf8.png" alt="在这里插入图片描述" /></p>
+<p>而刚刚提到的<code>Unfold</code>和<code>Fold</code>只是为了将数据给reshape成计算<code>Self-Attention</code>时所需的数据格式。对于普通的<code>Self-Attention</code>计算前，一般是直接展平<code>H, W</code>两个维度得到一个<code>Token</code>序列，即将<code>[N, H, W, C] -&gt; [N, H*W, C]</code>其中N表示Batch维度。但在<code>MobileViT block</code>的<code>Self-Attention</code>计算中，只是将颜色相同的<code>Token</code>进行了<code>Attention</code>，所以不能简单粗暴的展平<code>H, W</code>维度。如下图所示，文中的<code>Unfold</code>就是将相同颜色的<code>Token</code>展平在一个序列中，这样就可以直接使用普通的<code>Self-Attention</code>并行计算每个序列的<code>Attention</code>了。最后在通过<code>Fold</code>折叠回原特征图即可。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2F9fe78d3bd4df4552bda8e5164000ea13.png" alt="在这里插入图片描述" /></p>
+<hr />
+<h3 id="13-patch-size对性能的影响"><a class="markdownIt-Anchor" href="#13-patch-size对性能的影响"></a> 1.3 Patch Size对性能的影响</h3>
+<p>在上面1.2章节中我们已经讲完了MobileViT结构，接着我们再来聊聊有关<code>patch_size</code>对网络性能的影响。前面有提到大的<code>patch_size</code>能够提升网络推理速度，但是会丢失一些细节信息。这里直接看下论文中给的图8，这里展示了两组不同的<code>patch_size</code>组合在三个任务中的性能，包括图像分类，目标检测以及语义分割。其中配置A的<code>patch_size</code>为<code>&#123;2, 2, 2&#125;</code>，配置B的<code>patch_size</code>为<code>&#123;8, 4, 2&#125;</code>，这三个数字分别对应下采样倍率为8，16，32的特征图所采用的<code>patch_size</code>大小。通过对比可以发现，在图像分类和目标检测任务中（对语义细节要求不高的场景），配置A和配置B在Acc和mAP上没太大区别，但配置B要更快。但在语义分割任务中（对语义细节要求较高的场景）配置A的效果要更好。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2F0b0745d1a58e47a394e8f38141d5ff33.png" alt="在这里插入图片描述" /></p>
+<hr />
+<h2 id="2-模型详细配置"><a class="markdownIt-Anchor" href="#2-模型详细配置"></a> 2 模型详细配置</h2>
+<p>在论文中，关于MobileViT作者提出了三种不同的配置，分别是MobileViT-S(small)，MobileViT-XS(extra small)和MobileViT-XXS(extra extra small)。三者的主要区别在于特征图的通道数不同。下图为MobileViT的整体框架，最开始的<code>3x3</code>卷积层以及最后的<code>1x1</code>卷积层、全局池化、全连接层不去赘述，主要看下图中的标出的Layer1~5，这里是根据源码中的配置信息划分的。下面只列举了部分配置信息，更加详细的配置可查看源码。</p>
+<p><img src="/img/loading.gif" data-original="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fimg-blog.csdnimg.cn%2Fa73e7c9ecedf40358afe74ccdb168cec.png" alt="在这里插入图片描述" /></p>
+<p>对于MobileViT-XXS，Layer1~5的详细配置信息如下：</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130145842530.png" alt="image-20221130145842530" /></p>
+<p>对于MobileViT-XS，Layer1~5的详细配置信息如下：</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130145901170.png" alt="image-20221130145901170" /></p>
+<p>对于MobileViT-S，Layer1~5的详细配置信息如下：</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130145921654.png" alt="image-20221130145921654" /></p>
+<p>其中：</p>
+<ul>
+<li><code>out_channels</code>表示该模块输出的通道数</li>
+<li><code>mv2_exp</code>表示<code>Inverted Residual Block</code>中的expansion ratio</li>
+<li><code>transformer_channels</code>表示<code>Transformer</code>模块输入<code>Token</code>的序列长度（特征图通道数）</li>
+<li><code>num_heads</code>表示多头自注意力机制中的head数</li>
+<li><code>ffn_dim</code>表示FFN中间层<code>Token</code>的序列长度</li>
+<li><code>patch_h</code>表示每个patch的高度</li>
+<li><code>patch_w</code>表示每个patch的宽度</li>
+</ul>
+<hr />
+<p>到此，有关MobileViT的内容就基本讲完了。如果觉得这篇文章对你有用，记得点赞、收藏并分享给你的小伙伴们哦😄。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/126715733">查看原网页: blog.csdn.net</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ppmobileseg/" title="PP-MobileSeg Explore the Fast and Accurate Semantic Segmentation Model on Mobile Devices"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">PP-MobileSeg Explore the Fast and Accurate Semantic Segmentation Model on Mobile Devices</div></div><div class="info-2"><div class="info-item-1"> PP-MobileSeg: Explore the Fast and Accurate Semantic Segmentation Model on Mobile Devices 文章链接  1. Abstract transformer在计算机视觉中的成功导致了一些尝试，以使其适用于移动设备，但其性能在一些实际应用中仍然不令人满意。为了解决这个问题，我们提出了PP-MobileSeg，一个在移动设备上实现最先进性能的语义分割模型。PP-MobileSeg包括三个新的部分：StrideFormer主干、聚合注意力模块（AAM）和有效插值模块（VIM）。四个阶段的StrideFormer主干是用MV3块和strided...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/pspnet/" title="pspnet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">pspnet</div></div><div class="info-2"><div class="info-item-1"> pspnet  Abstract 对于不受限制的开放词汇和多样化场景，场景解析是一项挑战。在本文中，我们通过我们的金字塔池化模块和所提出的金字塔场景解析网络（PSPNet），利用基于不同区域的上下文聚合，从而利用全局上下文信息的能力。我们的全局先验表示法能有效地在场景解析任务中产生高质量的结果，而 PSPNet 则为像素级预测提供了一个卓越的框架。所提出的方法在各种数据集上都取得了最先进的性能。它在 2016 年 ImageNet 场景解析挑战赛、PASCAL VOC 2012 基准测试和 Cityscapes 基准测试中均名列第一。在 PASCAL VOC 2012 和 Cityscapes 基准测试中，单个 PSPNet 的 mIoU 准确率分别达到 85.4% 和 80.2% 的新纪录。  1. Introduction 基于语义分割的场景解析是计算机视觉领域的一个基本课题。其目标是为图像中的每个像素分配一个类别标签。场景解析可提供对场景的完整理解。它能预测每个元素的标签、位置和形状。这一主题在自动驾驶、机器人传感等潜在应用中具有广泛的意义。   图 1. ADE20K...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mobilevit%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="toc-text"> MobileViT模型简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95"><span class="toc-text"> 文章目录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text"> 0 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90"><span class="toc-text"> 1 模型结构解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-vision-transformer%E7%BB%93%E6%9E%84"><span class="toc-text"> 1.1 Vision Transformer结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-mobilevit%E7%BB%93%E6%9E%84"><span class="toc-text"> 1.2 MobileViT结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-patch-size%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text"> 1.3 Patch Size对性能的影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A8%A1%E5%9E%8B%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE"><span class="toc-text"> 2 模型详细配置</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

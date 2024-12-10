@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CA | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为 “坐标注意”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CA">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为 “坐标注意”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:04:03.850Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CA',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">CA</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">CA</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:04:03.850Z" title="更新于 2024-12-11 01:04:03">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="coordinate-attention-for-efficient-mobile-network-design"><a class="markdownIt-Anchor" href="#coordinate-attention-for-efficient-mobile-network-design"></a> Coordinate Attention for Efficient Mobile Network Design</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<p>最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为 “坐标注意”。与通过二维全局汇集将特征张量转化为单一特征向量的通道注意不同，坐标注意将通道注意分解为两个一维特征编码过程，分别沿两个空间方向汇集特征。通过这种方式，可以沿一个空间方向捕获长距离的依赖性，同时可以沿另一个空间方向保留精确的位置信息。然后，产生的特征图被分别编码为一对方向感知和位置敏感的注意图，它们可以互补地应用于输入特征图，以增强对感兴趣的物体的表征。我们的坐标注意很简单，可以灵活地插入到经典的移动网络中，如MobileNetV2、MobileNeXt和EfficientNet，几乎没有计算开销。大量的实验表明，我们的坐标注意不仅有利于ImageNet的分类，而且更有趣的是，在下游任务中表现得更好，如物体检测和语义分割。</p>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h2>
+<p>用于告诉模型 &quot;什么 &quot;和 &quot;哪里 &quot;需要注意的注意机制已经被广泛研究[47, 29]，并被广泛用于提高现代深度神经网络的性能[18, 44, 3, 25, 10, 14]。然而，它们在移动网络中的应用（模型大小有限）明显落后于大型网络的应用[36, 13, 46]。这主要是因为大多数关注机制所带来的计算开销是移动网络所不能承受的。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425211442800.png" alt="image-20230425211442800" /></p>
+<blockquote>
+<p>图2. 提出的坐标注意块（c）与经典的SE通道注意块[18]（a）和CBAM[44]（b）的示意图比较。这里，&quot;GAP &quot;和 &quot;GMP &quot;分别指的是全局平均池和全局最大池。X平均池 &quot;和 &quot;Y平均池 &quot;分别指的是一维水平全局池和一维垂直全局池。</p>
+</blockquote>
+<p>考虑到移动网络的计算能力有限，到目前为止，最流行的移动网络关注机制仍然是挤压和激发（SE）关注[18]。它在二维全局池的帮助下计算信道注意力，并以相当低的计算成本提供明显的性能提升。然而，SE注意只考虑了通道间信息的编码，而忽略了位置信息的重要性，而位置信息对于捕捉视觉任务中的物体结构至关重要[42]。后来的工作，如BAM[30]和CBAM[44]，试图通过减少输入张量的通道维度来利用位置信息，然后使用卷积计算空间注意力，如图2（b）所示。然而，卷积只能捕捉到局部关系，而不能模拟对视觉任务至关重要的长距离依赖关系[48, 14]。</p>
+<p>为了使移动网络能够在大的区域内进行关注，同时避免产生大量的计算开销，我们建议将位置信息嵌入通道关注中，以建立高效的关注机制。为了缓解二维全局集合引起的位置信息损失，我们将通道注意分解为两个平行的一维特征编码过程，以有效地将空间坐标信息整合到生成的注意图中。具体来说，我们的方法利用两个一维全局池化操作，将沿垂直和水平方向的输入特征分别聚集到两个独立的方向感知特征图中。然后，这两个具有嵌入式方向特定信息的特征图被分别编码为两个注意力图，每个注意力图都捕捉到输入特征图沿一个空间方向的长距离依赖性。因此，位置信息可以在生成的注意图中得到保留。然后，两个注意图都通过乘法应用于输入特征图，以强调感兴趣的表征。我们把提出的注意方法命名为坐标注意，因为它的操作区分了空间方向（即坐标），并产生了坐标意识的注意图。</p>
+<p>我们的坐标注意具有以下优点。首先，它不仅能捕捉到跨频道的信息，还能捕捉到方向意识和位置敏感的信息，这有助于模型更准确地定位和识别感兴趣的对象。其次，我们的方法灵活而轻便，可以很容易地插入移动网络的经典构建模块，如MobileNetV2[34]中提出的倒置残差块和MobileNeXt[49]中提出的沙镜块，通过强调信息表征来增强特征。第三，作为一个预训练的模型，我们的坐标关注可以为移动网络的下游任务带来显著的性能提升，特别是对于那些有密集预测的任务（例如，语义分割），我们将在实验部分展示。</p>
+<p>为了证明所提出的方法相对于以前的移动网络注意力方法的优势，我们在ImageNet分类[33]和流行的下游任务中进行了广泛的实验，包括物体检测和语义分割。在可学习的参数和计算量相当的情况下，我们的网络在ImageNet上实现了0.8%的顶级分类精度的性能提升。在物体检测和语义分割方面，我们也观察到与其他注意力机制的模型相比有明显的改进，如图1所示。我们希望我们简单而有效的设计能够促进未来移动网络注意力机制的发展。</p>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2. Related Work</h2>
+<p>在这一节中，我们对本文进行了简要的文献回顾，包括之前关于高效网络架构设计和关注或非本地模型的工作。</p>
+<h3 id="21-mobile-network-architectures"><a class="markdownIt-Anchor" href="#21-mobile-network-architectures"></a> 2.1. Mobile Network Architectures</h3>
+<p>最近最先进的移动网络大多是基于深度可分离卷积[16]和倒置残差块[34]。HBONet[20]在每个倒置的残差块内引入了下采样操作，用于对代表性的空间信息进行建模。ShuffleNetV2[27]在倒置的残差块前后使用了一个信道分割模块和一个信道洗牌模块。后来，MobileNetV3[15]与神经结构搜索算法[50]相结合，搜索最佳激活函数和不同深度的倒置残差块的扩展率。此外，MixNet[39]、EfficientNet[38]和ProxylessNAS[2]也采用了不同的搜索策略，在扩展率、输入分辨率、网络深度和宽度方面搜索深度可分离卷积的最佳核大小或控制网络权重的标量。最近，Zhou等人[49]重新思考了利用纵深可分离卷积的方式，并提出了MobileNeXt，它采用了移动网络的经典瓶颈结构。</p>
+<h3 id="22-attention-mechanisms"><a class="markdownIt-Anchor" href="#22-attention-mechanisms"></a> 2.2. Attention Mechanisms</h3>
+<p>注意力机制[41, 40]已被证明有助于各种计算机视觉任务，如图像分类[18, 17, 44, 1]和图像分割[14, 19, 10]。其中一个成功的例子是SENet[18]，它简单地挤压每个二维特征图以有效地建立通道之间的相互依赖关系。CBAM[44]通过引入大尺寸核的卷积进行空间信息编码，进一步推进了这一想法。后来的工作，如GENET[17]、GALA[22]、AA[1]和TA[28]，通过采用不同的空间注意机制或设计先进的注意块来扩展这一思想。</p>
+<p>非局部/自我注意网络最近非常流行，因为它们有能力建立空间或通道式注意。典型的例子包括NLNet[43]、GCNNet[3]、A2Net[7]、SCNet[25]、GSoP-Net[11]或CCNNet[19]，它们都是利用非局部机制来捕捉不同类型的空间信息。然而，由于自我关注模块内部有大量的计算，它们通常在大型模型中被采用[13, 46]，但不适合移动网络。</p>
+<p>与这些利用昂贵而繁重的非本地或自留地块的方法不同，我们的方法考虑了一种更有效的捕捉位置信息和通道关系的方法，以增强移动网络的特征表示。通过将二维全局集合操作分解为两个一维编码过程，我们的方法比其他具有轻量级特性的注意力方法（如SENet[18]、CBAM[44]和TA[28]）表现得更好。</p>
+<h2 id="3-coordinate-attention"><a class="markdownIt-Anchor" href="#3-coordinate-attention"></a> 3. Coordinate Attention</h2>
+<p>一个坐标注意块可以被看作是一个计算单元，其目的是提高移动网络所学特征的表达能力。它可以把任何中间特征张量X=[x1, x2, … , xc]∈RC×H×W作为输入，并输出一个与X大小相同的具有增强表示的张量Y=[y1, y2, … , yc]的转变。</p>
+<h3 id="31-revisit-squeeze-and-excitation-attention"><a class="markdownIt-Anchor" href="#31-revisit-squeeze-and-excitation-attention"></a> 3.1. Revisit Squeeze-and-Excitation Attention</h3>
+<p>如[18]所述，标准卷积本身很难对通道关系进行建模。明确建立信道间的依赖关系可以提高模型对信息信道的敏感性，这些信道对最终的分类决策贡献更大。此外，使用全局平均池也可以帮助模型捕捉全局信息，而这正是卷积所缺乏的。</p>
+<p>从结构上看，SE块可以分解为两个步骤：挤压和激励，分别用于全局信息嵌入和通道关系的适应性再校准。给定输入X，第c个通道的挤压步骤可以表述为：：</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230413211007633.png" alt="image-20230413211007633" /></p>
+<p>其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">Z_c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>是与第c个通道相关的输出。输入X直接来自具有固定核大小的卷积层，因此可以被视为局部描述符的集合。挤压操作使得收集全局信息成为可能。</p>
+<p>第二步，激发，旨在充分捕捉通道间的依赖关系，可以表述为</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230413211030868.png" alt="image-20230413211030868" /></p>
+<p>其中，-指的是信道明智的乘法，σ是sigmoid函数，ˆ z是由一个变换函数产生的结果，其表述如下：</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425201102531.png" alt="image-20230425201102531" /></p>
+<p>这里，T1和T2是两个线性变换，可以通过学习来捕捉每个通道的重要性。</p>
+<p>SE块在最近的移动网络中被广泛使用[18, 4, 38]，并被证明是实现最先进性能的一个关键组成部分。然而，它只考虑了通过对信道关系的建模来重新权衡每个信道的重要性，但忽略了位置信息，正如我们将在第4节中通过实验证明的那样，位置信息对于生成空间选择性注意力图是很重要的。在下文中，我们将介绍一个新的注意力块，它同时考虑到通道间的关系和位置信息。</p>
+<h3 id="32-coordinate-attention-blocks"><a class="markdownIt-Anchor" href="#32-coordinate-attention-blocks"></a> 3.2. Coordinate Attention Blocks</h3>
+<p>我们的坐标注意在两个步骤中对通道关系和长距离的依赖性进行编码：坐标信息嵌入和坐标注意生成。图2的右边部分是拟议的坐标注意模块的图。在下文中，我们将详细描述它。</p>
+<h4 id="321-coordinate-information-embedding"><a class="markdownIt-Anchor" href="#321-coordinate-information-embedding"></a> 3.2.1 Coordinate Information Embedding</h4>
+<p>全局集合在通道注意中经常被用来对空间信息进行全局编码，但它将全局空间信息挤压到通道描述符中，因此很难保留位置信息，而位置信息对捕捉视觉任务中的空间结构至关重要。为了鼓励注意力区块以精确的位置信息来捕捉长距离的空间互动，我们将公式（1）中表述的全局集合分解为一对一维特征编码操作。具体来说，给定输入X，我们使用两个空间范围的集合核（H，1）或（1，W ），分别沿横坐标和纵坐标对每个通道进行编码。因此，高度为h的第c个通道的输出可以被表述为<img src="/img/loading.gif" data-original="images/image-20230425201256333.png" alt="image-20230425201256333" /></p>
+<p>类似地，在宽度为w的第c个通道的输出可以写为</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425201321721.png" alt="image-20230425201321721" /></p>
+<p>上述两种变换分别沿两个空间方向聚集特征，产生一对方向感知的特征图。这与通道注意方法中产生单一特征向量的挤压操作（公式（1））相当不同。这两个转换还允许我们的注意力块沿一个空间方向捕捉长距离的依赖性，并沿另一个空间方向保留精确的位置信息，这有助于网络更准确地定位感兴趣的对象。</p>
+<h4 id="322-coordinate-attention-generation"><a class="markdownIt-Anchor" href="#322-coordinate-attention-generation"></a> 3.2.2 Coordinate Attention Generation</h4>
+<p>如上所述，公式(4)和公式(5)实现了一个全局性的接受领域，并对精确的位置信息进行编码。为了利用由此产生的表达性表征，我们提出了第二个转换，称为坐标注意生成。我们的设计指的是以下三个标准。首先，就移动环境中的应用而言，新的转换应该尽可能的简单和便宜。其次，它可以充分利用捕捉到的位置信息，从而使感兴趣的区域能够被准确地突出。最后但并非最不重要的是，它还应该能够有效地捕捉通道间的关系，这在现有的研究中已经被证明是至关重要的[18, 44]。</p>
+<p>具体来说，给定由公式4和公式5产生的聚合特征图，我们首先将它们连接起来，然后将它们发送到一个共享的1×1卷积变换函数F1，产生</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425205626787.png" alt="image-20230425205626787" /></p>
+<p>其中[-，-]表示沿空间维度的连接操作，δ是一个非线性激活函数，f∈RC/r×(H+W )是编码水平方向和垂直方向空间信息的中间特征图。这里，r是控制区块大小的还原率，如同SE区块。然后我们将f沿空间维度分割成两个独立的张量f h∈RC/r×H和f w∈RC/r×W。再利用两个1×1的卷积变换Fh和Fw将f h和f w分别变换为与输入X具有相同通道数的张量，得到</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425205650185.png" alt="image-20230425205650185" /></p>
+<p>回顾一下，σ是sigmoid函数。为了减少开销模型的复杂性，我们经常用一个适当的减少比率r（例如32）来减少f的通道数。我们将在实验部分讨论不同的还原比对性能的影响。然后，输出的gh和gw被扩大，并分别作为注意力的权重。最后，我们的坐标注意块Y的输出可以写为</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230425205704434.png" alt="image-20230425205704434" /></p>
+<p>讨论。与只注重重新权衡不同通道的重要性的通道注意不同，我们的坐标注意块也考虑了空间信息的编码。如上所述，沿水平和垂直方向的注意同时应用于输入张量。两个注意图中的每个元素都反映了感兴趣的物体是否存在于相应的行和列中。这个编码过程使我们的坐标注意能够更准确地定位感兴趣的物体的确切位置，从而帮助整个模型更好地识别。我们将在实验部分详尽地证明这一点。</p>
+<h3 id="33-implementation"><a class="markdownIt-Anchor" href="#33-implementation"></a> 3.3. Implementation</h3>
+<p>由于本文的目标是研究一种更好的方法来增强移动网络的卷积特征，这里我们以两个具有不同类型的残差块的经典轻量级架构（即MobileNetV2[34]和MobileNeXt[49]）为例来证明所提出的坐标注意力块相对于其他著名的轻量级注意力块的优势。图3显示了我们如何将注意力块插入MobileNetV2的倒置残差块和MobileNeXt的沙漏块。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230620194302020.png" alt="image-20230620194302020" /></p>
+<h2 id="4-experiments"><a class="markdownIt-Anchor" href="#4-experiments"></a> 4. Experiments</h2>
+<p>在这一节中，我们首先描述了我们的实验设置，然后进行了一系列的消融实验，以证明所提出的协调注意力中的每个组成部分对性能的贡献。接下来，我们将我们的方法与一些基于注意力的方法进行比较。最后，我们报告了所提出的方法与其他基于注意力的方法在物体检测和语义分割方面的比较结果。</p>
+<h3 id="41-experiment-setup"><a class="markdownIt-Anchor" href="#41-experiment-setup"></a> 4.1. Experiment Setup</h3>
+<p>我们使用PyTorch工具箱[31]来实现我们所有的实验。在训练过程中，我们使用标准的SGD优化器，衰减和动量为0.9来训练所有模型。权重的衰减被设置为4×10-5。采用初始学习率为0.05的余弦学习计划。我们使用四个NVIDIA GPU进行训练，批次大小被设置为256。在没有额外声明的情况下，我们将MobileNetV2作为基线，对所有的模型进行200次的训练。对于数据增强，我们使用与MobileNetV2相同的方法。我们报告了在ImageNet数据集[33]上的分类结果。</p>
+<h3 id="42-ablation-studies"><a class="markdownIt-Anchor" href="#42-ablation-studies"></a> 4.2. Ablation Studies</h3>
+<p>协调注意的重要性。为了证明所提出的坐标注意的性能，我们进行了一系列的消融实验，其相应的结果都列于表1。我们从坐标注意中去除水平注意或垂直注意，以观察编码坐标信息的重要性。如表1所示，沿任何一个方向的注意的模型都具有与SE注意的模型相当的性能。然而，当水平注意和垂直注意都被纳入时，我们得到了表1中强调的最佳结果。这些实验反映出，在可学习的参数和计算成本相当的情况下，坐标信息嵌入对图像分类更有帮助。</p>
+<p>不同的权重乘数。在这里，我们以两个经典的移动网络（包括带有倒置剩余块的MobileNetV2[34]和带有沙镜瓶颈块的MobileNeXt[49]）为基线，看看在不同的权重乘数下，所提出的方法与SE关注[18]和CBAM[44]相比的性能。在这个实验中，我们采用了三种典型的权重乘数，包括{1.0, 0.75, 0.5}。如表2所示，当以MobileNetV2网络为基线时，采用CBAM的模型与采用SE注意力的模型有类似的结果。然而，在每一种设置下，采用建议的协调注意力的模型都能产生最好的结果。当使用MobileNeXt网络时，也可以观察到类似的现象，如表3中所列。这表明，不管是考虑沙漏瓶颈区块还是倒置的残余区块，也不管选择哪一个权重乘数，我们的坐标注意都表现得最好，因为它是同时编码位置和通道间信息的先进方式。</p>
+<p>减少比率r的影响。为了研究不同减少比率的注意力块对模型性能的影响，我们尝试减少减少比率的大小，看看性能变化。如表4所示，当我们把r减少到原始大小的一半时，模型的大小会增加，但可以产生更好的性能。这表明，通过减少缩减率来增加参数对提高模型性能很重要。更重要的是，在这个实验中，我们的坐标注意仍然比SE注意和CBAM表现得更好，反映了所提出的坐标注意对减少比例的鲁棒性。</p>
+<h3 id="43-comparison-with-other-methods"><a class="markdownIt-Anchor" href="#43-comparison-with-other-methods"></a> 4.3. Comparison with Other Methods</h3>
+<p>移动网络的注意力。我们将我们的协调注意力与其他用于移动网络的轻量级注意力方法进行比较，包括表2中广泛采用的SE注意力[18]和CBAM[44]。可以看出，加入SE注意力后，分类性能已经提高了1%以上。对于CBAM，与SE注意相比，其图2(b)所示的空间注意模块似乎在移动网络中没有贡献。然而，当考虑到提议的坐标注意时，我们取得了最好的结果。我们还在图4中可视化了不同注意力方法的模型所产生的特征图。很明显，我们的坐标注意比SE注意和CBAM更能帮助定位感兴趣的对象。</p>
+<p>我们认为，所提出的位置信息编码方式比CBAM的优势有两个方面。首先，CBAM中的空间注意模块将通道维度压缩为1，导致信息损失。然而，我们的坐标注意使用一个适当的减少率来减少瓶颈处的通道维度，避免了过多的信息损失。其次，CBAM利用内核大小为7×7的卷积层来编码局部空间信息，而我们的坐标注意通过使用两个互补的1D全局池操作来编码全局信息。这使我们的坐标注意能够捕捉到空间位置之间的长距离依赖关系，这对视觉任务是至关重要的。</p>
+<p>更强的基线。为了进一步证明所提出的坐标注意在更强大的移动网络中比SE注意的优势，我们把EfficientNet-b0[38]作为我们的基线。EfficientNet是基于架构搜索算法的，包含SE注意力。为了研究在EfficientNet上提出的坐标注意的性能，我们只是用我们提出的坐标注意替换了SE注意。对于其他的设置，我们遵循原论文的规定。结果已列于表5。与包含SE注意力的原始EfficientNet-b0以及其他与EfficientNet-b0具有可比性的参数和计算方法相比，我们的网络在协调注意力方面取得了最好的结果。这表明所提出的协调注意力在强大的移动网络中仍能有良好的表现。</p>
+<h3 id="44-applications"><a class="markdownIt-Anchor" href="#44-applications"></a> 4.4. Applications</h3>
+<p>在本小节中，我们对物体检测任务和语义分割任务进行了实验，以探索所提出的协调注意对其他注意方法的可转移能力。</p>
+<h4 id="441-object-detection"><a class="markdownIt-Anchor" href="#441-object-detection"></a> 4.4.1 Object Detection</h4>
+<p>**实施细节。**我们的代码是基于PyTorch和SSDLite[34, 26]。按照[34]，我们将SSDLite的第一层和第二层分别与输出跨度为16和32的最后一个点状卷积层相连接，并在最后一个卷积层之上添加其余的SSDLite层。在COCO上训练时，我们将批次大小设置为256，并使用同步的批次归一化。使用余弦学习计划，初始学习率为0.01。我们对模型进行了1,600,000次迭代训练。当在Pascal VOC上训练时，批次大小被设置为24，所有的模型被训练了24万次迭代。权重衰减被设置为0.9。初始学习率为0.001，然后在160,000次和200,000次迭代时除以10。对于其他设置，读者可以参考[34，26]。</p>
+<p>关于COCO的结果。在这个实验中，我们遵循大多数以前的工作，分别以AP、AP50、AP75、APS、APM和APL的方式报告结果。在表6中，我们显示了不同的网络设置在COCO 2017验证集上产生的结果。很明显，在MobileNetV2中加入坐标关注，在只有0.5M的参数开销和几乎相同的计算成本的情况下，大幅提高了检测结果（24.5 v.s. 22.3）。与其他轻量级的注意力方法，如SE注意力和CBAM相比，我们的SSDLite320版本在所有指标上都取得了最好的结果，而参数和计算的数量几乎相同。</p>
+<p>此外，我们还展示了以前基于SSDLite320的最先进模型产生的结果，如表6所列。请注意，有些方法（例如MobileNetV3[15]和MnasNet-A1[37]）是基于神经结构搜索方法的，但我们的模型没有。很明显，与其他参数和计算接近的方法相比，我们的检测模型在AP方面取得了最好的结果。</p>
+<p>Pascal VOC的结果。在表7中，我们显示了采用不同注意力方法时对Pascal VOC 2007测试集的检测结果。我们观察到，SE注意力和CBAM不能改善基线结果。然而，加入提议的协调注意力可以将平均AP从71.7提高到73.1。在COCO和Pascal VOC数据集上的两个检测实验都表明，与其他注意力方法相比，采用建议的协调注意力的分类模型具有更好的可转移能力。</p>
+<h4 id="442-semantic-segmentation"><a class="markdownIt-Anchor" href="#442-semantic-segmentation"></a> 4.4.2 Semantic Segmentation</h4>
+<p>我们还对语义分割进行了实验。在MobileNetV2[34]之后，我们利用经典的DeepLabV3[6]作为例子，将所提出的方法与其他模型进行比较，以证明所提出的坐标注意在语义分割中的可转移能力。具体来说，我们抛弃了最后一个线性算子，将ASPP连接到最后一个卷积算子。在ASPP中，我们用深度可分离的卷积算子取代了标准的3×3卷积算子，以减少考虑移动应用的模型大小。ASPP中每个分支的输出通道被设置为256，ASPP中的其他组件保持不变（包括1×1卷积分支和图像级特征编码分支）。我们报告了两个广泛使用的语义分割基准的结果，包括Pascal VOC 2012 [9] 和Cityscapes [8]。对于实验设置，我们严格遵循DeeplabV3的论文，除了权重衰减被设置为4e-5。当输出跨度设置为16时，ASPP中的扩张率为{6，12，18}，而当输出跨度设置为8时，扩张率为{12，24，36}。</p>
+<p>Pascal VOC 2012的结果。Pascal VOC 2012的分割基准共有21个类，包括一个背景类。按照原论文的建议，我们用1,464张图像的分割来训练，用1,449张图像的分割来验证。此外，正如大多数以前的工作[6，5]所做的那样，我们通过增加来自[12]的额外图像来增加训练集，结果是共有10,582张图像用于训练。</p>
+<p>我们在表8中显示了以不同模型为骨干的分割结果。我们报告了两种不同输出步长下的结果，即16和8。请注意，这里报告的所有结果都不是基于COCO预训练的。根据表8，配备了我们的协调注意力的模型比虚构的MobileNetV2和其他注意力方法表现得更好。</p>
+<p>城市景观的结果。Cityscapes[8]是最流行的城市街道场景分割数据集之一，共包含19个不同的类别。按照官方的建议，我们使用了2,975张图片进行训练，500张图片进行验证的分割。只有精细标注的图像被用于训练。在训练中，我们将原始图像随机裁剪为768×768。在测试过程中，所有图像都保持原始尺寸（1024 × 2048）。</p>
+<p>在表9中，我们显示了采用不同注意力方法的模型在Cityscapes数据集上产生的分割结果。与虚构的MobileNetV2和其他注意力方法相比，我们的坐标注意力可以在可学习参数数量相当的情况下大幅提高分割结果。</p>
+<p>讨论。我们观察到，我们的坐标注意力在语义分割上的改进比ImageNet分类和物体检测上的改进更大。我们认为，这是因为我们的坐标注意能够通过精确的位置信息来捕捉长距离的依赖关系，这对具有密集预测的视觉任务更有利，比如语义分割。</p>
+<h2 id="5-conclusions"><a class="markdownIt-Anchor" href="#5-conclusions"></a> 5. Conclusions</h2>
+<p>在本文中，我们为移动网络提出了一种新的轻量级的注意机制，名为协调注意。我们的协调注意继承了通道注意方法（如挤压和激发注意）的优点，这些方法对通道间的关系进行建模，同时用精确的位置信息捕捉长距离的依赖关系。在ImageNet分类、物体检测和语义分割中的实验证明了我们的协调注意的有效性。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/BAM/" title="BAM"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BAM</div></div><div class="info-2"><div class="info-item-1"> BAM  Abstract 近来，小样本分割分割技术（FSS）得到了广泛的发展。然而，训练出来的模型偏向于所看到的类别，而不是理想的类别无关性，从而阻碍了对新内容的识别。本文提出了一种新颖而直接的见解来缓解这一问题。具体来说，我们在传统的 FSS 模型（元学习器）上增加了一个分支（基础学习器），以明确识别基础类别的目标，即不需要分割的区域。然后，对这两个学习器并行输出的粗略结果进行自适应整合，从而得出精确的分割预测结果。考虑到元学习器的敏感性，我们进一步引入了一个调整因子来估计输入图像对之间的场景差异，以促进模型的集合预测。在 PASCAL-5i 和 COCO-20i 上取得的显著性能提升验证了这一方法的有效性，而且令人惊讶的是，即使使用两个普通学习器，我们的多功能方案也创造了新的一流水平。此外，鉴于所提方法的独特性，我们还将其扩展到了更现实但更具挑战性的环境中，即广义 FSS，在这种环境中，基础类和新类别的像素都需要确定。  1. Introduction   得益于成熟的大规模数据集 [8, 9,...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#coordinate-attention-for-efficient-mobile-network-design"><span class="toc-text"> Coordinate Attention for Efficient Mobile Network Design</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1. Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2. Related Work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-mobile-network-architectures"><span class="toc-text"> 2.1. Mobile Network Architectures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-attention-mechanisms"><span class="toc-text"> 2.2. Attention Mechanisms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-coordinate-attention"><span class="toc-text"> 3. Coordinate Attention</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-revisit-squeeze-and-excitation-attention"><span class="toc-text"> 3.1. Revisit Squeeze-and-Excitation Attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-coordinate-attention-blocks"><span class="toc-text"> 3.2. Coordinate Attention Blocks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#321-coordinate-information-embedding"><span class="toc-text"> 3.2.1 Coordinate Information Embedding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#322-coordinate-attention-generation"><span class="toc-text"> 3.2.2 Coordinate Attention Generation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-implementation"><span class="toc-text"> 3.3. Implementation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experiments"><span class="toc-text"> 4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-experiment-setup"><span class="toc-text"> 4.1. Experiment Setup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-ablation-studies"><span class="toc-text"> 4.2. Ablation Studies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-comparison-with-other-methods"><span class="toc-text"> 4.3. Comparison with Other Methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-applications"><span class="toc-text"> 4.4. Applications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#441-object-detection"><span class="toc-text"> 4.4.1 Object Detection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#442-semantic-segmentation"><span class="toc-text"> 4.4.2 Semantic Segmentation</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-conclusions"><span class="toc-text"> 5. Conclusions</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

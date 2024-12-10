@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RTFormer | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RTFormer  Abstract 最近，基于transformer的网络在语义分割方面显示出令人印象深刻的结果。然而，对于实时语义分割来说，由于transformer的计算机制很耗时，基于CNN的纯方法仍然在该领域占主导地位。我们提出了RTFormer，一种用于实时语义分割的高效双分辨率transformer，它在性能和效率之间实现了比基于CNN的模型更好的权衡。为了在类似GPU的设备上实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RTFormer">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/RTformer/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="RTFormer  Abstract 最近，基于transformer的网络在语义分割方面显示出令人印象深刻的结果。然而，对于实时语义分割来说，由于transformer的计算机制很耗时，基于CNN的纯方法仍然在该领域占主导地位。我们提出了RTFormer，一种用于实时语义分割的高效双分辨率transformer，它在性能和效率之间实现了比基于CNN的模型更好的权衡。为了在类似GPU的设备上实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:03:52.351Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/RTformer/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RTFormer',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">RTFormer</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RTFormer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:03:52.351Z" title="更新于 2024-12-11 01:03:52">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="rtformer"><a class="markdownIt-Anchor" href="#rtformer"></a> RTFormer</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<p>最近，基于transformer的网络在语义分割方面显示出令人印象深刻的结果。然而，对于实时语义分割来说，由于transformer的计算机制很耗时，基于CNN的纯方法仍然在该领域占主导地位。我们提出了RTFormer，一种用于实时语义分割的高效双分辨率transformer，它在性能和效率之间实现了比基于CNN的模型更好的权衡。为了在类似GPU的设备上实现高推理效率，我们的RTFormer利用了具有线性复杂度的GPU-Friendly Attention，并抛弃了多头机制。此外，我们发现，跨分辨率的注意力通过传播从低分辨率分支学到的高水平知识，更有效地收集高分辨率分支的全局背景信息。在主流基准上的广泛实验证明了我们提出的RTFormer的有效性，它在Cityscapes、CamVid和COCOStuff上达到了最先进的水平，并在ADE20K上显示出有希望的结果。</p>
+<blockquote></blockquote>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1 Introduction</h2>
+<p>语义分割是一项基本的计算机视觉任务，通常在自动驾驶、移动应用、机器人传感等方面充当关键的感知模块。随着这些应用的发展，对实时语义分割的需求也越来越强烈。现有的实时分割方法主要集中在利用CNN架构，包括通过手工设计高效率的骨干和解码器[52, 46, 45, 17, 22, 13, 6, 30]，以及探索神经架构的搜索方法，在准确性和效率之间找到更好的权衡[51, 24, 23, 9]。而到目前为止，这些伟大的工作已经取得了重大的改进。</p>
+<p><strong>最近，视觉transformer因其强大的视觉识别能力而受到广泛关注[12, 35, 26, 39, 40]。在此基础上，提出了一系列基于transformer的架构，如[55, 42, 48, 32]，并在一般的语义分割任务中显示出非常有前途的性能。与基于CNN的网络相比，这些基于transformer的架构的主要区别在于大量使用了自我注意，而自我注意善于捕捉长距离的上下文信息，这在语义分割中是至关重要的。因此，我们认为注意力结构在实时语义分割任务中也应该是有效的。</strong></p>
+<p>但是到目前为止，只有少数工作[42]探索了注意力在这一领域的应用，而且先进的技术仍然由基于CNN的架构所主导。我们认为在实时环境中应用注意力的主要障碍可能来自以下两个方面。</p>
+<ol>
+<li>是现有的大多数注意力类型的计算特性对GPU喜欢的设备来说不太友好，例如二次复杂性和多头机制。二次方复杂度在处理高分辨率特征时引入了大量的计算负担，尤其是在语义分割这样的密集预测任务中。虽然有一些工作，如[39, 42]缩小了键和值的大小，但二次复杂性的特性仍然存在。而多头机制将矩阵乘法分成多组，这使得注意力操作在类似GPU的设备上很耗时，类似于执行分组卷积的情况。</li>
+<li><strong>另一个问题是，像[42(SegFormer), 48(HRFormer)]那样只对高分辨率特征图本身进行关注可能不是捕捉长距离语境和高水平语义信息的最有效方法，因为来自高分辨率特征图的单个特征向量的感受野是有限的。</strong></li>
+</ol>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130204536536.png" alt="image-20221130204536536" /></p>
+<blockquote>
+<p>图2 ：RTFormer块的说明。对于低分辨率，采用GPU友好关注。对于高分辨率，我们使用交叉分辨率关注，从低分辨率分支中提取K和V。此外，我们用两个3×3的卷积层组成FFN模块和金字塔池模块。SegNet[2]恢复了高清晰度的图像。</p>
+</blockquote>
+<p>我们提出了一个新的transformer块，名为RTFormer块，如图2所示，**旨在通过transformer在类似GPU的设备上实现性能和效率之间的更好权衡。对于低分辨率分支，我们采用了一个新提出的GPU-Friendly Attention，它源自外部注意力[15]。它继承了外部关注的线性复杂度特性，并通过放弃矩阵乘法运算中的通道分割，缓解了类GPU设备的多头机制的弱点。相反，它扩大了外部参数的数量，并将外部关注所提出的双线性运算中的第二次归一化分成多组。这使得GPU-Friendly Attention能够在一定程度上保持多头机制的优势。对于高分辨率分支，我们采用了跨分辨率的关注，而不是只在高分辨率特征本身进行关注。此外，与[36, 17, 48]的多分辨率融合的并行表述不同，我们将两个分辨率分支安排为阶梯式布局。因此，高分辨率分支可以通过从低分辨率分支学到的高层次全局信息的辅助来更有效地增强。**基于提出的RTFormer块，我们构建了一个新的实时语义分割网络，命名为RTFormer。为了学习足够的局部语境，我们仍然在早期阶段使用卷积块，并将RTFormer块放在最后两个阶段。通过大量的实验，我们发现RTFormer可以更有效地利用全局背景，并且比以前的工作取得更好的权衡。图1显示了RTFormer与其他方法在CamVid上的比较。最后，我们将RTFormer的贡献总结为以下三个方面。</p>
+<img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130204407436.png" alt="image-20221130204407436" style="zoom: 67%;" />
+<blockquote>
+<p>图1 ：在CamVid[4]测试集上的准确度（mIoU%）与推理速度（FPS）。我们的方法以红点表示，其他方法以蓝点表示。</p>
+</blockquote>
+<ul>
+<li>提出了一种新型的RTFormer模块，它在类似GPU的设备上实现了对语义分割任务的性能和效率的更好权衡。</li>
+<li>提出了一个新的网络架构RTFormer，它可以充分利用全局环境，在不损失效率的情况下，深入利用注意力来改善语义分割。</li>
+<li>RTFormer在Cityscapes、CamVid和COCOStuff上达到了最先进的水平，并在ADE20K上表现出良好的性能。此外，它还为实时语义分割任务的实践提供了一个新的视角。</li>
+</ul>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2 Related Work</h2>
+<h5 id="generic-semantic-segmentation"><a class="markdownIt-Anchor" href="#generic-semantic-segmentation"></a> Generic Semantic segmentation.</h5>
+<p>传统的分割方法利用手工制作的特征来解决像素级的标签分配问题，例如，阈值选择[31]、超级像素[1]和图算法[3]。随着深度学习的成功，一系列基于FCN（全卷积神经网络）[28]的方法[7, 2, 54]在各种基准上取得了优异的表现。这些方法从不同方面改进了FCN。Deeplabv3[7]和PSPNet[54]通过引入直角空间金字塔集合模块和金字塔集合模块，扩大了感受野并融合了不同层次的特征。SegNet[2]通过编码器-解码器结构恢复了高分辨率地图。HRNet[36]引入了一个多分辨率结构，该结构在整个网络中保持高分辨率的特征图。OCRNet[47]通过查询全局背景，增强了从骨干网输出的特征。</p>
+<h5 id="real-time-semantic-segmentation"><a class="markdownIt-Anchor" href="#real-time-semantic-segmentation"></a> Real-time Semantic segmentation.</h5>
+<p>为了解决实时分割问题，人们提出了各种方法[52, 46, 45, 17, 13, 9]。ICNet[52]通过使用一个精心设计的多分辨率图像级联网络来解决这个问题。FasterSeg[9]利用神经结构搜索（NAS）来达到平衡高准确性和低延迟的目标。BiSeNetV1[46]和BiSeNetV2[45]采用双流路径网络和特征融合模块，在速度和分割性能之间达到良好的平衡。STDC[13]对BiSeNet进行了重新思考和改进，提出了一种带有细节引导模块的单流结构。DDRNets[17]通过设计一个具有多个双边融合的双深分支网络和一个深度聚合金字塔池模块，实现了更好的性能。</p>
+<h5 id="attention-mechanism"><a class="markdownIt-Anchor" href="#attention-mechanism"></a> Attention mechanism.</h5>
+<p>注意机制在计算机视觉领域得到了有力的发展[41, 49, 19, 20, 14, 43]。由[20]提出的SE块将注意力功能应用于通道并提高了网络的表示能力。[19]使用注意力模块对物体关系进行建模并帮助进行异议检测。[41]提出了一种非局部操作，可以捕捉长距离的依赖关系，并在视频分类任务上显示出有希望的结果。[43]在点云识别任务中使用注意力。自我注意是近年来被广泛使用的注意机制的一个特例[49, 14, 37]。然而，四次方的复杂性限制了它的使用。一些作品[15, 38, 44]对自我注意进行了改革，以实现线性复杂度。但它们对GPU上的推理仍然不友好。受外部注意力[15]的启发，我们开发了一个GPU友好的注意力模块，它在类似GPU的设备上具有低延迟和高性能。</p>
+<h5 id="transformer-in-semantic-segmentation"><a class="markdownIt-Anchor" href="#transformer-in-semantic-segmentation"></a> Transformer in Semantic segmentation.</h5>
+<p>最近，transformer在语义分割中显示出了很好的性能。DPT[32]将transformer作为编码器来提高密集预测任务的性能。SETR[55]提出了一种序列对序列的方法并取得了令人印象深刻的结果。SETR使用预训练的VIT[50]作为其骨干，在空间分辨率上没有降采样。然而，由于其沉重的骨架和极高的分辨率，很难将其用于实时分割任务。SegFormer[42]通过引入一个分层transformer编码器和一个轻量级的全MLP解码器来提高效率。与SETR相比，SegFormer既有更高的效率也有更高的性能。然而，与一些最先进的基于CNN的实时分割模型相比，SegFormer的效率仍然比较低。通过引入我们的RTFormer模块，我们的方法可以利用注意力机制，同时实现实时速度。</p>
+<h2 id="3-methodology"><a class="markdownIt-Anchor" href="#3-methodology"></a> 3 Methodology</h2>
+<h3 id="31-rtformer-block"><a class="markdownIt-Anchor" href="#31-rtformer-block"></a> 3.1 RTFormer block</h3>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130204536536.png" alt="image-20221130204536536" /></p>
+<blockquote>
+<p>图2 ：RTFormer块的说明。对于低分辨率，采用GPU友好关注。对于高分辨率，我们使用交叉分辨率关注，从低分辨率分支中提取K和V。此外，我们用两个3×3的卷积层组成FFN模块和金字塔池模块。SegNet[2]恢复了高清晰度的图像。</p>
+</blockquote>
+<p>RTFormer模块是双分辨率模块，继承了[36, 17, 48]的多分辨率融合范式。与之前的工作不同，RTFormer模块由两种类型的注意力及其前馈网络组成，并以阶梯式布局排列，如图2所示。在低分辨率分支中，我们使用GPU-Friendly Attention来捕捉高水平的全局环境。而在高分辨率分支中，我们引入了一个跨分辨率注意力，将从低分辨率分支中学习到的高水平全局背景广播到每个高分辨率像素，阶梯式布局的作用是将低分辨率分支中更有代表性的特征反馈到跨分辨率注意力中。</p>
+<h5 id="gpu-friendly-attention"><a class="markdownIt-Anchor" href="#gpu-friendly-attention"></a> GPU-Friendly Attention.</h5>
+<p>比较现有的不同类型的注意力，我们发现外部注意力[15(EA)]由于其线性复杂度的可喜特性，可以成为在类GPU设备上执行的潜在选择，而我们的GPU-Friendly Attention（GFA）就是从它衍生出来的。因此，在详细介绍GFA之前，我们首先回顾一下EA。让X∈RN×d表示一个输入特征，其中N是元素数（或图像中的像素），d是特征维度，那么EA的表述可以表示为。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20221130173044063.png" alt="image-20221130173044063" /></p>
+<p>其中，K、V∈RM×d为可学习参数，M为参数维度，DN为[15]提出的双归一化操作。</p>
+<p>而多头版的EA可以表示为:</p>
+<p><img src="/img/loading.gif" data-original="images/image-20221130173058134.png" alt="image-20221130173058134" /></p>
+<p>其中K′，V′∈RM×d′，d′=d/H，H为头数，Xi为X的第i个头。如图3上部所示，多头机制产生了H个注意力图，以提高EA的容量，这使得矩阵乘法被分割成若干组，这与组卷积相似。尽管EA对不同的头使用了共享的K′和V′，这可以大大加快计算速度，但分割的矩阵乘法仍然存在。</p>
+<p>为了避免在类似于GPU的设备上由于多头机制而导致的延迟减少，我们提出了一个简单有效的GPU友好的注意力。它由公式1表示的基本外部注意演变而来，可以表述为：。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20221130173150139.png" alt="image-20221130173150139" /></p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130210301304.png" alt="image-20221130210301304" /></p>
+<blockquote>
+<p>图3：多头外部关注和GFA之间的比较。多头外部关注将矩阵乘法分成几组，而我们的GFA使矩阵乘法被整合，这对类似GPU的设备更加友好。</p>
+</blockquote>
+<p>其中，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>g</mi></msub><mo separator="true">,</mo><msub><mi>V</mi><mi>g</mi></msub><mo>∈</mo><msup><mi>R</mi><mrow><msub><mi>M</mi><mi>g</mi></msub><mo>×</mo><mi>d</mi></mrow></msup><mo separator="true">,</mo><msub><mi>M</mi><mi>g</mi></msub><mo>=</mo><mi>M</mi><mo>×</mo><mi>H</mi></mrow><annotation encoding="application/x-tex">K_g,V_g∈R^{M_g×d},M_g=M\times H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.135216em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16454285714285716em;"><span style="top:-2.357em;margin-left:-0.10903em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span>，GDN表示分组双归一化，它将原双归一化的第二次归一化分成H组，如图3左下部分所示。从公式3我们可以发现，GFA有两个主要的改进。一方面，它使矩阵乘法得到了整合，这对类似GPU的设备来说是相当友好的。受益于此，我们可以将外部参数的大小从（M，d′）扩大到（Mg，d）。因此，更多的参数可以被调整以提高性能。另一方面，它在一定程度上保持了多头机制的优越性，因为它利用了分组双重规范化的优势。为了直观的理解，可以认为GFA也产生了H个不同的注意力图谱来捕捉不同的标记之间的关系，但更多的特征元素参与计算相似度，所有的注意力图谱都对最终的输出有贡献。</p>
+<h5 id="cross-resolution-attention"><a class="markdownIt-Anchor" href="#cross-resolution-attention"></a> Cross-resolution Attention.</h5>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130204536536.png" alt="image-20221130204536536" /></p>
+<blockquote>
+<p>图2 ：RTFormer块的说明。对于低分辨率，采用GPU友好关注。对于高分辨率，我们使用交叉分辨率关注，从低分辨率分支中提取K和V。此外，我们用两个3×3的卷积层组成FFN模块和金字塔池模块。SegNet[2]恢复了高清晰度的图像。</p>
+</blockquote>
+<p>多分辨率融合已被证明对密集预测任务是有效的。对于多分辨率架构的设计，我们可以直观地将GFA独立应用于不同的分辨率分支，并在卷积模块或注意力模块执行后交换特征，如[36, 48]。但在高分辨率分支中，像素更多关注的是局部信息，而不是高层次的全局背景。因此，我们认为直接在高分辨率特征图上进行注意力来学习全局背景是不够有效的。为了更有效地获得全局语境，我们提出了一个跨分辨率的注意力，其目的是充分利用从低分辨率分支学到的高层次语义信息。如图2所示，与GFA不同的是，在高分辨率分支中采用交叉分辨率注意力来收集全局语境。这种跨分辨率注意力的计算方法表示为：。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20221130173235894.png" alt="image-20221130173235894" /></p>
+<p>其中Xh、Xl分别表示高分辨率分支和低分辨率分支的特征图，φ是一组矩阵运算，包括分割、置换和重塑，dh表示高分辨率分支的特征维度。值得说明的是，特征图Xc，在下文中表示为交叉特征，是由函数θ从Xl计算出来的，该函数由池化和卷积层组成。而Xc的空间大小表示从Xl中生成的标记的数量。实验中，我们只在注意力图谱的最后一个轴上采用softmax进行归一化，因为当键和值不是外部参数时，单个softmax比双重归一化表现得更好。特别是，为了在类似GPU的设备上进行快速推理，这里也放弃了多头机制。</p>
+<h5 id="feed-forward-network"><a class="markdownIt-Anchor" href="#feed-forward-network"></a> Feed Forward Network.</h5>
+<p>在以前的基于transformer的分割方法中，如[42, 48]，前馈网络(FFN)通常由两个MLP层和一个深度3×3卷积层组成，其中深度3×3层用于补充位置编码或增强定位性。此外，两个MLP层将隐藏维度扩大到输入维度的2到4倍。这种类型的FFN可以用相对较少的参数达到更好的性能。但在需要考虑类似GPU设备的延迟的情况下，典型的FFN结构并不是很有效。为了平衡性能和效率，我们在RTFormer块的FFN中采用了两个3×3的卷积层，没有维度扩展。它显示了比典型的FFN配置更好的结果。</p>
+<h3 id="32-rtformer"><a class="markdownIt-Anchor" href="#32-rtformer"></a> 3.2 RTFormer</h3>
+<p>图4说明了RTFormer的整体架构。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221130210607847.png" alt="image-20221130210607847" /></p>
+<blockquote>
+<p>图4：说明了RTFormer的结构。我们把RTFormer模块放在最后两个阶段，用粉色块表示，在早期阶段使用卷积块，用蓝色块表示。此外，我们借鉴了[17]的成功经验，为分割头增加了一个DAPPM模块。</p>
+</blockquote>
+<h5 id="backbone-architecture"><a class="markdownIt-Anchor" href="#backbone-architecture"></a> Backbone Architecture.</h5>
+<p>为了提取高分辨率特征图所需要的足够的局部信息，我们将卷积层与我们提出的RTFormer块结合起来，构建RTFormer。具体来说，我们让RTFormer从一个由两个3×3卷积层组成的干块开始，用几个连续的基本剩余块组成前两个阶段[16]。然后，从第三阶段开始，我们使用双分辨率模块，在高分辨率和低分辨率分支之间进行特征交换，其灵感来自于[17]。对于后三个阶段的高分辨率分支，其特征跨度保持为8不变，而对于低分辨率分支，其特征跨度分别为16、32、32。特别是，我们将双分辨率模块安排为阶梯式布局，以便在低分辨率分支输出的帮助下提升高分辨率特征的语义表示。最重要的是，我们用我们提出的RTFormer模块构建了阶段4和阶段5，如图2所示，用于高效的全局建模，而阶段3仍然由基本的残差模块组成。</p>
+<h5 id="segmentation-head"><a class="markdownIt-Anchor" href="#segmentation-head"></a> Segmentation Head.</h5>
+<p>对于RTFormer的分割头，我们借鉴了[17]的成功经验，在低分辨率输出特征后加入了DAPPM模块。将DAPPM的输出与高分辨率的特征融合后，我们得到了stride=8的输出特征图。最后，这个输出特征被传递到一个像素级分类头，用于预测密集的语义标签。分类头由一个3×3的卷积层和一个1×1的卷积层组成，隐性特征维度与输入特征维度相同。</p>
+<h5 id="instantiation"><a class="markdownIt-Anchor" href="#instantiation"></a> Instantiation.</h5>
+<p>我们用RTFormer-Slim和RTFormerBase来实例化RTFormer的架构，详细配置记录在表1中。对于通道数和块数，每个数组包含5个元素，它们分别对应5个阶段。特别是，有两个数字的元素对应于双分辨率阶段。例如，64/128表示高分辨率分支的通道数为64，低分辨率分支为128。而1/2意味着基本卷积块的数量在高分辨率分支为1，低分辨率分支为2。值得注意的是，块数数组中的最后两个元素表示RTFormer块的数量，对于RTFormer-Slim和RTFormer-Base，它们都是1。对于RTFormer-Slim和RTFormer-Base，交叉特征的空间尺寸分别被设定为64（8×8）和144（12×12）。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201104526844.png" alt="image-20221201104526844" /></p>
+<h2 id="4-experiments"><a class="markdownIt-Anchor" href="#4-experiments"></a> 4 Experiments</h2>
+<p>在本节中，我们在Cityscapes[10]、Camvid[4]、ADE20K[56]和COCOStuff[5]上验证RTFormer。我们首先介绍了这些数据集和它们的训练细节。然后，我们在Cityscapes和CamVid上比较了RTFormer与最先进的实时方法。此外，我们还总结了在ADE20K[56]和COCOStuff[5]上的更多实验，以进一步证明我们方法的通用性。最后，我们还提供了在ADE20K[56]上RTFormer块中不同设计模块的消融研究。</p>
+<h3 id="41-implementation-details"><a class="markdownIt-Anchor" href="#41-implementation-details"></a> 4.1 Implementation Details</h3>
+<p>在对语义分割进行微调之前，所有模型都在ImageNet[11]上进行了预训练。而ImageNet[11]的训练细节将在补充材料中提供。我们分别采用mIoU和FPS作为性能和效率的衡量标准，FPS是在默认情况下不使用tensorrt加速的RTX 2080Ti上测量的。</p>
+<h5 id="cityscapes"><a class="markdownIt-Anchor" href="#cityscapes"></a> Cityscapes.</h5>
+<p>Cityscapes[10]是一个广泛使用的城市街道场景解析数据集，它包含19个用于语义分割任务的类。而且它有2975、500和1525张精细注释的图像，分别用于训练、验证和测试。我们使用AdamW优化器训练所有模型，初始学习率为0.0004，权重衰减为0.0125。我们采用功率为0.9的聚能学习策略来降低学习率，并实施数据增强方法，包括随机裁剪为512×1024，在0.5至2.0范围内随机缩放，以及随机水平翻转。所有的模型都是用484个epochs（大约12万次迭代），12个批次大小，以及在四个V100 GPU上的syncBN来训练的。为了与其他算法进行公平比较，没有使用在线硬例挖掘（OHEM）。</p>
+<h5 id="camvid"><a class="markdownIt-Anchor" href="#camvid"></a> CamVid.</h5>
+<p>CamVid[4]包含701个密集注释的框架，每个框架的分辨率为720 × 960。这些帧被分为367张训练图像、101张验证图像和233张测试图像。CamVid[4]有32个类别，其中有11个类别的子集被用于分割实验。我们将训练集和验证集合并进行训练，并在测试集上评估我们的模型。我们设置初始学习率为0.001，权重衰减为0.05。聚合学习策略的功率被设定为1.0。我们对所有模型进行了968次的训练。数据增强包括颜色抖动、随机水平翻转、随机裁剪为720×960和随机缩放为[288, 1152]。与以前的方法[13]不同，我们没有在Cityscapes[10]上预训练我们的模型。所有其他的训练细节都与Cityscapes[10]相同。</p>
+<h5 id="ade20k"><a class="markdownIt-Anchor" href="#ade20k"></a> ADE20K.</h5>
+<p>ADE20K[56]是一个涵盖150个细粒度语义概念的场景解析数据集，它将20K、2K和3K的图像分别拆开进行训练、验证和测试。我们的模型以16个批次的规模进行训练，进行16万次迭代。并且我们将初始学习率设置为0.0001，权重衰减为0.05，其他的训练设置与Cityscapes[10]的设置相同。</p>
+<h5 id="cocostuff"><a class="markdownIt-Anchor" href="#cocostuff"></a> COCOStuff.</h5>
+<p>COCOStuff[5]是一个来自COCO的密集注释数据集。它包含10K图像（9K用于训练，1K用于测试），涉及182个类别，包括91个事物和91个东西类别。其中11个事物类没有注释。我们用AdamW优化器在COCOStuff上训练RTFormer 110 epochs，初始学习率和权重衰减分别设置为0.0001和0.05。在训练阶段，我们首先将图像的短边尺寸调整为640，并随机裁剪640×640的补丁进行增强。而在测试阶段，我们将所有图像的大小调整为640×640。其他训练设置与Cityscapes相同。</p>
+<h3 id="42-comparison-with-state-of-the-arts"><a class="markdownIt-Anchor" href="#42-comparison-with-state-of-the-arts"></a> 4.2 Comparison with State-of-the-arts</h3>
+<p>在这一部分，我们在Cityscapes[10]和CamVid[4]上比较了我们的RTFormer和最先进的方法。表2显示了我们对Cityscapes[10]和CamVid[4]的结果，包括参数、FPS和mIoU。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201104834868.png" alt="image-20221201104834868" /></p>
+<h5 id="results"><a class="markdownIt-Anchor" href="#results"></a> Results.</h5>
+<p>在Cityscapes[10]上，我们的RTFormer在所有其他实时方法中拥有最佳的速度-准确度权衡。例如，我们的RTFormer-Slim在110.0FPS的情况下实现了76.3%的mIoU，与STDC2-Seg75[13]和DDRNet-23-Slim[14]相比，速度更快，提供了更好的mIoU。此外，我们的RTFormer-Base实现了39.1 FPS和79.3%的mIoU，这建立了新的最先进的结果。此外，在CamVid[4]上，仅使用ImageNet[11]预训练，我们的方法就达到了82.5%的mIoU，94.0 FPS，大大超过了所有其他实时方法，包括使用额外Cityscapes[10]预训练的STDC2-Seg[13]。此外，我们的RTFormer-Slim在190.7FPS的情况下仅用4.8M就获得了81.4mIoU，比其他模型如STDC2-Seg[13]的125.6FPS和DDRNet-23[17]的97.1FPS更快、更好。图5显示了CamVid[4]测试集的定性结果，其中RTFormer-base比DDRNet-23[17]提供了更好的细节，特别是对于Column Pole类，它需要更多的全局背景。总之，这些结果证明了RTFormer在实时语义分割方面的准确性、延迟和模型大小方面的优越性。</p>
+<h3 id="43-generalization-capability"><a class="markdownIt-Anchor" href="#43-generalization-capability"></a> 4.3 Generalization Capability</h3>
+<p>为了进一步证明我们的RTFormer在更普遍的场景中的有效性，我们展示了在ADE20K[56]和COCOStuff[5]上的额外结果。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201105310712.png" alt="image-20221201105310712" /></p>
+<h5 id="results-2"><a class="markdownIt-Anchor" href="#results-2"></a> Results.</h5>
+<p>表3显示了我们在ADE20K[56]上的结果。我们的RTFormer-Base实现了42.1%的卓越的mIoU和71.4FPS，超过了所有其他方法。对于实例来说，与DDRNet-23-Slim[17]相比，RTFormer-Slim实现了更好的mIoU 36.7%，并保持了几乎相同的速度。图6显示了ADE20K验证集的定性结果。与DDRNet-23[17]相比，我们的RTFormer显示了更好的细节和背景信息。综上所述，这些结果表明，RTFormer在通用场景的实时语义分割上也显示出非常有前途的性能。而在COCOStuff上，如表4所示，我们的RTFormer-Base在143.3 FPS的情况下实现了35.3 mIoU，在推理速度相当的情况下比DDRNet-23高出3%，创造了新的最先进水平。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201105722809.png" alt="image-20221201105722809" /></p>
+<h3 id="44-ablation-study-on-ade20k"><a class="markdownIt-Anchor" href="#44-ablation-study-on-ade20k"></a> 4.4 Ablation study on ADE20K</h3>
+<h5 id="training-setup"><a class="markdownIt-Anchor" href="#training-setup"></a> Training Setup.</h5>
+<p>我们提供了RTFormer-Slim的消融结果。为了进行快速评估，我们从头开始训练RTFormer-slim，初始学习率设置为0.001，其他训练设置与上述ADE20K[56]的实验相同。更多的实验细节和分析在补充材料中阐述。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201105746412.png" alt="image-20221201105746412" /></p>
+<h5 id="comparison-on-different-types-of-attention"><a class="markdownIt-Anchor" href="#comparison-on-different-types-of-attention"></a> Comparison on different types of attention.</h5>
+<p>为了验证我们提出的注意力的有效性，我们用不同的类型和组合替换了RTFormer块中使用的注意力。如表5a所示，我们给出了多头自我注意、多头外部注意、GPU友好注意和跨分辨率注意的不同组合的结果。例如，&quot;GFA+CA &quot;意味着在低分辨率分支使用GFA，在高分辨率分支使用CA。此外，我们通过M=d×r来调整多头外部关注中的超参数M，其中r是一个减少率。我们可以发现，GPU-友好注意力优于多头外部注意力的所有设置，当M=d时，GPU-友好注意力比最佳设置更快，同时，GPU-友好注意力比多头自我注意力效率更高，性能相当。这表明，在类似GPU的设备上，GPU-友好注意比多头自我注意和多头外部注意在性能和效率之间实现了更好的权衡。当我们引入跨分辨率注意力时，性能进一步提高，而FPS只下降了不到2。</p>
+<h5 id="comparison-on-different-types-of-ffn"><a class="markdownIt-Anchor" href="#comparison-on-different-types-of-ffn"></a> Comparison on different types of FFN.</h5>
+<p>表5b说明了典型的FFN的结果，它由两个MLP层和一个3×3深度卷积层组成，而我们提出的FFN包含两个3×3卷积层。结果显示，我们提出的FFN不仅在mIoU上，而且在FPS上都优于典型的FFN。这表明我们提出的FFN更适用于需要考虑类似GPU设备的延迟的情况。</p>
+<h5 id="influence-of-the-number-of-groups-within-grouped-double-normalization"><a class="markdownIt-Anchor" href="#influence-of-the-number-of-groups-within-grouped-double-normalization"></a> Influence of the number of groups within grouped double normalization.</h5>
+<p>我们研究了在两个分支都使用GPU-Friendly Attention的情况下，分组双重归一化中组的数量的影响。而表5c显示了不同配置的结果。例如，&quot;8+2 &quot;意味着在低分辨率分支使用8个组，在高分辨率使用2个组。特别是，当组数被设置为1时，分组的双重归一化会退化为原始的双重归一化。在这里，当组数为8和2时，实现了最佳的mIoU，这说明分组双归一化比原始双归一化表现得更好。值得注意的是，改变分组双重归一化的组数并不影响推理效率，这使得GPU友好的注意在组数较多时能够保持高FPS。</p>
+<h5 id="influence-of-the-spatial-size-of-cross-feature-in-cross-resolution-attention"><a class="markdownIt-Anchor" href="#influence-of-the-spatial-size-of-cross-feature-in-cross-resolution-attention"></a> Influence of the spatial size of cross-feature in Cross-resolution Attention.</h5>
+<p>我们还研究了交叉分辨率注意力中交叉特征的空间大小，包括应用6×6、8×8和12×12。如表5d所示，根据FPS和mIoU之间的权衡，RTFormer-Slim的交叉特征的空间尺寸为8×8是最好的。在某种程度上，这表明交叉特征的空间尺寸接近于高分辨率特征的尺寸是合适的，因为RTFormer-Slim的高分辨率特征尺寸是64，相当于8×8。</p>
+<h2 id="5-conclusion"><a class="markdownIt-Anchor" href="#5-conclusion"></a> 5 Conclusion</h2>
+<p>在本文中，我们提出了RTFormer，它可以有效地捕获全局背景，以提高实时语义分割的性能。广泛的实验表明，我们的方法不仅在实时分割的普通数据集上取得了新的最先进的结果，而且在一般语义分割的挑战性数据集上也显示出卓越的性能。由于RTFormer的效率，我们希望我们的方法能够鼓励用转化器进行实时语义分割的新设计。一个限制是，虽然我们的RTFormer-Slim只有4.8M的参数，但在边缘设备的芯片中可能需要更多的参数效率。我们把它留给未来的工作。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/PIDNet/" title="PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers</div></div><div class="info-2"><div class="info-item-1"> PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers  Abstract  1. Introduction Proportional-Integral-Derivative (PID) Controller is a classic concept that has been widely applied in modern dynamic systems and processes such as robotic manipulation [3], chemical processes [24], and power systems [25]. Even though many advanced control strategies with better control performance have been developed in recent years, PID controller is still the go-to choice for most...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/SAN/" title="SAN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SAN</div></div><div class="info-2"><div class="info-item-1"> SAN  Abstract 本文提出了一种利用预先训练好的视觉语言模型（名为 “侧适配器网络”（SAN））进行开放词汇语义分割的新框架。我们的方法将语义分割任务建模为区域识别问题。一个侧边网络连接到一个冻结的 CLIP 模型，该模型有两个分支：一个用于预测mask建议，另一个用于预测注意力偏差，该注意力偏差应用于 CLIP 模型，以识别mask类别。这种解耦设计有利于 CLIP 识别mask建议类别。由于附加侧网络可以重复使用 CLIP 特征，因此可以非常轻便。此外，整个网络可以进行端到端训练，使侧网络适应冻结的 CLIP 模型，从而使预测的mask建议具有 CLIP 感知。我们的方法快速、准确，而且只增加了几个额外的可训练参数。我们在多个语义分割基准上评估了我们的方法。我们的方法明显优于其他同类方法，可训练参数减少了 18 倍，推理速度提高了 19 倍。图 1 显示了 ImageNet 上的一些可视化结果。我们希望我们的方法能成为一个坚实的基线，并为未来的开放词汇语义分割研究提供帮助。              图 1.ImageNet...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#rtformer"><span class="toc-text"> RTFormer</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2 Related Work</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#generic-semantic-segmentation"><span class="toc-text"> Generic Semantic segmentation.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#real-time-semantic-segmentation"><span class="toc-text"> Real-time Semantic segmentation.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#attention-mechanism"><span class="toc-text"> Attention mechanism.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#transformer-in-semantic-segmentation"><span class="toc-text"> Transformer in Semantic segmentation.</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-methodology"><span class="toc-text"> 3 Methodology</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-rtformer-block"><span class="toc-text"> 3.1 RTFormer block</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#gpu-friendly-attention"><span class="toc-text"> GPU-Friendly Attention.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#cross-resolution-attention"><span class="toc-text"> Cross-resolution Attention.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#feed-forward-network"><span class="toc-text"> Feed Forward Network.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-rtformer"><span class="toc-text"> 3.2 RTFormer</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#backbone-architecture"><span class="toc-text"> Backbone Architecture.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#segmentation-head"><span class="toc-text"> Segmentation Head.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#instantiation"><span class="toc-text"> Instantiation.</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experiments"><span class="toc-text"> 4 Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-implementation-details"><span class="toc-text"> 4.1 Implementation Details</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#cityscapes"><span class="toc-text"> Cityscapes.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#camvid"><span class="toc-text"> CamVid.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ade20k"><span class="toc-text"> ADE20K.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#cocostuff"><span class="toc-text"> COCOStuff.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-comparison-with-state-of-the-arts"><span class="toc-text"> 4.2 Comparison with State-of-the-arts</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#results"><span class="toc-text"> Results.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-generalization-capability"><span class="toc-text"> 4.3 Generalization Capability</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#results-2"><span class="toc-text"> Results.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-ablation-study-on-ade20k"><span class="toc-text"> 4.4 Ablation study on ADE20K</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#training-setup"><span class="toc-text"> Training Setup.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#comparison-on-different-types-of-attention"><span class="toc-text"> Comparison on different types of attention.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#comparison-on-different-types-of-ffn"><span class="toc-text"> Comparison on different types of FFN.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#influence-of-the-number-of-groups-within-grouped-double-normalization"><span class="toc-text"> Influence of the number of groups within grouped double normalization.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#influence-of-the-spatial-size-of-cross-feature-in-cross-resolution-attention"><span class="toc-text"> Influence of the spatial size of cross-feature in Cross-resolution Attention.</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-conclusion"><span class="toc-text"> 5 Conclusion</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

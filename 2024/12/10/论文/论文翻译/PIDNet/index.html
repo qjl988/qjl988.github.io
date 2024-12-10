@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers  Abstract  1. Introduction Proportional-Integral-Derivative (PID) Controller is a classic concept that has been widely ap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/PIDNet/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers  Abstract  1. Introduction Proportional-Integral-Derivative (PID) Controller is a classic concept that has been widely ap">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:03:57.535Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/PIDNet/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">PIDNet A Real-time Semantic Segmentation Network Inspired by PID Controllers</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:03:57.535Z" title="更新于 2024-12-11 01:03:57">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="pidnet-a-real-time-semantic-segmentation-network-inspired-by-pid-controllers"><a class="markdownIt-Anchor" href="#pidnet-a-real-time-semantic-segmentation-network-inspired-by-pid-controllers"></a> PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract</h2>
+<h3 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h3>
+<p>Proportional-Integral-Derivative (PID) Controller is a classic concept that has been widely applied in modern dynamic systems and processes such as robotic manipulation [3], chemical processes [24], and power systems [25]. Even though many advanced control strategies with better control performance have been developed in recent years, PID controller is still the go-to choice for most industry applications due to its simplicity and robustness. Furthermore, the idea of PID controller has been extended to many other areas. For example, researchers introduced the PID concept to image denoising [32], stochastic gradient decent [1] and numerical optimization [50] for better algorithm performance. In this paper, we devise a novel architecture for real-time semantic segmentation tasks by employing the basic concept of PID controller and demonstrate that the performance of our model surpasses all the previous works and achieves the best trade-off between inference speed and accuracy, as illustrated in Figure 1, by extensive experiments.</p>
+<p>Semantic segmentation is a fundamental task for visual scene parsing with the objective of assigning each pixel in the input image to a specific class label. With the increasing demand of intelligence, semantic segmentation has become the basic perception component for applications such as autonomous driving [16], medical imaging diagnosis [2] and remote sensing imagery [54]. Starting from FCN [31], which achieved great improvement over traditional methods, deep convnets gradually dominated the semantic segmentation field and many representative models have been proposed [4, 6, 40, 48, 59, 60]. For better performance, various strategies were introduced to equip these models with the capability of learning contextual dependencies among pixels in large scale without missing important details. Even though these models achieve encouraging segmentation accuracy, too much computational cost are required, which significantly hinder their application in real-time scenarios, such as autonomous vehicle [16] and robot surgery [44].</p>
+<p>To meet real-time or mobile requirements, researchers have come up with many efficient and effective models in the past for semantic segmentation. Specifically, ENet [36] adopted lightweight decoder and downsampled the feature maps in early stages. ICNet [58] encoded small-size inputs in complex and deep path to parse the high-level semantics. MobileNets [21, 42] replaced traditional convolutions with depth-wise separable convolutions. These early works reduced the latency and memory usage of segmentation models, but low accuracy significantly limits their real-world application. Recently, many novel and promising models based on Two-Branch Network (TBN) architecture have been proposed in the literature and achieve SOTA trade-off between speed and accuracy [15, 20, 38, 39, 52].</p>
+<p>In this paper, we view the architecture of TBNs from the prospective of PID controller and point out that a TBN is equivalent to a PI controller, which suffers from the overshoot issue as illustrated in Figure 2. To alleviate this problem, we devise a novel three-branch network architecture, namely PIDNet, and demonstrate its superiority on Cityscapes [12], CamVid [5] and PASCAL Context [33] datasets. We also provide ablation study and feature visualization for better understanding of the functionality of each module in PIDNet.</p>
+<p>The main contributions of this paper are three-fold:</p>
+<ul>
+<li>We make a connection between deep CNN and PID controller and propose a family of three-branch networks based on the PID controller architecture.</li>
+<li>Efficient modules, such as Bag fusion module designed to balance detailed and context features, are proposed to boost the performance of PIDNets.</li>
+<li>PIDNet achieves the best trade-off between inference speed and accuracy among all the existing models. In particular, PIDNet-S achieves 78.6% mIOU with speed of 93.2 FPS and PIDNet-L presents the highest accuracy (80.6% mIOU) in real-time doman on Cityscapes test set without acceleration tools.</li>
+</ul>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2. Related Work</h2>
+<p>Representative methods towards high-accuracy and realtime requirements are discussed separately in this section.</p>
+<h3 id="21-high-accuracy-semantic-segmentation"><a class="markdownIt-Anchor" href="#21-high-accuracy-semantic-segmentation"></a> 2.1. High-accuracy Semantic Segmentation</h3>
+<p>早期的语义分割方法是基于编码器-解码器结构[4,31,40]，其中编码器通过分层卷积或集合操作逐渐扩大其感受野，而解码器则使用去卷积或上采样来恢复高层语义的详细信息。然而，在编码器-解码器网络的下采样过程中，空间细节容易被忽略。为了缓解这个问题，人们提出了扩张卷积[53]，在不降低空间分辨率的情况下扩大视场。在此基础上，DeepLab系列[7-9]通过在网络中采用不同扩张率的扩张卷积，取得了比以前的工作更大的改进。请注意，扩张卷积由于其非连续的内存访问而不适合硬件实现。PSPNet[59]引入了一个金字塔池模块（PPM）来解析多尺度的上下文信息，HRNet[48]利用多路径和双边连接来学习和融合不同尺度的表示。受语言机注意机制[47]的长距离依赖性解析能力的启发，非局部操作[49]被引入计算机视觉，并导致了许多精确的模型[17, 23, 55]。</p>
+<h3 id="22-real-time-semantic-segmentation"><a class="markdownIt-Anchor" href="#22-real-time-semantic-segmentation"></a> 2.2. Real-time Semantic Segmentation</h3>
+<p>为了实现推理速度和准确性之间的最佳权衡，人们提出了许多网络架构，大致可以概括为以下几点。</p>
+<p>轻量级的编码器和解码器 SwiftNet[35]采用了一个低分辨率的输入来获得高层次的语义，另一个高分辨率的输入为其轻量级的解码器提供足够的细节。DFANet[27]通过修改Xception[11]的架构引入了一个轻量级的骨干，该架构是基于深度可分离卷积的，并减少了输入大小以提高推理速度。ShuffleSeg[18]采用了ShuffleNet[57]，它结合了通道洗牌和分组卷积，作为其骨干，以减少计算成本。然而，这些网络中的大多数仍然是编码器-解码器的结构形式，它们要求信息流经过深度编码器，然后再反向通过解码器，这就引入了太多的延迟。此外，由于在GPU上对深度可分离卷积的优化还不成熟，传统的卷积呈现出更快的速度，而有更多的FLOPs和参数[35]。因此，我们寻求更有效的模型，避免卷积因子化和编码器-解码器架构。</p>
+<p>双分支网络结构 语境依赖性可以通过大的感受野来提取，而空间细节对于边界划分和小范围物体识别至关重要。为了兼顾这两方面，**BiSeNet[52]的作者提出了一个双分支网络（TBN）架构，它包含两个不同深度的分支，用于上下文嵌入和细节解析，同时还有一个特征融合模块（FFM）来融合上下文和细节信息。一些基于该架构的后续工作被提出，以提高其表示能力或降低其模型的复杂性[38, 39, 51]。**具体来说，DDRNet[20]引入了双边连接，以加强上下文和详细分支之间的信息交流，在实时语义分割中取得了最先进的成果。然而，直接融合原始的详细语义和低频的上下文信息有这样的风险，即物体的边界被周围的像素过度腐蚀，小物体被相邻的大物体所淹没（如图2和3所示）。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230507145008196.png" alt="image-20230507145008196" /></p>
+<blockquote>
+<p>图2. 动态系统（左|）和图像分割（|右）的过冲问题。左图 |： 二阶系统的PI和PID控制器的阶跃响应； | 右： 从第一行到最后一行，图像分别从地面实况、DDRNet-23[20]和ADB-Bag-DDRNet-23（我们的）的输出中裁剪出来。</p>
+</blockquote>
+<h2 id="3-method"><a class="markdownIt-Anchor" href="#3-method"></a> 3. Method</h2>
+<img src="/img/loading.gif" data-original="images/image-20230507145047907.png" alt="image-20230507145047907" style="zoom:150%;" />
+<blockquote>
+<p>图3. 上图|： PID控制器和提议的网络之间的类比； |下图： 左图：将周围的掩膜区域清零，并计算每个像素的当前特征和原始特征的相似度；右图：将周围的掩膜区域清零： 从第一列到最后一列，图像指的是DDRNet-23的基础真相、所有分支的预测、仅详细分支和仅上下文分支。</p>
+</blockquote>
+<p>PID控制器包含三个部分：比例（P）控制器、积分（I）控制器和导数（D）控制器，如图3-Upper所示。PI控制器的实现可以写成：</p>
+<p>P控制器专注于电流信号，而I控制器积累所有过去的信号。由于积累的惯性效应，当信号发生相反的变化时，简单的PI控制器的输出会发生过冲现象。然后，引入了D控制器，如果信号变小，D分量将变成负值，作为阻尼器来减少过冲。同样地，TBNs通过多个卷积层分别解析上下文和详细信息，有的有，有的没有。考虑一个简单的一维例子，其中详细和背景分支都由3层组成，没有BNs和ReLUs。那么，输出图可以被计算为：</p>
+<p>这里，kmn指的是m层中内核的第n个值。由于|kmn|大多分布在（0，0.01）（DDRNet-23的92%），并且以1为界，所以每项的系数会随着层数的增加而呈指数下降。因此，对于每个输入向量来说，项目的数量越多，意味着对最终输出的贡献越大。对于细节分支，I[i - 1]、I[i]和I[i + 1]占据了总项目的70%以上，这意味着细节分支更注重于局部信息。相反，I[i - 1]、I[i]和I[i + 1]只占上下文分支总项目的不到26%，所以上下文分支强调的是周围信息。图3-底部显示，与细节分支相比，上下文分支对本地信息的变化不太敏感。细节分支和上下文分支在空间域中的行为与时域中的P（当前）和I（所有先前）控制器相似。</p>
+<p>在PID控制器的z变换中用e-jω代替z-1，可以表示为：</p>
+<p>当输入频率ω增加时，I和D控制器的增益将分别变小和变大，因此P、I和D控制器作为全通、低通滤波器和高通滤波器工作。由于PI控制器更关注输入信号的低频部分，不能立即对信号的快速变化做出反应，因此它本身就存在过冲问题。D控制器通过使控制输出对输入信号的变化敏感来减少过冲。图3-底部显示，细节分支解析各种语义信息，即使不准确，而上下文分支聚合低频的上下文信息，并在语义上用大的平均过滤器进行类似工作。直接融合细节信息和上下文信息会导致一些细节特征的缺失。因此，我们得出结论，TBN等同于傅里叶域的PI控制器。</p>
+<h3 id="31-pidnet-a-novel-three-branch-network"><a class="markdownIt-Anchor" href="#31-pidnet-a-novel-three-branch-network"></a> 3.1. PIDNet: A Novel Three-branch Network</h3>
+<p>为了缓解过冲问题，我们在TBN上附加了一个辅助导数分支（ADB），在空间上模仿PID控制器，突出高频语义信息。每个物体内部的像素的语义是一致的，只有沿着相邻物体的边界才会变得不一致，所以语义的差异只有在物体边界才是非零的，ADB的目标是边界检测。因此，我们建立了一个新的三分支实时语义分割架构，即比例-积分-导数网络（PIDNet），如图4所示。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230507145437924.png" alt="image-20230507145437924" /></p>
+<blockquote>
+<p>图4. 我们提出的比例-积分-导数网络（PIDNet）的基本架构概述。S和B表示语义和边界，Add和Up分别指元素相加和双线性升值操作；BASLoss表示边界感知的CE损失[46]。虚线和关联块在推理阶段将被忽略。</p>
+</blockquote>
+<p>PIDNet拥有三个责任互补的分支：比例（P）分支解析并保留高分辨率特征图中的详细信息；积分（I）分支聚合局部和全局的上下文信息以解析长距离的依赖关系；衍生（D）分支提取高频特征以预测边界区域。和[20]一样，我们也采用了级联残差块[19]作为骨干，以保证硬件的友好性。此外，P、I和D分支的深度被设定为适中、较深和较浅，以便有效实施。因此，通过加深和加宽模型，产生了一系列的PIDNets（PIDNet-S、M和L）。</p>
+<p>按照[20, 28, 51]，我们在第一个Pag模块的输出端放置一个语义头，以产生额外的语义损失l0，从而更好地优化整个网络。l2和l3代表CE损失，而我们利用边界头的输出对l3采用边界感知CE损失[46]，以协调语义分割和边界检测任务，增强Bag模块的功能。BAS-Loss的计算方法可以写成：</p>
+<p>其中t是指预定义的阈值，bi, si,c和ˆ si,c分别是边界头的输出、分割的真实情况和第i个像素的c类的预测结果。因此，PIDNet的最终损失为：</p>
+<p>根据经验，我们将PIDNet的训练损失参数设定为λ0 = 0.4, λ1 = 20, λ2 = 1, λ3 = 1和t = 0.8。</p>
+<h3 id="32-pag-learning-high-level-semantics-selectively"><a class="markdownIt-Anchor" href="#32-pag-learning-high-level-semantics-selectively"></a> 3.2. Pag: Learning High-level Semantics Selectively</h3>
+<p>在[20, 35, 48]中利用的横向连接增强了不同尺度的特征图之间的信息传递，提高了其模型的表示能力。在PIDNet中，I分支提供的丰富而准确的语义信息对于P和D分支的细节解析和边界检测至关重要，这两个分支包含的层数和通道相对较少。因此，我们将I分支视为其他两个分支的备份，并使其能够为它们提供所需信息。与直接添加所提供的特征图的D分支不同，我们为P分支引入了一个Pixel-attention-guided fusion模块（Pag），如图5所示，以便有选择地从I分支学习有用的语义特征而不被淹没。Pag的基本概念是借用了注意力机制[47]。将P和I分支的特征图中相应像素的向量分别定义为~ vp和~ vi，那么Sigmoid函数的输出可以表示为：</p>
+<p>其中σ表示这两个像素属于同一对象的可能性。如果σ高，我们就更相信~ vi，因为I分支的语义丰富且准确，反之亦然。因此，Pag的输出可以写成：：</p>
+<h3 id="33-pappm-fast-aggregation-of-contexts"><a class="markdownIt-Anchor" href="#33-pappm-fast-aggregation-of-contexts"></a> 3.3. PAPPM: Fast Aggregation of Contexts</h3>
+<p>为了更好地构建全局场景先验，PSPNet[59]引入了金字塔池化模块（PPM），在卷积层之前将多尺度池化图串联起来，形成局部和全局的情境表示。实验结果表明，该模型在全局范围内具有很强的可操作性。然而，DAPPM的计算过程在深度方面不能并行化，这很耗时，而且DAPPM对每个尺度都包含太多的通道，这可能超过了轻量级模型的表现能力。因此，我们修改了DAPPM中的连接，使其可以并行，如图6所示，并将每个规模的通道数量从128个减少到96个。这个新的上下文采集模块被称为并行聚合PPM（PAPPM），并被应用于PIDNet-M和PIDNet-S，以保证其速度。对于我们的深度模型： 对于我们的深度模型：PIDNet-L，考虑到其深度，我们仍然选择DAPPM，但减少其通道数量，以减少计算量和提高速度。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230507150134972.png" alt="image-20230507150134972" /></p>
+<blockquote>
+<p>Figure 6. The parallel structure of PAPPM. Avg (5,2) means average pooling with kernel size of 5×5 and strides of 2.</p>
+</blockquote>
+<h3 id="34-bag-balancing-the-details-and-contexts"><a class="markdownIt-Anchor" href="#34-bag-balancing-the-details-and-contexts"></a> 3.4. Bag: Balancing the Details and Contexts</h3>
+<p>鉴于ADB提取的边界特征，我们采用边界注意力来指导详细（P）和背景（I）表征的融合。具体来说，我们设计了一个边界注意力引导的融合模块（Bag），如图7所示，分别用细节和上下文特征填充高频和低频区域。请注意，上下文分支在语义上是准确的，但它失去了太多的空间和几何细节，特别是对于边界区域和小物体。由于详细分支更好地保留了空间细节，我们迫使模型在边界区域更多地信任详细分支，并利用上下文特征来填补其他区域。将P、I和D特征图的相应像素的向量分别定义为~ vp、~ vi和~ vd，那么Sigmoid、Bag和Light-Bag的输出可以表示为：</p>
+<p>其中f指的是卷积、批量归一化和ReLU的组成。尽管我们在Light-Bag中用两个1×1的卷积代替了Bag中的3×3卷积，但Bag和Light-Bag的功能是相似的，即当σ&gt;0.5时，模型更相信细节特征，否则就会优先考虑上下文信息。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233926664.png" alt="image-20230628233926664" /></p>
+<h2 id="4-experiment"><a class="markdownIt-Anchor" href="#4-experiment"></a> 4. Experiment</h2>
+<p>在这一部分，我们的模型将在Cityscapes、CamVid和PASCAL Context基准上进行训练和测试。</p>
+<h3 id="41-datasets"><a class="markdownIt-Anchor" href="#41-datasets"></a> 4.1. Datasets</h3>
+<p><strong>Cityscapes.</strong> Cityscapes[12]是最著名的城市场景解析数据集之一，它包含了从不同城市的汽车视角收集的5000张图像。这些图像被分为数量为2975、500和1525的集合，用于训练、验证和测试。图像分辨率为2048×1024，这对实时模型来说是个挑战。这里只使用了精细注释的数据集。</p>
+<p><strong>CamVid.</strong> CamVid [5] provides 701 images of driving scenes, which is partitioned into 367, 101 and 233 for training, validation and test. The image resolution is of 960×720 and the number of annotated categories is 32, of which 11 classes are used for fair comparison with previous works.</p>
+<p><strong>PASCAL Context.</strong> Semantic labeling for whole scene is provided in PASCAL Context [33], which contains 4998 images for training and 5105 images for validation. While this dataset is mainly used for benchmarking high-accuracy models, we utilized it here to show the generalization ability of PIDNets. Both 59 and 60-class scenarios are evaluated.</p>
+<h3 id="42-implementation-details"><a class="markdownIt-Anchor" href="#42-implementation-details"></a> 4.2. Implementation Details</h3>
+<p><strong>Pretraining.</strong> 在对我们的模型进行微调之前，我们通过ImageNet[41]对其进行预训练，就像大多数以前的工作一样[20,34,35]。在最后阶段，我们去掉D分支，直接合并特征来构建分类模型。训练的总次数为90次，学习率最初为0.1，在第30和60次时乘以0.1。图像被随机裁剪成224×224，并在水平方向上翻转以增加数据。</p>
+<p><strong>Training.</strong> 我们的训练协议与以前的工作[15, 20, 52]几乎相同。具体来说，我们采用poly策略来更新学习率，并在[0.5, 2.0]的范围内进行随机裁剪、随机水平翻转和随机缩放来进行数据扩充。Cityscapes、CamVid和PASCAL Context的训练历时数、初始学习率、权重衰减、裁剪尺寸和批量大小可分别概括为[484, 1e-2, 5e-4, 1024×1024, 12]、[200, 1e-3, 5e-4, 960×720, 12] 和[200, 1e-3, 1e-4, 520×520, 16]。按照[20, 51]，我们对CamVid的Cityscapes预训练模型进行了微调，并在lr&lt;5e-4时停止训练过程以避免过拟合。</p>
+<p><strong>Inference.</strong> 在测试之前，我们的模型由Cityscapes和CamVid的训练集和val集进行训练。我们测量了由单个RTX 3090、PyTorch 1.8、CUDA 11.2、cuDNN 8.0和WindowsConda环境组成的平台上的推理速度。使用[10]提出的测量协议并遵循[20, 35, 45]，我们将批量归一化整合到卷积层中，并将批量大小设置为1来测量推理速度。</p>
+<p>4.3. Ablation Study</p>
+<p><strong>ADB for Two-branch Networks.</strong> 为了证明PID方法的有效性，我们将ADB和Bag与现有模型相结合。在这里，两个有代表性的双分支网络： BiSeNet[52]和DDRNet[20]配备了ADB和Bag，与它们的原始模型相比，在Cityscapes估值集上取得了更高的准确性，如表1所示。然而，额外的计算大大降低了它们的推理速度，这就促使我们建立PIDNet。</p>
+<p><strong>Collaboration of Pag and Bag.</strong> P分支利用Pag模块从I分支学习有用的信息，在融合阶段前不会被淹没，Bag模块被引入指导详细特征和背景特征的融合。如表2所示，横向连接可以显著提高模型的准确性，预训练可以进一步提高其性能。在我们的方案中，增加横向连接和Bag融合模块或Pag横向连接和增加融合模块的组合意义不大，因为细节的保存在整个网络中应该是一致的。因此，我们只需要比较Add + Add和Pag + Bag的性能，表2和表3的实验结果证明了Pag和Bag（或Light-Bag）协作的优越性。图8中特征图的可视化显示，与第二种Pag的Sigmoid图中的大物体相比，小物体的颜色变得更深，其中I分支失去了更多的细节信息。同时，在Bag模块的输出中，边界区域和小物体的特征也大大增强，这在图9中得到说明，也解释了我们选择粗略边界检测的原因。</p>
+<p><strong>Efficiency of PAPPM.</strong> 对于实时模型来说，沉重的上下文聚合模块会大大降低推理速度，并可能超过网络的表示能力。因此，我们提出了PAPPM，它是由并行结构和少量参数构成的。表3中的实验结果显示，PAPPM达到了与DAPPM[20]相同的精度，但对于我们的轻量级模型来说，呈现出9.5FPS的速度提升。</p>
+<p><strong>Effectiveness of Extra losses.</strong> 在PIDNet中引入了三个额外的损失，以促进整个网络的优化并强调每个组件的功能。根据表4，边界损失l1和边界意识损失l3对于更好的性能是必要的，尤其是边界损失（+1.1% mIOU），这有力地证明了D分支的必要性，而在线硬例挖掘（OHEM）[43]进一步提高了准确性。</p>
+<h3 id="43-ablation-study"><a class="markdownIt-Anchor" href="#43-ablation-study"></a> 4.3. Ablation Study</h3>
+<p><strong>ADB for Two-branch Networks.</strong> 为了证明PID方法的有效性，我们将ADB和Bag与现有模型相结合。在这里，两个有代表性的双分支网络： BiSeNet[52]和DDRNet[20]配备了ADB和Bag，与它们的原始模型相比，在Cityscapes估值集上取得了更高的准确性，如表1所示。然而，额外的计算大大降低了它们的推理速度，这就促使我们建立PIDNet。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233309064.png" alt="image-20230628233309064" /></p>
+<p><strong>Collaboration of Pag and Bag.</strong> P分支利用Pag模块从I分支学习有用的信息，在融合阶段前不会被淹没，Bag模块被引入指导详细特征和背景特征的融合。如表2所示，横向连接可以显著提高模型的准确性，预训练可以进一步提高其性能。在我们的方案中，增加横向连接和Bag融合模块或Pag横向连接和增加融合模块的组合意义不大，因为细节的保存在整个网络中应该是一致的。因此，我们只需要比较Add + Add和Pag + Bag的性能，表2和表3的实验结果证明了Pag和Bag（或Light-Bag）协作的优越性。图8中特征图的可视化显示，与第二种Pag的Sigmoid图中的大物体相比，小物体的颜色变得更深，其中I分支失去了更多的细节信息。同时，在Bag模块的输出中，边界区域和小物体的特征也大大增强，这在图9中得到说明，也解释了我们选择粗略边界检测的原因。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233321100.png" alt="image-20230628233321100" /></p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233331867.png" alt="image-20230628233331867" /></p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233430680.png" alt="image-20230628233430680" /></p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233404236.png" alt="image-20230628233404236" /></p>
+<p><strong>Efficiency of PAPPM.</strong> 对于实时模型来说，沉重的上下文聚合模块会大大降低推理速度，并可能超过网络的表示能力。因此，我们提出了PAPPM，它是由并行结构和少量参数构成的。表3中的实验结果显示，PAPPM达到了与DAPPM[20]相同的精度，但对于我们的轻量级模型来说，呈现出9.5FPS的速度提升。</p>
+<p><strong>Effectiveness of Extra losses.</strong> 在PIDNet中引入了三个额外的损失，以促进整个网络的优化并强调每个组件的功能。根据表4，边界损失l1和边界意识损失l3对于更好的性能是必要的，尤其是边界损失（+1.1% mIOU），这有力地证明了D分支的必要性，而在线硬例挖掘（OHEM）[43]进一步提高了准确性。</p>
+<h3 id="44-comparison"><a class="markdownIt-Anchor" href="#44-comparison"></a> 4.4. Comparison</h3>
+<p><strong>CamVid.</strong> 对于CamVid[5]数据集，只有DDRNet的准确率可以与我们的模型相媲美，所以考虑到我们的平台比他们的平台更先进，我们在我们的平台上用同样的设置测试其速度，以进行公平比较。表5中的实验结果显示，我们所有模型的准确率都超过了80% mIOU，而PIDNet-S-Wider，只是将PIDNetS的通道数量增加了一倍，就达到了最高的准确率，而且比以前的模型有很大的优势。此外，PIDNet-S的准确性超过了以前的先进模型： DDRNet-23-S高出1.5% mIOU，而延迟只增加了约1毫秒。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233151656.png" alt="image-20230628233151656" /></p>
+<p><strong>Cityscapes.</strong> 考虑到Cityscapes[12]的高质量注释，以前的实时工作将其作为标准基准。如表6所示，我们在没有任何加速工具的情况下，在同一平台上测试了近两年发表的模型的推理速度，与PIDNets进行公平比较。实验结果显示，PIDNets在推理速度和准确性之间实现了最佳的权衡。具体来说，PIDNet-L在速度和精度方面超过了SFNet(ResNet18)†和DDRNet-39，成为实时领域中最准确的模型，测试精度从80.4%提高到80.64%mIOU。与其他推理速度相似的模型相比，PIDNet-M和PIDNet-S也提供了更高的准确性。从PIDNet-S中移除Pag和Bag模块，我们提供了一个更快速的选择： PIDNet-S-Simple，它的泛化能力较弱，但在延迟小于10ms的模型中仍然呈现出最高的准确性。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233204925.png" alt="image-20230628233204925" /></p>
+<p><strong>PASCAL Context.</strong> PAPPM中的Avg(17, 8)路径被移除，因为PASCAL Context[33]中的图像尺寸太小。与其他两个数据集不同的是，这里利用了多尺度和翻转推理，以便与以前的模型进行公平比较。尽管与前两个数据集相比，PASCAL Context中的详细注释较少，但我们的模型仍然在现有的重型网络中取得了有竞争力的性能，如表7所示。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20230628233213136.png" alt="image-20230628233213136" /></p>
+<h2 id="5-conclusion"><a class="markdownIt-Anchor" href="#5-conclusion"></a> 5. Conclusion</h2>
+<p>本文介绍了一种新颖的三分支网络结构： 用于实时语义分割的PIDNet。PIDNet实现了推理时间和准确性之间的最佳权衡。然而，由于PIDNet利用边界预测来平衡细节和上下文信息，为了获得更好的性能，通常需要大量时间的边界周围精确注释是首选。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Polyper/" title="Polyper"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Polyper</div></div><div class="info-2"><div class="info-item-1"> Polyper  Abstract 我们提出了一种新的息肉分割边界敏感框架，称为 Polyper。我们的方法源于一种临床方法，即经验丰富的医生经常利用息肉内部区域的固有特征来解决边界模糊的问题。受此启发，我们提出明确利用息肉区域来增强模型的边界辨别能力，同时最大限度地减少计算量。我们的方法首先通过形态学算子从初始分割图中提取边界和息肉区域。然后，我们设计了对边界敏感的注意力，利用内部息肉区域的特征集中增强边界区域附近的特征，从而生成良好的分割结果。我们提出的方法可与 ResNet-50、MiT-B1 和 Swin Transformer 等经典编码器网络无缝集成。为了评估 Polyper 的有效性，我们在五个公开的挑战性数据集上进行了实验，并在所有数据集上都获得了一流的性能。  Introduction 结肠息肉是结肠粘膜内的突起物，在形状、质地和颜色上有很大差异（Pooler 等人，2023 年）。重要的是，结肠息肉被认为是与结肠癌发展密切相关的癌前病变（Djinbachian 等人，2020...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/RTformer/" title="RTFormer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">RTFormer</div></div><div class="info-2"><div class="info-item-1"> RTFormer  Abstract 最近，基于transformer的网络在语义分割方面显示出令人印象深刻的结果。然而，对于实时语义分割来说，由于transformer的计算机制很耗时，基于CNN的纯方法仍然在该领域占主导地位。我们提出了RTFormer，一种用于实时语义分割的高效双分辨率transformer，它在性能和效率之间实现了比基于CNN的模型更好的权衡。为了在类似GPU的设备上实现高推理效率，我们的RTFormer利用了具有线性复杂度的GPU-Friendly Attention，并抛弃了多头机制。此外，我们发现，跨分辨率的注意力通过传播从低分辨率分支学到的高水平知识，更有效地收集高分辨率分支的全局背景信息。在主流基准上的广泛实验证明了我们提出的RTFormer的有效性，它在Cityscapes、CamVid和COCOStuff上达到了最先进的水平，并在ADE20K上显示出有希望的结果。   1...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pidnet-a-real-time-semantic-segmentation-network-inspired-by-pid-controllers"><span class="toc-text"> PIDNet: A Real-time Semantic Segmentation Network Inspired by PID Controllers</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1. Introduction</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2. Related Work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-high-accuracy-semantic-segmentation"><span class="toc-text"> 2.1. High-accuracy Semantic Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-real-time-semantic-segmentation"><span class="toc-text"> 2.2. Real-time Semantic Segmentation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-method"><span class="toc-text"> 3. Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-pidnet-a-novel-three-branch-network"><span class="toc-text"> 3.1. PIDNet: A Novel Three-branch Network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-pag-learning-high-level-semantics-selectively"><span class="toc-text"> 3.2. Pag: Learning High-level Semantics Selectively</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-pappm-fast-aggregation-of-contexts"><span class="toc-text"> 3.3. PAPPM: Fast Aggregation of Contexts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-bag-balancing-the-details-and-contexts"><span class="toc-text"> 3.4. Bag: Balancing the Details and Contexts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experiment"><span class="toc-text"> 4. Experiment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-datasets"><span class="toc-text"> 4.1. Datasets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-implementation-details"><span class="toc-text"> 4.2. Implementation Details</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-ablation-study"><span class="toc-text"> 4.3. Ablation Study</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-comparison"><span class="toc-text"> 4.4. Comparison</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-conclusion"><span class="toc-text"> 5. Conclusion</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ParC-Net | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ParC-Net  Abstract. 最近，视觉transformers开始显示出令人印象深刻的结果，其性能大大超过了基于卷积的大型模型。然而，在用于移动或资源受限设备的小型模型领域，ConvNet在性能和模型复杂性方面仍有自己的优势。我们提出了ParC-Net，一个纯粹的基于ConvNet的骨干模型，通过将视觉transformers的优点融合到ConvNets中，进一步加强了这些优势。具体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ParC-Net">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ParcNet/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="ParC-Net  Abstract. 最近，视觉transformers开始显示出令人印象深刻的结果，其性能大大超过了基于卷积的大型模型。然而，在用于移动或资源受限设备的小型模型领域，ConvNet在性能和模型复杂性方面仍有自己的优势。我们提出了ParC-Net，一个纯粹的基于ConvNet的骨干模型，通过将视觉transformers的优点融合到ConvNets中，进一步加强了这些优势。具体">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:04:05.565Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ParcNet/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ParC-Net',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">ParC-Net</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">ParC-Net</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:04:05.565Z" title="更新于 2024-12-11 01:04:05">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>24分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="parc-net"><a class="markdownIt-Anchor" href="#parc-net"></a> ParC-Net</h1>
+<h2 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> Abstract.</h2>
+<p>最近，视觉transformers开始显示出令人印象深刻的结果，其性能大大超过了基于卷积的大型模型。然而，在用于移动或资源受限设备的小型模型领域，ConvNet在性能和模型复杂性方面仍有自己的优势。我们提出了ParC-Net，一个纯粹的基于ConvNet的骨干模型，通过将视觉transformers的优点融合到ConvNets中，进一步加强了这些优势。具体来说，我们提出了位置感知卷积（ParC），这是一个轻量级的卷积运算，它拥有一个全局的接受域，同时产生了与局部卷积一样的位置敏感特征。我们将ParCs和squeeze-exictation（SE）操作结合起来，形成一个类似于模型块的meta-former，它还具有类似于transformers的注意机制。上述块可以用即插即用的方式来替代ConvNets或transformers中的相关块。实验结果表明，在常见的视觉任务和数据集中，所提出的ParC-Net比流行的轻量级ConvNets和基于视觉transformers的模型取得了更好的性能，同时参数更少，推理速度更快。对于ImageNet-1k的分类，ParC-Net以大约500万个参数达到了78.6%的最高准确率，与MobileViT相比，节省了11%的参数和13%的计算成本，但获得了0.2%的高准确率和23%的快推理速度（基于ARM的Rockchip RK3288），与DeIT相比，仅使用0.5倍的参数，但获得了2.7%的准确率。在MS-COCO物体检测和PASCAL VOC分割任务中，ParC-Net也显示出更好的性能。</p>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1 Introduction</h2>
+<p>最近，各种视觉transformers（ViTs）模型在许多视觉任务中取得了显著的效果，形成了卷积神经网络（ConvNets）的强有力的替代品[5] [33] [21]。</p>
+<p>然而，我们认为ViTs和ConvNets都是不可缺少的，原因如下：</p>
+<ol>
+<li><strong>从应用的角度来看，ViTs和ConvNets都有其优点和缺点。ViT模型一般具有较好的性能，但通常存在计算成本高和难以训练的问题[33]。与ViTs相比，ConvNets可能表现出较差的性能，但它们仍然有一些独特的优势。例如，ConvNets有更好的硬件支持，并且容易训练。此外，正如[9]和我们的实验所总结的那样，ConvNets在移动或边缘设备的小模型领域仍然占据主导地位。</strong></li>
+<li>**从信息处理的角度来看，ViTs和ConvNets都有独特的特点。ViTs擅长提取全局信息，并利用注意力机制从输入数据驱动的不同位置提取信息[3] [25]。ConvNets专注于局部关系的建模，并通过归纳偏见具有很强的先验性[4]。**上述分析自然而然地提出了一个问题：我们能否从ViTs中学习，以改进移动或边缘计算应用的ConvNets？</li>
+</ol>
+<p>在本文中，我们旨在设计新的轻量级纯卷积网，进一步增强其在移动和边缘计算友好模型领域的优势。</p>
+<p>纯卷积对移动更加友好，因为卷积被现有的工具链高度优化，这些工具链被广泛用于将模型部署到这些资源有限的设备中。更重要的是，由于过去几年中卷积网络的大受欢迎，一些现有的神经网络加速器主要围绕卷积风格的操作而设计，复杂的非线性操作，如softmax和数据总线带宽要求的大矩阵乘法，并没有得到有效的支持。这些硬件和软件的限制使得一个纯卷积的轻量级模型更加可取，即使基于ViT的模型在其他方面同样具有竞争力。</p>
+<p>为了设计这样的ConvNet，我们比较了ConvNets和ViTs，并总结了它们之间的三个主要区别。</p>
+<ol>
+<li>
+<p>ViTs善于提取全局特征[3] [25] [4]；</p>
+</li>
+<li>
+<p>ViTs采用Meta-former块[40]；</p>
+</li>
+<li>
+<p>ViTs中的信息聚合是数据驱动的（数据依赖动态计算）。</p>
+</li>
+</ol>
+<p>对应于这三点，我们设计了我们的ParC块。</p>
+<ol>
+<li>我们提出了位置感知循环卷积（ParC）来提取全局特征；</li>
+<li>基于提出的ParC，我们建立了一个纯ConvNet meta-former块作为基本的外部结构；</li>
+<li>我们在meta-former的特征前向网络（FFN）部分增加了通道明智的关注模块，这使得我们提出的ParC块能够根据输入调整内核权值。</li>
+<li>受CoatNet[4]和MobileViT[25]的启发，我们使用分叉结构（第3.2节）作为外部框架来构建一个完整的网络ParC-Net。</li>
+</ol>
+<p>实验结果表明，所提出的ParC-Net在三个流行的视觉任务上取得了坚实的性能，包括图像分类、物体检测和语义分割。以图像分类的实验结果为例，与MobileViT[25]相比，ParC-Net在大约500万个参数的情况下达到了78.6%的最高准确率，节省了11%的参数和13%的计算成本，但获得了0.2%的高准确率和23%的推理速度（在Rockchip RK3288上）。在物体检测和语义分割的实验中，与其他轻量级模型相比，所提出的ParC-Net获得了更高的mAP和mIOU，同时参数更少。</p>
+<p>我们的主要贡献总结如下：</p>
+<ul>
+<li>为了克服传统卷积运算感知领域有限的限制，我们提出了position aware circular convolution（ParC），其中base-instance kernel和position embedding strategies被用来处理输入尺寸变化，并将位置信息分别注入输出特征图。我们联合使用提议的ParC和传统的卷积操作来提取局部-全局特征，这带来了更高的准确性。</li>
+<li>我们提出了ParC-Net，一个用于移动和边缘计算应用的纯ConvNet。拟议的ParC-Net继承了ConvNets和ViTs的优点。据我们所知，这是第一次尝试结合ConvNets和ViTs的优点来设计一个轻量级的ConvNet。</li>
+<li>我们将提出的ParC-Net应用于三个视觉任务。与基线模型相比，拟议的ParC-Net在所有三个任务上都取得了更好的性能，同时参数更少，计算成本更低，推理速度更高。</li>
+</ul>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2 Related work</h2>
+<h3 id="21-vision-transformers"><a class="markdownIt-Anchor" href="#21-vision-transformers"></a> 2.1 Vision transformers</h3>
+<p>Vaswani等人首先提出了用于自然语言处理（NLP）任务的transformer[34]。与递归神经网络（RNN）模型相比，transformers的计算效率要高得多，它善于从输入序列中的任何一对元素中捕捉关系。因此，transformers取代了RNN，在NLP领域占据主导地位。</p>
+<p>2020年，Dosovitskiy等人将transformers引入视觉任务，并提出了视觉transformers（ViT）[5]，其中每个图像被裁剪成一个patch序列以满足transformers的输入要求，并采用PE来确保模型对输入patch的位置信息敏感。通过对JFT-300M[29]等巨大数据集的预训练，ViT在各种视觉任务上取得了令人印象深刻的性能。然而，原始的ViT模型有一些限制，例如，它的重量很重(复杂），计算效率低，而且很难训练。随后的ViTs变体被提出来以克服这些问题。从改善训练策略的角度出发，Touvron等人[33]提出使用知识提炼法来训练ViT模型，并在较少的预训练数据下取得了具有竞争力的精度。为了进一步改进模型结构，一些研究者试图通过从ConvNets中学习来优化ViTs。其中，PVT[35]和CVT[37]在ViT模型的每个阶段插入卷积操作，以减少标记的数量，并建立分层的多阶段结构。Swin transformers[21]在移位的局部窗口内计算自我注意。PiT[11]联合使用池化层和深度卷积层来实现通道乘法和空间减法。CCNet[15]提出了一个简化版的自我注意机制十字交叉注意，并将其插入到ConvNet中，以建立具有全局感受野的ConvNet。这些论文清楚地表明，ConvNet的一些技术可以应用于视觉transformers，以设计更好的视觉transformers模型。</p>
+<h3 id="22-hybrid-structures-combining-convnet-and-vision-transformers"><a class="markdownIt-Anchor" href="#22-hybrid-structures-combining-convnet-and-vision-transformers"></a> 2.2 Hybrid structures combining ConvNet and vision transformers</h3>
+<p>另一个流行的研究方向是结合ViT和ConvNets的元素来设计新的骨干网。Graham等人在他们的LeVit模型中混合了ConvNet和transformer，在速度/准确度的权衡方面明显优于以前的ConvNet和ViT模型[8]。BoTNet[28]在ResNet的最后几个块中用多头关注取代了标准卷积。ViT-C[38]在vanilla ViT中加入早期卷积干。ConViT[6]通过一个门控的位置自我注意纳入了软卷积的归纳偏差。CMT[9]块由基于深度的卷积的局部感知单元和一个轻量级的transformers模块组成。CoatNet[4]合并了卷积和自我注意，设计了一个新的transformers模块，它同时关注局部和全局信息。经过综合比较，我们发现这些混合模型同时采用了类似的结构，即在开始阶段使用卷积干来提取局部特征，随后使用transformer式模型来提取全局或局部-全局特征。在设计我们的纯卷积模型时，我们也选择了类似的结构。</p>
+<h3 id="23-light-weight-convnets-and-vits"><a class="markdownIt-Anchor" href="#23-light-weight-convnets-and-vits"></a> 2.3 Light-weight ConvNets and ViTs</h3>
+<p>自2017年以来，由于越来越多的应用需要在移动设备上运行ConvNet模型，轻量级ConvNets引起了人们的关注。现在，有很多轻量级的ConvNets，如ShuffleNets [24] [24], MobileNets [13] [27] [12], MicroNet [18], GhostNet [10], EfficientNet [32], TinyNet [2] 和MnasNet [31]。与标准ConvNets相比，轻量级ConvNets的参数更少，计算成本更低，推理速度更快。此外，轻量级的ConvNets可以在广泛的设备上应用。尽管有这些好处，这些轻量级模型与重量级模型相比性能较差。最近，按照结合ConvNet和ViT的优势的研究思路，一些研究人员试图为移动视觉任务建立轻量级的混合模型。Mobile-Former提出了一个MobileNet和Transformer的并行设计，它利用了MobileNet在提取局部特征和Transformer在捕捉全局信息方面的优势[3]。Mehta和Rastegari提出了MobileViT，其中MobileNetv2[27]的上层阶段被MobileViT块[25]取代。在MobileViT模块中，通过卷积提取的局部表征和全局表征被串联起来，生成局部-全局表征。</p>
+<p>就目的而言，我们提出的ParC-Net与Mobile-Former和MobileViT有关。与这两个模型不同的是，我们提出的ParC-Net仍然保留了transformers块，是纯粹的ConvNet，这使得我们提出的ParC-Net更有利于移动。我们在低功率平台上部署模型的实验证实了这一点。在通过从ViTs中学习来设计一个纯ConvNet方面，我们的工作与一个平行工作ConvNext[22]最为接近。两个主要的区别是。1) 思路和架构不同。ConvNext通过引入一系列（超过10个）递增但有效的设计，将一个标准的ResNet朝着视觉transformer的设计方向现代化。</p>
+<p>我们提出的ParC-Net从ConvNets和ViTs之间的三个主要区别出发，从宏观上填补了这些空白。由于想法不同，相应的结构也不同；2）它们是为不同的目的提出的。我们的ParC-Net是为移动设备提出的。与ConvNext相比，所提出的ParC-Net在约束模型时表现出轻量级模型的优势。</p>
+<h2 id="3-the-proposed-method"><a class="markdownIt-Anchor" href="#3-the-proposed-method"></a> 3 The proposed method</h2>
+<p>在本节中，我们将分两部分介绍我们的ParC-Net，即构建块（ParC块）的细节和整体模型结构（ParC-Net）。</p>
+<h3 id="31-parc-block"><a class="markdownIt-Anchor" href="#31-parc-block"></a> 3.1 ParC block</h3>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202130115789.png" alt="image-20221202130115789" /></p>
+<blockquote>
+<p>图1 ParC block. (a) A residual block that is widely used in ConvNets; (b) A ViT block; © An ParC block</p>
+</blockquote>
+<p>图1的上半部分显示了普通ConvNets和ViTs之间的三个主要区别。图1的下半部分说明了我们所提出的ParC块的结构。在下文中，我们将解释提议的ParC块的动机和每个组件的具体结构。</p>
+<h5 id="extracting-global-features-with-parc"><a class="markdownIt-Anchor" href="#extracting-global-features-with-parc"></a> Extracting global features with ParC.</h5>
+<p>在ConvNets中，特征的计算公式为yi = P j∈L(i) wi-jxj，其中xi、yi分别是位置i的输入和输出，L(i)表示i的局部邻域。在ViTs中，自我注意模块根据公式yi = P j∈G e(xiT xj ) P k∈G e(xiT xk) xj提取特征，其中G表示全局空间。比较这两个公式，我们可以看到，自我注意从整个空间位置学习全局特征，而卷积则从局部的感受野收集信息。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202135639713.png" alt="image-20221202135639713" /></p>
+<blockquote>
+<p>图2 Illustration of the position aware circular convolution. (a) ParC-V; (b) ParC-H. F , EV and EH are explained in equations 1 and 2</p>
+</blockquote>
+<p>为了克服这个问题，我们提出了位置感知循环卷积（ParC）。如图2所示，我们提出的ParC有两种类型，一种是垂直方向的ParC（ParC-V），另一种是水平方向的ParC（ParC-H）。ParC-V和ParC-H的感受野分别覆盖了同一列和同一行的所有像素。联合使用ParC-V和ParC-H可以从所有输入像素中提取全局特征。为了简化符号，我们假设输入的x只有一个通道，相应的形状是1×h×w。ParC-V在位置(i, j)的输出是通过以下方式计算的。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201213028256.png" alt="image-20221201213028256" /></p>
+<p>其中，peV是实例位置嵌入（PE），它是通过双线性插值函数F（）从基础嵌入e peV生成的。这里F()用于使位置嵌入的大小与输入特征的大小相适应。 peeV是扩展的PE。EV（）是垂直方向的扩展函数。在复制了输入矢量w次后，EV（）沿水平方向将这些复制的矢量连接起来，生成一个h×w大小的PE矩阵。同样，ParC-H在位置（i，j）的输出可以表示为。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221201213123065.png" alt="image-20221201213123065" /></p>
+<p>其中peeH = EH(peH , h)，EH()是一个扩展函数。EH()将输入矢量沿垂直方向扩展。在现代深度学习库中实现ParC是很简单的。以最复杂的部分yi,j = P t∈(0,w-1) kH t xp (i,(j+t)modw)为例，可以用一行代码实现：y = F.conv2D(torch.cat(xp, xp, dim = 3), kH ) 。图3说明了在输入为一维向量的情况下的计算过程。从图3中，我们可以看到ParC-H沿着连接输入的起点和终点产生的圆进行卷积。因此，我们将提议的卷积命名为圆形卷积。拟议的ParC引入了三个修改。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140038047.png" alt="image-20221202140038047" /></p>
+<blockquote>
+<p>图3 Illustration of global circular convolution on horizontal direction.</p>
+</blockquote>
+<ul>
+<li>感受野被增加到全局空间。请注意，将传统局部卷积的核大小增加到全部输入大小并不能提取全局特征。在局部卷积中，通常使用零填充来保持卷积特征的大小与输入的相同。即使我们将核的大小增加到全局大小，全局核也只能覆盖来自输入的部分像素。特别是在提取边缘部分的特征时，全局核覆盖的像素中只有大约一半是来自输入的实际输入，而其他的则是简单的零。</li>
+<li>PE用于保持输出特征对空间位置的敏感性。循环卷积可以提取全局特征，但它扰乱了原始输入的空间结构。对于分类来说，保持空间结构可能不是一个大问题。但是，正如消融研究中所显示的，对于位置敏感的任务，如分割和检测，保持空间结构确实很重要。这里，按照ViTs的设计，我们引入了PE来保持空间结构。消融研究的实验结果表明，PE在分割和检测任务中是有用的。</li>
+<li>内核和PE是根据输入大小动态生成的。在ParC中，内核和PE码的大小必须与实例输入的大小一致。为了处理输入具有不同空间分辨率的情况，我们通过内插函数生成实例内核和PE码。</li>
+</ul>
+<h5 id="designing-parc-block-with-parc"><a class="markdownIt-Anchor" href="#designing-parc-block-with-parc"></a> Designing ParC block with ParC.</h5>
+<p>从ConvNets到ViTs，一个相当大的修改是meta-former块取代了residual块（蓝色双向箭头）。一个meta-former块一般由两个部件组成的序列：一个标记混合器和一个通道混合器。令牌混合器用于在不同空间位置的令牌之间交换信息。通道混合器是用于在不同的通道之间混合信息。这两个组件都使用残差学习结构。</p>
+<p>受此启发，我们将ParC插入类似于Meta-former的模块中，建立我们的ParC模块。具体来说，我们用提议的ParC来取代自我注意模块，建立一个新的空间模块来取代标记混合器部分。在这里，我们这样做有两个主要原因：</p>
+<ol>
+<li>ParC可以从全局空间中提取全局特征和像素间的交互信息，这符合令牌混合器模块的要求；</li>
+<li>自我注意模块的计算复杂性是二次的。</li>
+</ol>
+<p>用ParC代替这部分模块可以大大降低计算成本，这有助于实现我们设计一个轻量级ConvNet的目标。基于所提出的ParC，我们建立了一个类似于纯ConvNet meta-former的模块。</p>
+<h5 id="adding-channel-wise-attention-in-channel-mixer-part"><a class="markdownIt-Anchor" href="#adding-channel-wise-attention-in-channel-mixer-part"></a> Adding channel wise attention in channel mixer part.</h5>
+<p>在ViTs中，自我注意模块可以根据输入调整权重，这使得ViTs成为数据驱动模型。通过采用注意力机制，数据驱动模型可以专注于重要的特征而抑制不必要的特征，从而带来更好的性能。以前的文献14[16]已经解释了保持模型数据驱动的重要性。</p>
+<p>通过用提议的全局循环卷积取代自我注意，我们得到了一个可以提取全局特征的纯ConvNet。但是被替换的模型不再是一个数据驱动的模型。为了弥补这一点，我们在通道混合器部分插入了通道明智的注意力模块，如图1（c）所示。按照SENet[14]，我们首先通过全局平均池聚合输入特征x∈Rc×h×w的空间信息，得到聚合的特征xa∈Rc×1×1；然后我们将xa送入多层感知器，生成通道明智权重a∈Rc×1×1。a与通道明智的x相乘，产生最终输出。</p>
+<h3 id="32-parc-net"><a class="markdownIt-Anchor" href="#32-parc-net"></a> 3.2 ParC-Net</h3>
+<p>在第3.1节中，我们已经介绍了ParC块，它是一个基本块，可以插入到目前大多数现有的模型中。在这一节中，我们为它选择了一个外框，并建立了完整的网络ParC-Net。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140339795.png" alt="image-20221202140339795" /></p>
+<blockquote>
+<p>图4 Three main hybrid structures. (a) serial structure; (b) parallel structure; © bifurcate structure</p>
+</blockquote>
+<p>目前，如图4所示，现有的混合结构基本上可以分为三种主要结构，包括串行结构（图4（a））8，并行结构（图4（b））[3]和分叉结构（图4（c））25。在这三种结构中，第三种结构目前取得了最佳性能。目前，分叉模型CoatNet[4]在Imagenet-1k上取得了最高的分类精度。移动设备目标模型MobileViT[25]也采用了第三种结构。</p>
+<p>受此启发，我们采用分叉结构作为我们的外框，并在MobileViT的基础上建立我们最终的外框。具体来说，以MobileViT采用的外框为基线，我们进一步做了一些改进。</p>
+<ul>
+<li>MobileViT由两种主要的模块组成。浅层阶段由MobileNetV2模块组成，它具有局部感受野。深层阶段由ViT块组成，它享有全局接收场。我们保留所有的MobileNetV2模块，用相应的ParC模块取代ViT模块。这种替换将模型从混合结构转换为纯ConvNet。</li>
+<li>我们适当地增加了ParC块的宽度。即便如此，被替换的模型仍然有更少的参数和更少的计算成本。</li>
+<li>如图4©所示，分叉结构包含一些交互模块，它们负责本地和全局特征模块之间的信息交互。在最初的MobileViT中，ViT块是最重的模块。在用ParC块代替ViT块后，这些交互模块的成本变得很突出。因此，我们在这些模块中引入了分组卷积和点智卷积，在不影响性能的情况下减少了参数的数量。</li>
+</ul>
+<h2 id="4-experiment-results"><a class="markdownIt-Anchor" href="#4-experiment-results"></a> 4 Experiment results</h2>
+<p>在实验中，我们展示了所提出的ParC-Net在三个典型的视觉任务上的整体优势，然后进行详细的研究，以显示我们的设计选择的价值，模型的扩展特性，以及它在低功耗设备上的速度优势。</p>
+<h3 id="41-image-classification"><a class="markdownIt-Anchor" href="#41-image-classification"></a> 4.1 Image classification</h3>
+<p>我们在ImageNet-1k上进行了图像分类实验，这是这项任务中最广泛使用的基准数据集。我们在ImageNet-1K的训练集上训练所提出的ParC-Net模型，并在验证集上报告了最高的准确性。</p>
+<h5 id="training-setting"><a class="markdownIt-Anchor" href="#training-setting"></a> Training setting.</h5>
+<p>由于我们采用类似MobileViT的结构作为我们的外部框架，我们也使用非常类似的训练策略来训练我们的模型。具体来说，我们用AdamW优化器[23]在8个V100或A100 GPU上对每个模型进行300次训练，其中最大学习率、最小学习率、权重衰减和批量大小分别被设置为0.004、0.0004、0.025和1024。AdamW优化器的优化动量β1和β2分别被设置为0.9和0.999。我们使用前3000次迭代作为热身阶段。我们按照余弦计划调整学习率。对于数据增强，我们使用随机裁剪、水平翻转和多尺度采样器。我们使用标签平滑法[30]来规范网络，并将平滑系数设置为0.1。我们使用指数移动平均法（EMA）[26]。更多关于训练设置的细节和源代码的链接将在补充材料中提供。</p>
+<h5 id="comparison-results"><a class="markdownIt-Anchor" href="#comparison-results"></a> Comparison results.</h5>
+<p>图像分类的实验结果列于图5。图5（a）显示，ParC-Net-S和MobileViT-S以明显的优势击败了其他模型。图5（b）显示了与更多模型的比较。所提出的ParC-Net-S达到了最高的分类精度，并且比大多数模型的参数更少。与第二好的模型MobileViT-S相比，我们的ParC-Net-S减少了11%的参数数量，前1名的准确率增加了0.2个百分点。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140632361.png" alt="image-20221202140632361" /></p>
+<blockquote>
+<p>图5 ImageNet-1K上的分类实验结果。 (a) 准确率与模型大小的关系。这里我们只保留部分对比模型以示清晰。(b) 图像分类的结果比较。∗表示我们的实现。Pre-ConvNets表示在ViTs之前出现的经典ConvNets。Post-ConvNets表示整合了ViTs的优点但仍然保持纯ConvNet结构的ConvNets。</p>
+</blockquote>
+<h5 id="light-weight-models"><a class="markdownIt-Anchor" href="#light-weight-models"></a> Light-weight models.</h5>
+<p>表1显示了轻量级模型之间的比较结果，这证实了我们的想法并回答了介绍中提出的问题。</p>
+<p>首先，比较轻量级ConvNets和ViTs的结果，轻量级ConvNets显示出更好的性能。</p>
+<p>其次，比较ViT出现之前流行的ConvNets（pre-ConvNets）、ViTs和混合结构，混合结构取得了最好的性能。因此，通过学习ViT的优点来改进ConvNets是可行的。</p>
+<p>最后，所提出的ParC-Net在所有比较模型中取得了最好的性能。因此，通过学习ViT的设计，纯粹的轻量级ConvNets的性能确实可以得到显著提高。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140753512.png" alt="image-20221202140753512" /></p>
+<blockquote>
+<p>表1 Comparisons of light-weight models on ImageNet-1K classification</p>
+</blockquote>
+<h3 id="42-object-detection"><a class="markdownIt-Anchor" href="#42-object-detection"></a> 4.2 Object detection</h3>
+<p>我们使用MS-COCO[19]数据集及其评估协议进行物体检测实验。继25之后，我们将单次物体检测（SSD）[20]作为检测框架，并使用可分离卷积来取代检测头中的标准卷积。</p>
+<h5 id="experiment-setting"><a class="markdownIt-Anchor" href="#experiment-setting"></a> Experiment setting.</h5>
+<p>以在ImageNet-1K上预训练的模型为骨干，我们在MS-COCO的训练集上用AdamW优化器对检测模型进行了200次的微调。批量大小和权重衰减被设置为128和0.01。我们使用前500次迭代作为热身阶段，其中学习率从0.000001增加到0.0009。在训练期间，标签平滑和EMA都被使用。</p>
+<h5 id="comparison-results-2"><a class="markdownIt-Anchor" href="#comparison-results-2"></a> Comparison results.</h5>
+<p>图6列出了相应的结果。与图像分类的结果类似，MobileViT-S和ParC-Net-S在mAP方面达到了第二好和最好。与第二好的模型相比，ParC-Net-S在模型大小和检测精度方面都显示出优势。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140718542.png" alt="image-20221202140718542" /></p>
+<blockquote>
+<p>图6 Object detection results on MS-COCO. (a) mAP vs model size. (b) Comparison results</p>
+</blockquote>
+<h5 id="experiment-settings"><a class="markdownIt-Anchor" href="#experiment-settings"></a> Experiment settings.</h5>
+<p>DeepLabV3被作为语义分割的框架。我们在PASCAL VOC[7]和COCO数据集的训练集上对分割模型进行微调，然后在PASCAL VOC的验证集上使用平均相交于联合（mIOU）对训练模型进行评估，并报告最终结果进行比较。我们用AdamW对每个模型进行50次微调。读者可以参考补充材料中关于训练设置的更多细节。</p>
+<h5 id="comparison-results-3"><a class="markdownIt-Anchor" href="#comparison-results-3"></a> Comparison results.</h5>
+<p>结果总结在图7中。我们可以看到，MobileViT-S和ParC-Net-S在模型规模和mIOU之间有最好的权衡。与ResNet-101相比，MobileViT-S和ParC-Net-S实现了有竞争力的mIOU，同时参数少得多。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140837187.png" alt="image-20221202140837187" /></p>
+<blockquote>
+<p>图7 在PASCAL VOC上进行的语义分割实验。(a) mIOU与模型大小的关系。(b) 与更多模型的比较结果。</p>
+</blockquote>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202140932440.png" alt="image-20221202140932440" /></p>
+<h3 id="44-ablation-study"><a class="markdownIt-Anchor" href="#44-ablation-study"></a> 4.4 Ablation study</h3>
+<p>使用MobileViT作为基线模型，我们进一步对我们的ParC-Net中提出的三个组件进行消融分析。</p>
+<ul>
+<li><strong>Position aware circular convolution.</strong> 提出的ParC有两个主要特点。1）循环卷积带来全局感受野；2）PE保持空间结构信息。实验结果证实，这两个特点都很重要。1）第1-3行的结果表明，使用大内核也能提高精度，但当内核大小达到一定程度时，其好处达到饱和点。这个结果与[22]中声称的说法一致。使用ParC可以进一步提高精度，如第2-3行和第6-7行所示。2）在ParC中引入PE是必要的。正如我们在第3.1节中所解释的，单独使用循环卷积确实可以捕获全局特征，但它扰乱了原始空间结构。对于分类任务，PE没有影响（第6和7行）。然而，对于对空间位置敏感的检测和分割任务，放弃PE会损害性能（第9-10和12-13行）。</li>
+<li><strong>Meta-former architecture.</strong> 在放弃Meta-former架构的实验中，我们将ParC与ResNeXt块[39]整合，以取代Metaformer架构。通过比较第4行和第7行，我们可以看到，使用提议的纯ConvNet元构架是有用的。</li>
+<li><strong>Channel wise attention.</strong> 第5行和第7行的结果表明，使用明智的通道关注可以提高性能。与ParC相比，明智的通道关注带来的好处较少。</li>
+</ul>
+<p>总而言之，这三个部分都是有用的。将它们作为一个整体连接起来可以达到最佳的性能。</p>
+<h3 id="45-inference-speed-on-low-power-devices"><a class="markdownIt-Anchor" href="#45-inference-speed-on-low-power-devices"></a> 4.5 Inference speed on low power devices.</h3>
+<p>在本节中，我们进行了实验来验证两点。1）正如我们在介绍中提到的，ParC-Net是为边缘计算设备提出的。为了验证所提出的ParC-Net是否符合我们的要求，我们将所提出的ParC-Net部署在一个广泛使用的低功耗芯片Rockchip RK3288和一个内部的低功耗神经网络处理器DP2000上，与基线进行比较。我们使用ONNX[1]和MNN[17]将这些模型移植到芯片上，并对每个模型进行100次迭代，以测量平均推理速度；2）提议的ParC块是一个即插即用的块，它可以插入到其他模型中。我们用我们提出的ParC替换了典型CNN的最后几个块中的卷积（有PE和内核生成等），比较结果列于表3。</p>
+<p>如表3第1-4行所示，与基线相比，ParC-Net在Rockchip RK3288上要快23%，在DP2000上要快3.77倍。除了更少的FLOPs操作，我们认为这一速度的提高也是由两个因素带来的。1)现有的工具链对卷积进行了高度优化，这些工具链被广泛用于在这些资源受限的设备上部署模型；2)与卷积相比，transformers对数据的带宽要求更高，因为计算注意力图涉及两个大矩阵K和Q，而在卷积中，内核与输入特征图相比是一个相当小的矩阵。在带宽要求超过芯片设计的情况下，CPU将被闲置，等待数据，导致CPU利用率降低，整体推理速度变慢。</p>
+<p>第3-10行的结果显示，我们的ParC-Net普遍提高了典型的轻量级模型的性能。MobileViT-S的FLOPs要高得多，但在模型大小和精度之间实现了良好的权衡，在其自身的应用目的中表现出色。通过在MobleViT-S上应用我们的ParC-Net设计，ParC-Net-S在模型大小、FLOPs和精度之间实现了更好的平衡。在ResNet50、MobileNetV2和ConvNext-T上的结果表明，注重优化FLOPs-精度权衡的模型也能从ParC-Net设计中受益。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221202141044186.png" alt="image-20221202141044186" /></p>
+<h2 id="5-conclusion"><a class="markdownIt-Anchor" href="#5-conclusion"></a> 5 Conclusion</h2>
+<p>在本文中，针对边缘计算设备，我们提出了ParC-Net，一个纯粹的ConvNet，它继承了ConvNet的优点和ViT的综合结构特征。为了评估其性能，我们将提出的模型应用于三个流行的视觉任务，即图像分类、物体检测和语义分割。与其他ConvNet、ViT和混合模型相比，所提出的模型在所有三个任务上都取得了更好的性能，同时拥有更少的参数。在低功耗设备Rockchip RK3288和我们的内部处理器DP2000上的实验结果表明，拟议的ParC-Net确实继承了ConvNets，而且它能很好地被边缘计算设备支持。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/MedAugment%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/" title="MedAugment"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">MedAugment</div></div><div class="info-2"><div class="info-item-1"> MedAugment: Universal Automatic Data Augmentation Plug-in for Medical Image Analysis  Abstract 在计算机视觉领域，数据增强（DA）被广泛用于缓解数据短缺问题，而医学图像分析（MIA）中的数据增强则面临多重挑战。医学图像分析中流行的数据增强方法包括传统数据增强、合成数据增强和自动数据增强。然而，这些方法的使用带来了各种挑战，如经验驱动的设计和密集的计算成本。在此，我们提出了一种高效的自动图像增强方法–MedAugment。我们提出了像素增强空间和空间增强空间，并排除了可能破坏医学图像细节和特征的操作。此外，我们还提出了一种新颖的采样策略，即从这两个空间中采样有限数量的操作。此外，我们还提出了一种超参数映射关系，以产生合理的增强级别，并使 MedAugment 可通过单个超参数进行完全控制。这些修订解决了自然图像和医学图像之间的差异。在四个分类和三个分割数据集上的大量实验结果证明了 MedAugment 的优越性。我们认为，即插即用、无需训练的 MedAugment...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Polyper/" title="Polyper"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Polyper</div></div><div class="info-2"><div class="info-item-1"> Polyper  Abstract 我们提出了一种新的息肉分割边界敏感框架，称为 Polyper。我们的方法源于一种临床方法，即经验丰富的医生经常利用息肉内部区域的固有特征来解决边界模糊的问题。受此启发，我们提出明确利用息肉区域来增强模型的边界辨别能力，同时最大限度地减少计算量。我们的方法首先通过形态学算子从初始分割图中提取边界和息肉区域。然后，我们设计了对边界敏感的注意力，利用内部息肉区域的特征集中增强边界区域附近的特征，从而生成良好的分割结果。我们提出的方法可与 ResNet-50、MiT-B1 和 Swin Transformer 等经典编码器网络无缝集成。为了评估 Polyper 的有效性，我们在五个公开的挑战性数据集上进行了实验，并在所有数据集上都获得了一流的性能。  Introduction 结肠息肉是结肠粘膜内的突起物，在形状、质地和颜色上有很大差异（Pooler 等人，2023 年）。重要的是，结肠息肉被认为是与结肠癌发展密切相关的癌前病变（Djinbachian 等人，2020...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#parc-net"><span class="toc-text"> ParC-Net</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#abstract"><span class="toc-text"> Abstract.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-introduction"><span class="toc-text"> 1 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-related-work"><span class="toc-text"> 2 Related work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-vision-transformers"><span class="toc-text"> 2.1 Vision transformers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-hybrid-structures-combining-convnet-and-vision-transformers"><span class="toc-text"> 2.2 Hybrid structures combining ConvNet and vision transformers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-light-weight-convnets-and-vits"><span class="toc-text"> 2.3 Light-weight ConvNets and ViTs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-the-proposed-method"><span class="toc-text"> 3 The proposed method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-parc-block"><span class="toc-text"> 3.1 ParC block</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#extracting-global-features-with-parc"><span class="toc-text"> Extracting global features with ParC.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#designing-parc-block-with-parc"><span class="toc-text"> Designing ParC block with ParC.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#adding-channel-wise-attention-in-channel-mixer-part"><span class="toc-text"> Adding channel wise attention in channel mixer part.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-parc-net"><span class="toc-text"> 3.2 ParC-Net</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-experiment-results"><span class="toc-text"> 4 Experiment results</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-image-classification"><span class="toc-text"> 4.1 Image classification</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#training-setting"><span class="toc-text"> Training setting.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#comparison-results"><span class="toc-text"> Comparison results.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#light-weight-models"><span class="toc-text"> Light-weight models.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-object-detection"><span class="toc-text"> 4.2 Object detection</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#experiment-setting"><span class="toc-text"> Experiment setting.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#comparison-results-2"><span class="toc-text"> Comparison results.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#experiment-settings"><span class="toc-text"> Experiment settings.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#comparison-results-3"><span class="toc-text"> Comparison results.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-ablation-study"><span class="toc-text"> 4.4 Ablation study</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-inference-speed-on-low-power-devices"><span class="toc-text"> 4.5 Inference speed on low power devices.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-conclusion"><span class="toc-text"> 5 Conclusion</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

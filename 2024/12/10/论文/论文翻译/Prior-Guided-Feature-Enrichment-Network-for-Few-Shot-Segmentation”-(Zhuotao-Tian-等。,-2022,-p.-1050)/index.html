@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Prior Guided Feature Enrichment Network for Few-Shot Segmentation | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Prior Guided Feature Enrichment Network for Few-Shot Segmentation  1、介绍 深度学习的快速发展为语义分割带来了巨大的改进。标志性的框架[2], [52]已经在自动驾驶、机器人视觉、医学图像等广泛的应用中受益。然而，这些框架的性能在没有足够的完全标记的数据时或在对未见过的类进行工作时很快就会恶化。即使提供了额外的数据，微调仍然是耗">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prior Guided Feature Enrichment Network for Few-Shot Segmentation">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Prior-Guided-Feature-Enrichment-Network-for-Few-Shot-Segmentation%E2%80%9D-(Zhuotao-Tian-%E7%AD%89%E3%80%82,-2022,-p.-1050)/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="Prior Guided Feature Enrichment Network for Few-Shot Segmentation  1、介绍 深度学习的快速发展为语义分割带来了巨大的改进。标志性的框架[2], [52]已经在自动驾驶、机器人视觉、医学图像等广泛的应用中受益。然而，这些框架的性能在没有足够的完全标记的数据时或在对未见过的类进行工作时很快就会恶化。即使提供了额外的数据，微调仍然是耗">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T16:40:54.051Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Prior-Guided-Feature-Enrichment-Network-for-Few-Shot-Segmentation%E2%80%9D-(Zhuotao-Tian-%E7%AD%89%E3%80%82,-2022,-p.-1050)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Prior Guided Feature Enrichment Network for Few-Shot Segmentation',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">Prior Guided Feature Enrichment Network for Few-Shot Segmentation</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Prior Guided Feature Enrichment Network for Few-Shot Segmentation</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T16:40:54.051Z" title="更新于 2024-12-11 00:40:54">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="prior-guided-feature-enrichment-network-for-few-shot-segmentation"><a class="markdownIt-Anchor" href="#prior-guided-feature-enrichment-network-for-few-shot-segmentation"></a> Prior Guided Feature Enrichment Network for Few-Shot Segmentation</h1>
+<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1、介绍</h2>
+<p>深度学习的快速发展为语义分割带来了巨大的改进。标志性的框架[2], [52]已经在自动驾驶、机器人视觉、医学图像等广泛的应用中受益。然而，这些框架的性能在没有足够的完全标记的数据时或在对未见过的类进行工作时很快就会恶化。即使提供了额外的数据，微调仍然是耗费时间和资源的。</p>
+<p>为了解决这个问题，有人提出了小样本分割法[29]，将数据分为支持集和查询集。如图1所示，支持集和查询集的图像首先被发送到骨干网络以提取特征。特征处理可以通过为分类器生成权重[29]、余弦相似度计算[4]、[40]或卷积[13]、[46]来产生最终的预测结果。[image]</p>
+<blockquote>
+<p>图1.最近的小样本分割框架的总结。用于提取支持和查询特征的骨干方法可以是一个单一的共享网络或两个连体网络。</p>
+</blockquote>
+<p>支持集提供了关于目标类别的信息，帮助模型对查询图像进行准确的分割预测。这个过程模拟了这样的场景：一个模型在只有少数标记数据（支持）的情况下对测试图像（查询）进行未见过的类别预测。因此，几率模型需要快速适应新的类别。然而，现有的小样本分割方法的共同问题包括由于滥用高级特征而导致的泛化损失，以及查询和支持样本之间的空间不一致。在本文中，我们主要解决这两个难题。</p>
+<p>笼统的减少和高水平的特征。</p>
+<p>常见的语义分割模型在很大程度上依赖于带有语义信息的高级特征。(<a href="zotero://select/library/items/3AR39Q4N">Zhang 等。, 2019</a>)CANet[46]的实验表明，在小样本模型的特征处理过程中简单地添加高级特征会导致性能下降。因此，在小样本的设置中利用语义信息的方法并不简单。与以前的方法不同，我们使用ImageNet[28]预先训练好的查询和支持图像的高级特征来为模型产生 “先验”。这些先验有助于模型更好地识别查询图像中的目标。由于先验生成过程是免于训练的，因此尽管在训练过程中经常使用所见类别的高层次信息，所产生的模型也不会失去对未见类别的概括能力。</p>
+<p>空间上的不一致。</p>
+<p>此外，由于样本有限，每个支持对象的比例和姿势可能与查询目标有很大的不同，我们称之为空间不一致性。为了解决这个问题，我们提出了一个新的模块，名为特征丰富模块（FEM），用支持特征自适应地丰富查询特征。第4.3节中的消减研究表明，仅仅采用多尺度方案来解决空间不一致的问题是不理想的，因为FEM提供了有条件的特征选择，有助于保留不同尺度上传递的基本信息。FEM比其他多尺度结构，如HRNet[39]、PPM[52]、ASPP[3]和GAU[45]，取得了更优越的性能。</p>
+<p>最后，基于提出的先验生成方法和特征丰富模块，我们建立了一个新的网络–先验引导的特征丰富网络（PFENet）。基于ResNet-50的PFENet只包含10.8M的可学习参数，但在PASCAL-5i[29]和COCO[19]基准上取得了新的最先进的结果，在1-shot和5-shot的设置下分别达到15.9和5.1FPS。此外，我们通过将我们的模型应用于没有标记数据的zero-shot场景来体现其有效性。结果是令人惊讶的–PFENet在没有重大结构修改的情况下仍然取得了不错的性能。</p>
+<p><strong>我们在本文中的贡献有三点:</strong></p>
+<ul>
+<li>我们利用高层次的特征，提出免训练的先验生成，以大大提高预测的准确性，并保持高泛化。</li>
+<li>通过纳入支持特征和先验信息，我们的FEM有助于在有条件的尺度间信息交互下自适应地完善查询特征。</li>
+<li>PFENet在不影响效率的情况下，在PASCAL-5i和COCO数据集上取得了最好的新结果。</li>
+</ul>
+<h2 id="3-我们的方法"><a class="markdownIt-Anchor" href="#3-我们的方法"></a> 3、我们的方法</h2>
+<p>在本节中，我们首先在第3.1节中简要地描述了小样本的分割任务。然后，我们在第3.2和3.3节中分别介绍了先验生成方法和特征丰富模块。最后，在第3.4节中，讨论了我们提出的先验引导的特征丰富网络的细节。</p>
+<h3 id="31-任务描述"><a class="markdownIt-Anchor" href="#31-任务描述"></a> 3.1、任务描述</h3>
+<p>一个小样本的语义分割系统有两个集合，即查询集Q和支持集S。给定支持集S中的K个样本，目标是将未知类 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{test}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 的区域从查询集的每个查询图像 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">I_Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 中分割出来。</p>
+<p>模型在类别 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{train}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（基础）上进行训练，并在以前未见过的类别 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{test}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> （新的）上进行测试，其过程为：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><msub><mi>C</mi><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{train} C_{test}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> .  情节范式是在[38]中提出的，并在[29]中首次应用于小样本分割。每个情节由支持集S和同一类别c的查询集Q组成。支持集S由类别c的K个样本S¼ fS1;S2;…;SKg组成，我们称之为 “K-shot场景”。第1个支持样本Si是一对fISi;MSi g，其中ISi和MSi分别是c的支持图像和标签。对于查询集，Q¼fIQ;MQg，其中IQ是输入的查询图像，MQ是c类的地面真相掩码。查询支持对fIQ;IS1;MS1;IS2;MS2;…;ISK;MSK g构成模型的输入数据批。查询图像的地面真相MQ对模型来说是不可见的，它被用来评估每集查询图像的预测。</p>
+<h3 id="32-小样本分割的先例"><a class="markdownIt-Anchor" href="#32-小样本分割的先例"></a> 3.2 小样本分割的先例</h3>
+<h4 id="321-重要意见"><a class="markdownIt-Anchor" href="#321-重要意见"></a> 3.2.1 重要意见</h4>
+<p>CANet[46]在基准的PASCAL-5i数据集上，只从骨干中提取中间层次的特征（如ResNet-50的conv3_x和conv4_x），其性能大大超过了以前的工作。在CANet中的实验也表明，高层（如ResNet-50的conv5_x）特征会导致性能下降。[46]中解释说，中级特征的表现更好，因为它构成了未见过的类所共享的对象部分，但我们的另一种解释是，高级特征中包含的语义信息比中级特征更具有类的特异性，表明前者更可能对模型对未见过的类的概括能力产生负面影响。此外，高层特征直接提供了训练类Ctrain的语义信息，在识别属于Ctrain的像素和减少训练损失方面比中层信息的贡献更大。因此，这种行为导致了对Ctrain的偏爱。缺乏概括性和对训练类的偏爱对于在未见过的测试类Ctest上的评估都是有害的。</p>
+<p>值得注意的是，与高层特征对小样本分割的性能产生不利影响的发现相反，先前的分割框架[27], [51]利用这些特征为最终预测提供语义线索。这种矛盾促使我们找到一种方法，以一种对训练等级不敏感的方式利用高层信息来提高小样本分割的性能。</p>
+<h4 id="322-前期生成"><a class="markdownIt-Anchor" href="#322-前期生成"></a> 3.2.2 前期生成</h4>
+<p>在我们的工作中，我们将ImageNet[28]预先训练的包含语义信息的高级特征转化为先验掩码，告诉人们像素属于目标类别的概率，如图2所示。在训练过程中，骨干参数与[40]、[46]中的参数固定。因此，先验生成过程不会偏向于训练类Ctrain，并且在对未见过的测试类Ctest进行评估时保持了类的不敏感性。让IQ;IS表示输入的查询和支持图像，MS表示二进制支持掩码，F表示骨干网络，XQ;XS表示高级查询和支持特征。我们有其中是哈达玛德积–XQ和XS的大小都是½h; w; c。注意，F的输出是用ReLU函数处理的。所以二元支持掩码MS通过将其设置为零来去除支持特征中的背景。</p>
+<p>[image]</p>
+<p>具体来说，我们将查询特征XQ的先验YQ定义为揭示XQ和XS之间像素级对应关系的掩码。查询特征XQ的一个像素如果在YQ上的值很高，意味着这个像素与支持特征中的至少一个像素有很高的对应关系。因此，它很可能在查询图像的目标区域内。通过将支持特征的背景设置为零，查询特征的像素与支持特征的背景没有对应关系–它们只与前景目标区域相关。为了生成YQ，我们首先计算xq 2 XQ和xs 2 XS的特征向量之间的像素余弦相似度cosðxq;xsÞ2R，即</p>
+<p>[image]</p>
+<p>[image]</p>
+<p>我们提出的先验生成方法的关键点在于使用固定的高级特征，通过从公式（2）和（3）中给出的大小为hw hw的相似性矩阵中获取最大值来产生先验掩码，这相当简单而有效。在第4.4节中对[24]、[40]、[50]中使用的其他替代方法进行的消融研究表明了我们方法的优越性。</p>
+<h2 id="33-特征丰富化模块"><a class="markdownIt-Anchor" href="#33-特征丰富化模块"></a> 3.3 特征丰富化模块</h2>
+<h4 id="331-动机"><a class="markdownIt-Anchor" href="#331-动机"></a> 3.3.1 动机</h4>
+<p>现有的小样本分割框架[4]、[13]、[24]、[26]、[29]、[31]、[40]、[46]在进一步处理前使用屏蔽的全局平均池，从支持图像中提取类向量。然而，支持图像的全局池化会导致空间信息的不一致，因为查询目标的面积可能比支持样本大得多或小得多。因此，使用全局池化的支持特征来直接匹配查询特征的每个像素并不理想。</p>
+<p>一个自然的选择是加入PPM[52]或ASPP[3]，为特征提供多层次的空间信息。PPM和ASPP帮助基线模型产生更好的性能（正如我们后面的实验所证明的）。然而，这两个模块是次优的，因为。1）它们为合并后的特征提供空间信息，而没有在每个尺度内进行具体的细化处理；2）忽略了不同尺度间的层次关系。</p>
+<p>为了缓解这些问题，我们拆分了多尺度结构，并提出了特征丰富模块，1）将查询特征与各尺度中的支持特征和先验掩码进行横向交互；2）纵向利用层次关系，通过自上而下的信息路径，用从细化特征中提取的基本信息丰富粗略的特征图。经过横向和纵向的优化，投射到不同尺度的特征再被收集起来，形成新的查询特征。FEM的细节如下。</p>
+<h4 id="332-模块结构"><a class="markdownIt-Anchor" href="#332-模块结构"></a> 3.3.2 模块结构</h4>
+<p>如图3所示，特征丰富模块将查询特征、先前掩码和支持特征作为输入。它通过支持特征的丰富信息输出精炼的查询特征。丰富过程可分为三个子过程：1）源间丰富，首先将输入投射到不同的尺度，然后在每个尺度中独立地将查询特征与支持特征和先验掩码进行交互；2）尺度间交互，在不同尺度的合并查询-支持特征之间选择性地传递基本信息；3）信息集中，合并不同尺度的特征，最终产生精炼的查询特征。图4显示了具有四个尺度和自上而下的尺度间交互路径的FEM的图示。</p>
+<p>[image]</p>
+<blockquote>
+<p>图4.有四个尺度和一个自上而下路径的FEM（虚线框）的视觉图示。C、1×1和圆圈M分别代表串联、11卷积和尺度间合并模块。激活函数是ReLU。</p>
+</blockquote>
+<p>[image]</p>
+<p>尺度间的相互作用。值得注意的是，在下采样的特征图中可能不存在微小的物体。一个自上而下的路径，自适应地将信息从较细的特征传递到较粗的特征，有利于在我们的特征丰富模块中建立一个层次关系。现在的互动不仅是每个尺度的查询和支持特征之间的互动（横向），而且是不同尺度的合并特征之间的互动（纵向），这对整体性能是有利的。</p>
+<p>图4中圈出的M代表尺度间合并模块M，它通过选择性地将辅助特征中的有用信息传递给主特征，生成精炼的特征 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>X</mi><mrow><mi>Q</mi><mo separator="true">,</mo><mi>n</mi><mi>e</mi><mi>w</mi></mrow><mi>i</mi></msubsup></mrow><annotation encoding="application/x-tex">X^{i}_{Q,new}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.236103em;vertical-align:-0.411439em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.824664em;"><span style="top:-2.424669em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">Q</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.411439em;"><span></span></span></span></span></span></span></span></span></span> ，在不同尺度间进行交互。这个过程可以写成[image]</p>
+<p>[image]</p>
+<p>规模间互动的其他选择包括自下而上的路径，即用来自粗略特征（辅助）的信息来丰富更精细的特征（主要），以及双向变体，即自上而下的路径后是自下而上的路径，以及自下而上的路径后是自上而下的路径。自上而下的路径在第4.3.1节中显示了其优越性。</p>
+<p>[image]</p>
+<blockquote>
+<p>图5.C是串联，þ是像素级加法。a表示1 1卷积，b表示2 3 3卷积。激活函数是ReLU。对于没有辅助特征的特征，不存在与辅助特征的串联，精炼的特征只由主特征与a和b产生。</p>
+</blockquote>
+<p>尺度间合并模块M的具体结构如图5所示。我们首先将辅助特征的大小调整为与主特征相同的空间大小。然后，我们使用一个1 1卷积a从辅助特征中提取有用的信息，以主特征为条件。随后的两个3 3卷积b用于完成交互，并输出精炼的特征。规模间合并模块M内的剩余链接用于保持输出特征Xi Q;new中主特征的完整性。对于那些没有辅助特征的特征（如自上而下路径中的第一个合并特征X1 Q;m和自下而上路径中的最后一个合并特征Xn Q;m），我们直接忽略与M中的辅助特征的连接–精炼特征只由主特征产生。</p>
+<p>[image]</p>
+<p>图6显示了没有FEM（B1 ¼ h ¼ w）的基线模型的视觉图。为了鼓励更好地丰富特征，我们通过给每个Xi Q;new附加分类头（图7b）来增加中间监督。</p>
+<p>总之，通过将汇集的支持特征和先验掩码纳入不同空间大小的查询特征，该模型学会了在先验掩码的指导和地面实况的监督下，用来自每个位置的支持特征的信息来适应性地丰富查询特征。此外，垂直尺度间的交互作用用辅助特征提供的条件信息补充了主要特征。因此，与其他特征增强设计（如PPM[52]、ASPP[3]和GAU[45]）相比，FEM在基线上产生的性能增益更大。第4.3节的实验提供了更多细节。</p>
+<p>[image]</p>
+<blockquote>
+<p>图6.以输入特征的原始空间大小处理特征的基线结构的视觉说明。</p>
+</blockquote>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Transformers-in-Medical-Image-Analysis-A-Review/" title="Transformers in Medical Image Analysis A Review"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Transformers in Medical Image Analysis A Review</div></div><div class="info-2"><div class="info-item-1"> Transformers in Medical Image Analysis: A Review  Abstract Transformer 在自然语言处理领域占据了主导地位，最近又对计算机视觉领域产生了影响。在医学图像分析领域，Transformer 也已成功应用于全栈临床应用，包括图像合成/重建、配准、分割、检测和诊断。我们的论文旨在促进医学图像分析领域对 Transformer 的认识和应用。具体来说，我们首先概述了内置于 Transformer 和其他基本组件中的注意力机制的核心概念。其次，我们回顾了为医学影像应用量身定制的各种 Transformer 架构，并讨论了它们的局限性。在这篇综述中，我们围绕 Transformer 在不同学习范式中的使用、提高模型效率以及与其他技术的耦合等方面的关键挑战进行了研究。我们希望这篇综述能让医学图像分析领域的读者对 Transformer 有一个全面的了解。  1 INTRODUCTION Transformer [1] 在自然语言处理（NLP）领域占据主导地位，包括语音识别 [2]、合成 [3]、文本到语音的翻译 [4]...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Swin/" title="Swin Transformer Hierarchical Vision Transformer using Shifted Windows"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Swin Transformer Hierarchical Vision Transformer using Shifted Windows</div></div><div class="info-2"><div class="info-item-1"> Swin Transformer: Hierarchical Vision Transformer using Shifted Windows  Abstract This paper presents a new vision Transformer, called Swin Transformer, that capably serves as a general-purpose backbone for computer vision. Challenges in adapting Transformer from language to vision arise from differences between the two domains, such as large variations in the scale of visual entities and the high resolution of pixels in images compared to words in text. To address these differences, we...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prior-guided-feature-enrichment-network-for-few-shot-segmentation"><span class="toc-text"> Prior Guided Feature Enrichment Network for Few-Shot Segmentation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 1、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%88%91%E4%BB%AC%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text"> 3、我们的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="toc-text"> 3.1、任务描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%88%86%E5%89%B2%E7%9A%84%E5%85%88%E4%BE%8B"><span class="toc-text"> 3.2 小样本分割的先例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#321-%E9%87%8D%E8%A6%81%E6%84%8F%E8%A7%81"><span class="toc-text"> 3.2.1 重要意见</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#322-%E5%89%8D%E6%9C%9F%E7%94%9F%E6%88%90"><span class="toc-text"> 3.2.2 前期生成</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-%E7%89%B9%E5%BE%81%E4%B8%B0%E5%AF%8C%E5%8C%96%E6%A8%A1%E5%9D%97"><span class="toc-text"> 3.3 特征丰富化模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#331-%E5%8A%A8%E6%9C%BA"><span class="toc-text"> 3.3.1 动机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#332-%E6%A8%A1%E5%9D%97%E7%BB%93%E6%9E%84"><span class="toc-text"> 3.3.2 模块结构</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

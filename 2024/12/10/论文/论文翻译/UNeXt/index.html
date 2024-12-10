@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>UNeXt MLP-based Rapid Medical Image Segmentation Network | qjl988</title><meta name="author" content="qjl988"><meta name="copyright" content="qjl988"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="UNeXt: MLP-based Rapid Medical Image Segmentation Network  摘要 UNet及其最新的扩展，如TransUNet，近年来一直是领先的医学图像分割方法。然而，这些网络不能有效地用于医疗点应用中的快速图像分割，因为它们的参数很高，计算复杂，使用缓慢。为此，我们提出了UNeXt，这是一个基于卷积多层感知器（MLP）的网络，用于图像分割。我们以一种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNeXt MLP-based Rapid Medical Image Segmentation Network">
+<meta property="og:url" content="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/UNeXt/index.html">
+<meta property="og:site_name" content="qjl988">
+<meta property="og:description" content="UNeXt: MLP-based Rapid Medical Image Segmentation Network  摘要 UNet及其最新的扩展，如TransUNet，近年来一直是领先的医学图像分割方法。然而，这些网络不能有效地用于医疗点应用中的快速图像分割，因为它们的参数很高，计算复杂，使用缓慢。为此，我们提出了UNeXt，这是一个基于卷积多层感知器（MLP）的网络，用于图像分割。我们以一种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qjl988.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-10T15:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-10T17:03:27.795Z">
+<meta property="article:author" content="qjl988">
+<meta property="article:tag" content="论文翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qjl988.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qjl988.github.io/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/UNeXt/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'UNeXt MLP-based Rapid Medical Image Segmentation Network',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qjl988</span></a><a class="nav-page-title" href="/"><span class="site-name">UNeXt MLP-based Rapid Medical Image Segmentation Network</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">UNeXt MLP-based Rapid Medical Image Segmentation Network</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-10T17:03:27.795Z" title="更新于 2024-12-11 01:03:27">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87/">论文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="unext-mlp-based-rapid-medical-image-segmentation-network"><a class="markdownIt-Anchor" href="#unext-mlp-based-rapid-medical-image-segmentation-network"></a> UNeXt: MLP-based Rapid Medical Image Segmentation Network</h1>
+<h2 id="摘要"><a class="markdownIt-Anchor" href="#摘要"></a> 摘要</h2>
+<p>UNet及其最新的扩展，如TransUNet，近年来一直是领先的医学图像分割方法。然而，这些网络不能有效地用于医疗点应用中的快速图像分割，因为它们的参数很高，计算复杂，使用缓慢。为此，我们提出了UNeXt，这是一个基于卷积多层感知器（MLP）的网络，用于图像分割。我们以一种有效的方式设计UNeXt，在早期卷积阶段和潜伏阶段的MLP阶段。我们提出了一个Tokenized 的MLP块，我们有效地标记和投影卷积特征，并使用MLPs来建模表示。为了进一步提高性能，我们建议在输入到MLP的过程中改变输入的通道，以便专注于学习局部依赖关系。在潜伏空间中使用Tokenized 的MLPs可以减少参数的数量和计算的复杂性，同时能够产生更好的表示，以帮助分割。该网络还包括各级编码器和解码器之间的跳跃连接。我们在多个医学图像分割数据集上测试了UNeXt，结果显示我们将参数数量减少了72倍，计算复杂度降低了68倍，推理速度提高了10倍，同时还获得了比最先进的医学图像分割架构更好的分割性能。</p>
+<h2 id="1-引言"><a class="markdownIt-Anchor" href="#1-引言"></a> 1 引言</h2>
+<p>医学成像解决方案在医疗保健领域的诊断和治疗中发挥了关键作用。医学成像应用的一个主要任务是分割，因为它对计算机辅助诊断和图像引导的手术系统至关重要。在过去的十年中，文献中的许多工作都集中在开发高效和稳健的分割方法上。UNet[17]是一项具有里程碑意义的工作，它显示了具有跳跃连接的编码-解码卷积网络在医学图像分割中的效率。近年来，UNet已经成为几乎所有领先的医学图像分割方法的骨干。继UNet之后，一些关键的扩展如UNet++[29]、UNet3+[13]、3D UNet[7]、V-Net[16]、Y-Net[15]和KiUNet[21,22]也被提出。最近，许多基于transformer的网络被提出用于医学图像分割，因为它们可以学习对图像的整体理解，这对分割很有帮助。TransUNet[6]将ViT架构[10]修改为一个用于二维医学图像分割的UNet。其他基于transformer的网络如MedT[20]、TransBTS[25]和UNETR[11]也被提出用于医学图像分割。<strong>请注意，几乎所有的上述工作都集中在提高网络的性能上，但没有过多地关注计算复杂性、推理时间或参数数量，而这些在许多实际应用中是必不可少的。由于大多数都是在实验室环境下进行分析，因此使用具有高计算能力的机器（如GPU）进行测试。这有助于加快推理的速度，也有助于容纳大量的参数。</strong></p>
+<p>近来，医学成像解决方案已经从实验室转化为床边设置。这被称为护理点成像，因为测试和分析是在病人身边完成的。护理点成像[23]帮助临床医生扩大服务选择，改善病人护理。它有助于减少病人去放射科中心就诊的时间和程序。围绕护理点成像的技术改进使病人更加满意。近年来，护理点设备的使用一直在增加。例如，护理点超声（POCUS）设备[1]已被证明对快速检查肺部胸膜不规则情况、心脏血流动力学和自动计算膀胱容量很有用。基于语音相机的图像也被用来检测和诊断皮肤状况[2]。磁共振成像（MRI）机也被开发出来用于床边操作和快速分析[3]。如图1所示，这些最近的诊断发展有助于在医疗点清晰而快速地获取医疗图像。像分割、分类和登记这样的任务也正在与这些设备整合，以帮助病人和临床医生加速诊断过程。这些任务的主要基于深度学习的解决方案（如UNet和TransUNet）具有固有的计算开销和大量的参数，使它们难以用于医疗点的应用。在这项工作中，我们专注于解决这个问题，并设计一个高效的网络，它具有较少的计算开销、较少的参数数量、更快的推理时间，同时也保持良好的性能。设计这样一个网络对于适应医学成像从实验室到床边的转变趋势至关重要。为此，我们提出了UNeXt，它是用卷积网络和（多层感知器）MLPs设计的。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125142107602.png" alt="image-20221125131115932" /></p>
+<blockquote>
+<p>图1 UNeXt的动因。随着医疗成像解决方案越来越适用于医疗点，重要的是要关注使深度网络轻量级和快速，同时也要高效。(a) 护理点的医疗干预工作流程。(b) 最近的医学成像发展。POCUS设备[1]和（c）基于手机的皮肤病变检测和识别应用[2]。</p>
+</blockquote>
+<p>最近，基于MLP的网络也被发现可以胜任计算机视觉任务。特别是<a href="zotero://open-pdf/library/items/L857MNTS">MLP-Mixer[18]</a>，这是一个基于MLP的网络，它以较少的计算量给出了与transformer相当的性能。受这些工作的启发，我们提出了UNeXt，这是一个基于卷积和MLP的网络。我们仍然沿用UNet的5层深度编码器-解码器架构，但改变了每个模块的设计。我们在UNeXt中有两个阶段，一个是卷积阶段，另一个是MLP阶段。我们使用卷积块，在网络的初始和最终块中使用较少数量的过滤器。在瓶颈部分，我们使用了新颖的Tokenized MLP（TokMLP）块，它能有效地保持较少的计算量，同时还能建立一个良好的模型。Tokenized MLP将卷积特征投射到一个抽象的标记中，然后使用MLP来学习有意义的信息进行分割。我们还在MLP中引入移位操作，以提取对应于不同轴shifted 局部信息。由于Tokenized 特征的维度较小，而MLPs比卷积或自注意和变换器更不复杂；我们能够大大减少参数的数量和计算的复杂性，同时也能保持良好的性能。我们在ISIC皮肤病变数据集[8]和乳房超声图像（BUSI）数据集[4]上对UNeXt进行了评估，结果表明它比最近的通用分割架构获得了更好的性能。更重要的是，与TransUNet相比，我们将参数数量减少了72倍，计算复杂度降低了68倍，推理速度提高了10倍，使其适用于护理点医学成像应用。</p>
+<p>综上所述，本文有以下贡献。</p>
+<p>1）我们提出了UNeXt，第一个基于卷积MLP的图像分割网络。</p>
+<p>2）我们提出了一种新颖的具有轴向移动的Tokenized MLP块，以有效地学习潜伏空间的良好表示。</p>
+<p>3）我们成功地提高了医学图像分割任务的性能，同时具有较少的参数、较高的推理速度和较低的计算复杂性。</p>
+<h2 id="2-unext"><a class="markdownIt-Anchor" href="#2-unext"></a> 2 UNeXt</h2>
+<h3 id="21-网络设计"><a class="markdownIt-Anchor" href="#21-网络设计"></a> 2.1 网络设计</h3>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125131115932.png" alt="image-20221125142055525" /></p>
+<p>UNeXt是一个具有两个阶段的编码器-解码器架构:1）卷积阶段 2）Tokenized MLP阶段。**输入图像通过编码器，前3个块是卷积，后2个是Tokenized MLP块。解码器有2个Tokenized MLP块，然后是3个卷积块。每个编码器区块将特征分辨率降低2，每个解码器区块将特征分辨率提高2，编码器和解码器之间还包括跳跃连接。**每个块的通道数是一个超参数，表示为C1至C5。对于使用UNeXt架构的实验，除非另有说明，<strong>我们遵循C1=32，C2=64，C3=128，C4=160，C5=256</strong>。请注意，这些数字实际上比UNet及其变体的过滤器数量要少，这有助于减少参数和计算的第一次变化。</p>
+<p><img src="/img/loading.gif" data-original="images/image-20240203174511821.png" alt="image-20240203174511821" /></p>
+<blockquote>
+<p>图 2. 所提出的 UNeXt 架构概述。</p>
+</blockquote>
+<h3 id="22-卷积阶段"><a class="markdownIt-Anchor" href="#22-卷积阶段"></a> 2.2 卷积阶段</h3>
+<p>每个卷积块都有一个卷积层，一个批处理归一化层和ReLU激活。编码器中的卷积块使用池窗口为2×2的最大集合层，而解码器中的卷积块由双线性插值层组成，用于对特征图进行上采样。<strong>我们使用双线性插值而不是转置卷积，因为转置卷积基本上是可学习的上采样，有助于获得更多可学习的参数</strong>。</p>
+<h3 id="23-shifted-mlp阶段"><a class="markdownIt-Anchor" href="#23-shifted-mlp阶段"></a> 2.3 shifted MLP阶段</h3>
+<p><strong>在shifted MLP中，我们首先在Tokenized 之前移位conv特征的通道轴。这有助于MLP只关注卷积特征的某些位置，从而诱导块的位置性</strong>。这里的直觉类似于Swin变换器[5]，其中基于窗口的关注被引入到一个完全全局的模型中，以增加更多的位置性。由于Tokenized MLP块有2个MLP，我们像轴向注意力[24]一样，将特征在其中一个的宽度和另一个的高度上移动。我们将特征分成h个不同的分区，并根据指定的轴线将它们转移到j个位置。这有助于我们创建随机窗口，沿轴线引入位置性。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221121202433141.png" alt="image-20221125142107602" /></p>
+<h3 id="24-tokenized-mlp阶段"><a class="markdownIt-Anchor" href="#24-tokenized-mlp阶段"></a> 2.4 Tokenized MLP阶段</h3>
+<p>在Tokenized MLP区块中，我们首先转移特征并将其投影到标记中。为了Tokenized ，我们首先使用3的核大小，并将通道的数量改为E，其中E是嵌入维度（标记的数量），这是一个超参数。然后，我们将这些标记传递给一个shifted MLP（跨越宽度），MLP的隐藏维度是一个超参数H。我们在这个模块中使用DWConv<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>有两个原因。</p>
+<p>1）它有助于对MLP特征的位置信息进行编码。在[26]中显示，MLP块中的卷积层足以编码位置信息，它实际上比标准的位置编码技术表现得更好。像ViT中的位置编码技术，当测试和训练的分辨率不一样时，需要进行插值，往往会导致性能下降。</p>
+<p>2）DWConv使用的参数数量较少，因此提高了效率。然后我们使用GELU[12]激活层。我们使用GELU而不是RELU，因为它是一个更平滑的选择，而且被发现表现得更好。此外，最近的大多数架构，如ViT[10]和BERT[9]都成功地使用了GELU来获得更好的结果。然后，我们将特征通过另一个shifted MLP（跨越高度），将维度从H转换为O。我们在这里使用残差连接，并将原始标记作为残差加入。然后，我们应用层归一化（LN）并将输出特征传递给下一个区块。LN比BN更受欢迎，因为在Tokenized MLP块中，沿着tokens进行归一化而不是跨批归一化更有意义。</p>
+<p>Tokenized MLP块中的计算可以总结为：。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221121202526890.png" alt="image-20221121202433141" /></p>
+<p>其中，T表示标记，H表示高度，W表示宽度，DW Conv表示深度卷积，LN表示层归一化。请注意，所有这些计算都是在嵌入维度H上进行的，该维度明显小于特征图的维度H N×H N，其中N是一个2的系数，取决于块。在我们的实验中，除非另有说明，我们将H设置为768。这种设计Tokenized MLP块的方式有助于编码有意义的特征信息，在计算或参数方面没有什么贡献。</p>
+<h2 id="3-实验和结果"><a class="markdownIt-Anchor" href="#3-实验和结果"></a> 3 实验和结果</h2>
+<h3 id="31-数据集"><a class="markdownIt-Anchor" href="#31-数据集"></a> 3.1 数据集</h3>
+<p>为了使我们的实验尽可能地接近医疗点成像，我们挑选了国际皮肤成像合作组织（ISIC 2018）[8]和乳房超声图像（BUSI）[4]数据集作为我们结果的基准。ISIC数据集包含相机获取的皮肤学图像和相应的皮肤病变区域的分割图。ISIC 2018数据集由2594张图像组成。我们将所有图像的大小调整为512×512的分辨率。BUSI包括正常、良性和恶性乳腺癌病例的超声波图像以及相应的分割图。我们只使用良性和恶性的图像，结果共有647张图像被调整到256×256的分辨率。</p>
+<h3 id="32-实施细节"><a class="markdownIt-Anchor" href="#32-实施细节"></a> 3.2 实施细节</h3>
+<p>我们使用Pytorch框架开发UNeXt。我们使用二元交叉熵（BCE）和骰子损失的组合来训练UNeXt。预测ˆ y和目标y之间的损失L被表述为。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125144951200.png" alt="image-20221121202526890" /></p>
+<p>我们使用一个学习率为0.0001、momentum为0.9的Adam优化器。我们还使用cosine annealing学习率调度器，最小学习率可达0.00001。批量大小被设定为8。我们对UNeXt进行了总共400个epochs的训练。我们对数据集进行了三次80-20的随机分割，并报告了平均值和方差。</p>
+<h3 id="33-性能比较"><a class="markdownIt-Anchor" href="#33-性能比较"></a> 3.3 性能比较</h3>
+<p>我们将UNeXt的性能与最近广泛使用的医学图像分割框架进行比较。特别是，我们与UNet[17]、UNet++[29]和ResUNet[28]等卷积基线进行比较。我们还与最近的转化器基线如TransUNet[6]和MedT[20]进行比较。请注意，我们主要是在分割性能（F1得分和IoU）以及参数数量、计算复杂性（GFLOPs）和推理时间（ms）方面与基线进行比较。</p>
+<p>我们在表1中列出了结果。可以看出，UNeXt获得了比所有基线更好的分割性能，紧随其后的是TransUNet。这些改进在统计学上是显著的，P&lt;10-5。然而，这里最值得注意的一点是，与TransUNet相比，UNeXt的计算次数非常少，因为UNeXt没有任何注意块。计算量是以浮点运算器（FLOPs）的数量来计算的。我们注意到，与TransUNet的38.52和UNet的55.84相比，UNeXt的GFLOPs最少，为0.57。与所有基线相比，它也是最轻的网络。特别是，我们注意到UNeXt只有1.58M的参数，而TransUNet有105.32M的参数。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125152520456.png" alt="image-20221125144951200" /></p>
+<p>我们还展示了在CPU上运行时的平均推理时间。请注意，我们特别对CPU而不是GPU的推理时间进行了基准测试，因为医疗点设备大多在低计算能力下运行，通常不具备GPU的计算优势。我们对10张分辨率为256×256的图像进行前馈，并报告平均推理时间。用于基准测试的CPU是英特尔至强黄金6140 CPU，工作频率为2.30 GHz。可以注意到，我们用Swin-UNet[5]进行了实验，但发现在小数据集上有收敛问题，导致性能不佳。然而，Swin-UNet的参数很多，有41.35M，而且计算复杂，有11.46GFLOPs。</p>
+<p>在图4中，我们绘制了F1得分与GLOPs、F1得分与推理时间以及F1得分与参数数的对比图。这里使用的F1得分与ISIC数据集相对应。从图表中可以清楚地看到，UNeXt和TransUNet是在分割性能方面表现最好的方法。然而，UNeXt在计算复杂性、推理时间和参数数量方面明显优于其他所有网络，这些都是在医疗点成像应用中需要考虑的重要特征。在图5中，我们展示了UNeXt和其他基线的定性结果样本。可以看出，与其他方法相比，UNeXt产生了有竞争力的分割预测结果。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125145245105.png" alt="image-20221125145245105" /></p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125142055525.png" alt="image-20221125145303006" /></p>
+<h2 id="4-讨论"><a class="markdownIt-Anchor" href="#4-讨论"></a> 4 讨论</h2>
+<h3 id="41-消融实验"><a class="markdownIt-Anchor" href="#41-消融实验"></a> 4.1 消融实验</h3>
+<p>我们进行了一项消融实验（如表2所示），以了解UNeXt中每个模块的单独贡献。我们首先从原始的UNet开始，然后只是减少过滤器的数量，以减少参数的数量和复杂性。我们看到在参数减少不多的情况下，性能有所下降。接下来，我们减少深度，只使用3级深度架构，这基本上是UNeXt的Conv阶段。这大大减少了参数的数量和复杂性，但性能也降低了4%。现在，我们引入了Tokenized 的MLP块，这大大改善了性能，同时将复杂性和参数增加到最小值。接下来，我们使用DWConv增加了位置嵌入方法，如[26]，并看到了一些更多的改进。接下来，我们在MLPs中加入了移位操作，并表明在Tokenized 之前移位特征可以提高性能，而没有增加任何参数或复杂性。由于移位操作对任何加法或乘法都没有贡献，所以不会增加任何FLOPs。我们注意到，在两个轴上移动特征的结果是最好的性能，这是UNeXt的确切配置，参数和复杂性最小。请注意，上述所有的实验都是使用ISIC数据集的单一折叠进行的。</p>
+<h3 id="42-对渠道数量的分析"><a class="markdownIt-Anchor" href="#42-对渠道数量的分析"></a> 4.2 对渠道数量的分析</h3>
+<p>通道数是UNeXt的一个主要超参数，它影响到参数的数量、复杂性和网络的性能。在表3中，我们对ISIC的单折进行了实验，以显示UNeXt的两种不同配置。可以看出，增加通道（UNeXt-L）进一步提高了性能，同时增加了计算的开销。尽管减少通道（UNeXt-S）降低了性能（减少的幅度不大），但我们得到了一个非常轻的模型。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125145303006.png" alt="image-20221125152509416" /></p>
+<h3 id="43-与mlp-mixer的区别"><a class="markdownIt-Anchor" href="#43-与mlp-mixer的区别"></a> 4.3 与MLP-Mixer的区别</h3>
+<p>MLP-Mixer使用全MLP架构进行图像识别。UNeXt是一个用于图像分割的卷积和基于MLP的网络。MLP-Mixer专注于通道混合和标记混合，以学习一个好的表示。相比之下，我们提取卷积特征，然后将通道Tokenized ，并使用一个新颖的Tokenized 的MLPs，使用shifted MLPs来建模表示。值得注意的是，我们用MLPMixer作为编码器和一个普通的卷积解码器进行了实验。对于分割来说，性能并不理想，而且在11M左右的参数下，它仍然很沉重。</p>
+<p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125152509416.png" alt="image-20221125152520456" /></p>
+<h2 id="5-结论"><a class="markdownIt-Anchor" href="#5-结论"></a> 5 结论</h2>
+<p>在这项工作中，我们提出了一个新的深度网络架构UNeXt，用于医学图像分割，重点是用于医疗点的应用。UNeXt是一个基于卷积和MLP的架构，其中有一个初始卷积阶段，然后是潜伏空间的MLP。具体来说，我们提出了一个带有移位MLPs的Tokenized MLP块，以最小的复杂度和参数来有效地模拟表示。我们在多个数据集上验证了UNeXt，在那里我们实现了更快的推理，降低了复杂性，减少了参数数量，同时也达到了最先进的性能。</p>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><img src="/img/loading.gif" data-original="http://qjl988-tuchuang.oss-cn-beijing.aliyuncs.com/typora/image-20221125144046042.png" alt="image-20221125144046042" /> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/">论文翻译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Swin/" title="Swin Transformer Hierarchical Vision Transformer using Shifted Windows"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Swin Transformer Hierarchical Vision Transformer using Shifted Windows</div></div><div class="info-2"><div class="info-item-1"> Swin Transformer: Hierarchical Vision Transformer using Shifted Windows  Abstract This paper presents a new vision Transformer, called Swin Transformer, that capably serves as a general-purpose backbone for computer vision. Challenges in adapting Transformer from language to vision arise from differences between the two domains, such as large variations in the scale of visual entities and the high resolution of pixels in images compared to words in text. To address these differences, we...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/bisenetv1/" title="BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation</div></div><div class="info-2"><div class="info-item-1"> BiSeNet BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation  Abstract. 语义分割需要丰富的空间信息和相当大的感受野。然而，现代方法通常会牺牲空间分辨率来实现实时推理速度，这导致了性能不佳。在本文中，我们用一个新颖的双边分割网络（BiSeNet）来解决这个难题。我们首先设计了一个小步幅的空间路径，以保留空间信息并产生高分辨率的特征。同时，采用快速下采样策略的Context Path，以获得足够的感受野。在这两条路径的基础上，我们引入了一个新的特征融合模块来有效地结合特征。在Cityscapes、CamVid和COCO-Stuff数据集上，提议的架构在速度和分割性能之间取得了适当的平衡。具体来说，对于2048×1024的输入，我们在Cityscapes测试数据集上实现了68.4%的平均IOU，在一块NVIDIA Titan XP卡上的速度为105FPS，这比现有的具有可比性的方法要快得多。  1...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">ASGNet</div></div><div class="info-2"><div class="info-item-1"> ASGNet  Abstract 原型学习被广泛应用于小样本分割。通常情况下，通过平均全局对象信息，从支持特征中获得单一原型。然而，使用一个原型来表示所有信息可能会导致模糊不清。在本文中，我们提出了两个用于多原型提取和分配的新型模块，分别名为超像素引导聚类（SGC）和引导原型分配（GPA）。具体来说，SGC 是一种无参数、无训练的方法，它通过聚合相似的特征向量来提取更具代表性的原型，而 GPA 则能够选择匹配的原型，从而提供更准确的指导。通过将 SGC 和 GPA 整合在一起，我们提出了自适应超像素引导网络 (ASGNet)，它是一种轻量级模型，能适应物体的比例和形状变化。此外，我们的网络还可以很容易地推广到 k 个镜头的分割，并在不增加计算成本的情况下实现大幅改进。特别是，我们在 COCO 上进行的评估表明，ASGNet 在 5 镜头分割方面比最先进的方法高出 5%。  1....</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Head-Free Lightweight Semantic Segmentation with Linear Transformer</div></div><div class="info-2"><div class="info-item-1"> Head-Free Lightweight Semantic Segmentation with Linear Transformer  Abstract 现有的语义分割工作主要集中在设计有效的解码器上；然而，整体结构所带来的计算负荷长期以来一直被忽视，这阻碍了它们在资源有限的硬件上的应用。在本文中，我们提出了一个专门用于语义分割的无头轻量级架构，名为自适应频率变换器（AFFormer）。AFFormer采用了一个并行的架构来利用原型表征作为特定的可学习的局部描述，它取代了解码器并保留了高分辨率特征上丰富的图像语义。虽然去掉解码器后压缩了大部分的计算，但并行结构的准确性仍然受到低计算资源的限制。因此，我们采用异质运算器（CNN和Vision...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</div></div><div class="info-2"><div class="info-item-1"> Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network Automatic Classification and Segmentation of Teeth on 3D Dental Model Using Hierarchical Deep Learning Network ...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">AXIAL-ATTENTION</div></div><div class="info-2"><div class="info-item-1"> AXIAL ATTENTION  ABSTRACT We propose Axial Transformers, a self-attention-based autoregressive model for images and other data organized as high dimensional tensors. Existing autoregressive models either suffer from excessively large computational resource requirements for high dimensional data, or make compromises in terms of distribution expressiveness or ease of implementation in order to decrease resource requirements. Our architecture, by contrast, maintains both full expressiveness...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">CA</div></div><div class="info-2"><div class="info-item-1"> Coordinate Attention for Efficient Mobile Network Design  Abstract 最近关于移动网络设计的研究已经证明了通道注意（如SE注意力机制）对于提高模型性能的显著效果，但他们通常忽略了位置信息，而位置信息对于生成空间选择性注意图是很重要的。在本文中，我们提出了一种新的移动网络注意机制，将位置信息嵌入到通道注意中，我们称之为...</div></div></div></a><a class="pagination-related" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Biformer/" title="BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">BiFormer-Vision-Transformer-with-Bi-Level-Routing-Attention</div></div><div class="info-2"><div class="info-item-1">BiFormer: Vision Transformer with Bi-Level Routing Attention BiFormer: Vision Transformer with Bi-Level Routing Attention  2. Related Works Vision transformers. 变形器是一个神经网络家族，它采用信道明智的MLP块来进行每个位置的嵌入（信道混合），采用注意力[42]块来进行跨位置关系建模（空间混合）。变形器最初是为自然语言处理提出的[13, 42]，然后由DETR[1]和ViT[15]等开创性工作引入到计算机视觉。与CNN相比，最大的区别是，transformer使用注意力作为卷积的替代，以实现全局上下文建模。然而，由于香草注意计算所有空间位置的成对特征亲和力，它产生了高计算负担和沉重的内存足迹，特别是对于高分辨率输入。因此，一个重要的研究方向是寻求更有效的注意力机制。 Efficient attention mechanisms....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">qjl988</div><div class="author-info-description">钱家黎的博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qjl988"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/qjl988" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/mjh1667002013" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1976083684@qq.com" target="_blank" title="Email"><i class="fas fa-email"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#unext-mlp-based-rapid-medical-image-segmentation-network"><span class="toc-text"> UNeXt: MLP-based Rapid Medical Image Segmentation Network</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-text"> 摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E8%A8%80"><span class="toc-text"> 1 引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-unext"><span class="toc-text"> 2 UNeXt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1"><span class="toc-text"> 2.1 网络设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E5%8D%B7%E7%A7%AF%E9%98%B6%E6%AE%B5"><span class="toc-text"> 2.2 卷积阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-shifted-mlp%E9%98%B6%E6%AE%B5"><span class="toc-text"> 2.3 shifted MLP阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-tokenized-mlp%E9%98%B6%E6%AE%B5"><span class="toc-text"> 2.4 Tokenized MLP阶段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9E%E9%AA%8C%E5%92%8C%E7%BB%93%E6%9E%9C"><span class="toc-text"> 3 实验和结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text"> 3.1 数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%AE%9E%E6%96%BD%E7%BB%86%E8%8A%82"><span class="toc-text"> 3.2 实施细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83"><span class="toc-text"> 3.3 性能比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%AE%A8%E8%AE%BA"><span class="toc-text"> 4 讨论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C"><span class="toc-text"> 4.1 消融实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%AF%B9%E6%B8%A0%E9%81%93%E6%95%B0%E9%87%8F%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-text"> 4.2 对渠道数量的分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E4%B8%8Emlp-mixer%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text"> 4.3 与MLP-Mixer的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BB%93%E8%AE%BA"><span class="toc-text"> 5 结论</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/ASGNet/" title="ASGNet">ASGNet</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/AFFformer/" title="Head-Free Lightweight Semantic Segmentation with Linear Transformer">Head-Free Lightweight Semantic Segmentation with Linear Transformer</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchical-Deep-Learning-Networks/" title="Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network">Automatic-Classification-and-Segmentation-of-Teeth-on-3D-Dental-Model-Using-Hierarchica-Deep-Learning-Network</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/Axial-attention/" title="AXIAL-ATTENTION">AXIAL-ATTENTION</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91/CA/" title="CA">CA</a><time datetime="2024-12-10T15:28:34.000Z" title="发表于 2024-12-10 23:28:34">2024-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By qjl988</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
